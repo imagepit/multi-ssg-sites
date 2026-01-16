@@ -1,0 +1,61 @@
+{
+  "tech_keyword_id": "v0",
+  "site_name": "v0 マスターガイド",
+  "site_type": "documentation",
+  "language": "ja",
+  "created_at": "2025-09-26 22:25:21",
+  "updated_at": "2025-09-26 22:25:21",
+  "phase": "initialized",
+  "approvals": {
+    "requirements": {
+      "generated": true,
+      "approved": true,
+      "approved_at": "2025-09-26 22:25:21",
+      "approved_by": "2025-09-26 22:25:21"
+    },
+    "design": {
+      "generated": true,
+      "approved": true,
+      "approved_at": "2025-09-26 22:25:21",
+      "approved_by": "2025-09-26 22:25:21"
+    },
+    "tasks": {
+      "generated": true,
+      "approved": true,
+      "approved_at": "2025-09-26 22:25:21",
+      "approved_by": "2025-09-26 22:25:21"
+    }
+  },
+  "theme_config": {
+    "colors": {
+      "primary": "#000000",
+      "secondary": "hsl(266deg 85% 68%)",
+      "accent": "hsl(35deg 100% 60%)",
+      "background": "hsl(0deg 0% 100%)",
+      "surface": "hsl(220deg 13% 97%)",
+      "text": "hsl(220deg 9% 17%)",
+      "muted": "hsl(220deg 14% 52%)"
+    },
+    "fonts": {
+      "heading": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "body": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "mono": "JetBrains Mono, ui-monospace, SFMono-Regular, monospace"
+    },
+    "branding": {
+      "logo": "logo.svg",
+      "favicon": "logo.svg",
+      "og_image": "logo-og.drawio.svg"
+    }
+  },
+  "seo_strategy": {
+    "primary_keywords": ["v0", "Vercel", "AI UI生成", "プロンプトエンジニアリング", "React開発"],
+    "secondary_keywords": ["Next.js", "Tailwind CSS", "ShadCN UI", "ノーコード開発", "AI支援開発"],
+    "target_audience": ["フロントエンド開発者", "UI/UXデザイナー", "プロダクトマネージャー", "エンタープライズ開発チーム"],
+    "content_strategy": "包括的なv0学習リソースとして日本語市場をリード"
+  },
+  "monetization_strategy": {
+    "revenue_streams": ["有料研修プログラム", "企業向けワークショップ", "コンサルティングサービス", "認定プログラム"],
+    "conversion_funnels": ["無料コンテンツ → メルマガ登録 → 研修申込", "SEO流入 → リード獲得 → 営業接触"],
+    "pricing_tiers": ["基礎コース: ¥98,000", "実践コース: ¥148,000", "フルパッケージ: ¥298,000", "企業研修: ¥1,500,000+"]
+  }
+}

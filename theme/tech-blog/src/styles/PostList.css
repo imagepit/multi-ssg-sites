@@ -1,0 +1,7 @@
+.tb-postlist { margin: 16px 0; }
+.tb-postlist-title { font-weight: 700; margin: 8px 0 12px; font-size: 20px; }
+.tb-postlist-items { list-style: none; padding: 0; margin: 0; }
+.tb-postlist-item { padding: 10px 0; border-bottom: 1px solid var(--tb-border); }
+.tb-postlist-item a { text-decoration: none; color: var(--tb-text); }
+.tb-postlist-item a:hover { text-decoration: underline; }
+.tb-postlist-meta { color: var(--tb-muted); font-size: 12px; margin-top: 2px; }

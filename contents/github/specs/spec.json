@@ -1,0 +1,71 @@
+{
+  "tech_keyword_id": "github",
+  "site_name": "GitHub開発実践ガイド",
+  "site_type": "documentation",
+  "language": "ja",
+  "created_at": "2025-09-26 21:48:13",
+  "updated_at": "2025-09-26 21:48:13",
+  "phase": "initialized",
+  "research_reference": {
+    "keyword_id": "github",
+    "research_date": "2025-09-26",
+    "proposal_available": true
+  },
+  "target_metrics": {
+    "monthly_visitors": "10000",
+    "conversion_rate": "5%",
+    "page_views": "50000",
+    "engagement_time": "8分"
+  },
+  "approvals": {
+    "requirements": {
+      "generated": false,
+      "approved": false,
+      "approved_at": null,
+      "approved_by": null
+    },
+    "design": {
+      "generated": false,
+      "approved": false,
+      "approved_at": null,
+      "approved_by": null
+    },
+    "tasks": {
+      "generated": false,
+      "approved": false,
+      "approved_at": null,
+      "approved_by": null
+    }
+  },
+  "theme_config": {
+    "colors": {
+      "primary": "hsl(213deg 100% 50%)",
+      "secondary": "hsl(213deg 94% 40%)",
+      "accent": "hsl(40deg 100% 50%)",
+      "background": "hsl(220deg 26% 14%)",
+      "surface": "hsl(220deg 15% 20%)",
+      "text": "hsl(0deg 0% 100%)",
+      "muted": "hsl(215deg 15% 70%)"
+    },
+    "fonts": {
+      "heading": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "body": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "mono": "JetBrains Mono, ui-monospace, SFMono-Regular, monospace"
+    },
+    "spacing": {
+      "sidebar": "320px",
+      "content": "1024px",
+      "gap": "2rem"
+    },
+    "features": {
+      "darkMode": true,
+      "animations": true,
+      "blur": true
+    },
+    "branding": {
+      "logo": "/logos/github.svg",
+      "favicon": "/favicons/github.svg",
+      "og_image": "/og/github-og.png"
+    }
+  }
+}

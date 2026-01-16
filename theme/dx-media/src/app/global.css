@@ -1,0 +1,228 @@
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/black.css';
+@import 'fumadocs-ui/css/preset.css';
+
+#nd-page {
+  max-width: 900px;
+  margin-inline: auto;
+  width: 100%;
+}
+
+#nd-page[data-full="true"] {
+  max-width: 1200px;
+}
+
+/* Align sticky sidebar/TOC height with the external navbar */
+:root {
+  --dx-nav-height: 56px;
+}
+
+#nd-notebook-layout,
+#nd-docs-layout {
+  --fd-banner-height: var(--dx-nav-height);
+  --fd-docs-height: calc(100dvh - var(--dx-nav-height));
+}
+
+/* @media (min-width: 1280px) {
+  #nd-page {
+    transform: translateX(calc(var(--fd-toc-width, 268px) / 2));
+  }
+} */
+
+
+/* Ensure navbar spans full width only (container-fluid breakout) */
+#nd-nav {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+
+/* dx-media: unify navbar padding */
+#nd-nav nav {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.dx-shared-navbar {
+  --fd-header-height: 0px;
+}
+
+.dx-shared-navbar #nd-subnav {
+  display: none;
+}
+
+.site-title-text {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* dx-media: hide sidebar and its toggles for docs layout */
+.dx-no-sidebar [data-sidebar-placeholder],
+.dx-no-sidebar #nd-sidebar,
+.dx-no-sidebar #nd-sidebar-mobile {
+  display: none !important;
+}
+
+.dx-sidebar-hidden #nd-sidebar,
+.dx-sidebar-hidden #nd-sidebar-mobile,
+.dx-sidebar-hidden [data-sidebar-placeholder],
+.dx-sidebar-hidden [data-sidebar-panel] {
+  display: none !important;
+}
+
+.dx-sidebar-hidden #nd-toc,
+.dx-sidebar-hidden [data-toc-popover] {
+  display: none !important;
+}
+
+.dx-sidebar-hidden #nd-notebook-layout,
+.dx-sidebar-hidden #nd-docs-layout {
+  --fd-sidebar-width: 0px;
+  --fd-toc-width: 0px;
+  --fd-toc-popover-height: 0px;
+}
+
+
+/* Documentation theme overrides */ 
+.fd-step::before {
+  /* Prefer theme primary color set on layout, fallback to fumadocs default */
+  background-color: var(--fd-primary, var(--color-fd-primary)) !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+}
+ figure{
+  box-shadow: none !important;
+}
+ .bg-fd-card{
+  box-shadow: none !important;
+}
+
+/* Bash code blocks: force dark background in both light/dark modes */
+/* Using meta-injected class from remarkBashMeta -> figure.fd-bash */
+figure.fd-bash,
+figure[data-bash="true"] {
+  background-color: #0a0a0a !important;
+}
+
+figure.fd-bash .fd-scroll-container,
+figure[data-bash="true"] .fd-scroll-container {
+  background-color: #0a0a0a !important;
+}
+
+figure.fd-bash pre,
+figure[data-bash="true"] pre {
+  background-color: #0a0a0a !important;
+}
+
+figure.fd-bash code,
+figure[data-bash="true"] code {
+  background-color: #0a0a0a !important;
+  color: #fff !important;
+}
+
+figure.fd-bash .line,
+figure[data-bash="true"] .line {
+  color: #fff !important;
+}
+
+figure.fd-bash span,
+figure[data-bash="true"] span {
+  color: #fff !important;
+}
+
+/* Also target shiki syntax highlighting spans within bash blocks */
+figure.fd-bash span[style*="--shiki-light"],
+figure.fd-bash span[style*="--shiki-dark"],
+figure[data-bash="true"] span[style*="--shiki-light"],
+figure[data-bash="true"] span[style*="--shiki-dark"] {
+  color: #fff !important;
+}
+
+/* Fallback: target code blocks with bash-like languages directly */
+figure[data-language="bash"],
+figure[data-language="sh"],
+figure[data-language="shell"],
+figure[data-language="zsh"] {
+  background-color: #0a0a0a !important;
+}
+
+figure[data-language="bash"] .fd-scroll-container,
+figure[data-language="sh"] .fd-scroll-container,
+figure[data-language="shell"] .fd-scroll-container,
+figure[data-language="zsh"] .fd-scroll-container {
+  background-color: #0a0a0a !important;
+}
+
+figure[data-language="bash"] pre,
+figure[data-language="sh"] pre,
+figure[data-language="shell"] pre,
+figure[data-language="zsh"] pre {
+  background-color: #0a0a0a !important;
+}
+
+figure[data-language="bash"] code,
+figure[data-language="sh"] code,
+figure[data-language="shell"] code,
+figure[data-language="zsh"] code {
+  background-color: #0a0a0a !important;
+  color: #fff !important;
+}
+
+figure[data-language="bash"] .line,
+figure[data-language="sh"] .line,
+figure[data-language="shell"] .line,
+figure[data-language="zsh"] .line {
+  color: #fff !important;
+}
+
+figure[data-language="bash"] span,
+figure[data-language="sh"] span,
+figure[data-language="shell"] span,
+figure[data-language="zsh"] span {
+  color: #fff !important;
+}
+
+/* Search highlight */ 
+mark.fd-search-highlight {
+  /* background-color: color-mix(in srgb, var(--fd-primary, #f3eb00) 25%, transparent); */
+  background-color: #f3eb0044;
+  color: inherit;
+  padding: 0 0.15em;
+  border-radius: 0.2rem;
+}
+
+
+/* Code line state colors (override/extend Shiki default) */
+/* warning: soft orange, error: soft pink */ 
+pre .line.highlighted.warning, pre .line.warning.highlighted {
+  background-color: #fbecc9; /* light */
+  box-shadow: inset 2px 0 0 #f59e0b; /* amber-500 */
+} pre .line.highlighted.error, pre .line.error.highlighted {
+  background-color: #fde0e2; /* light */
+  box-shadow: inset 2px 0 0 #ef4444; /* red-500 */
+}
+
+/* Dark mode tweaks */
+.dark pre .line.highlighted.warning,
+.dark pre .line.warning.highlighted {
+  background-color: rgba(130, 52, 0, 0.262);
+}
+.dark pre .line.highlighted.error,
+.dark pre .line.error.highlighted {
+  background-color: rgba(255, 99, 132, 0.20);
+}
+
+/* Default highlighted lines (without error/warning classes) */
+pre .line.highlighted:not(.error):not(.warning) {
+  background-color: #ffff0044;
+  box-shadow: inset 2px 0 0 #ffff00;
+  font-weight: bold;
+}
+
+pre .line.diff.add,
+pre .line.diff.remove {
+  padding-left: 25px;
+}

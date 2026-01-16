@@ -1,0 +1,1 @@
+../../../.rules/docpage/AGENTS.md

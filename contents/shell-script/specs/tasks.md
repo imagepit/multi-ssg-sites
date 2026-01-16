@@ -1,0 +1,170 @@
+# タスク一覧
+
+## 記事執筆タスク - 完了状況
+
+### ✅ 完了済み (2025-09-28 実行)
+
+#### Shellの歴史セクション (8記事)
+- [x] [UNIX誕生とThompson Shell](../contents/getting-started/shell-history/unix-birth-thompson-shell.md)
+- [x] [Bourne Shell](../contents/getting-started/shell-history/bourne-shell.md)
+- [x] [C Shell / tcsh](../contents/getting-started/shell-history/c-shell-tcsh.md)
+- [x] [Korn Shellの革新](../contents/getting-started/shell-history/korn-shell-innovation.md)
+- [x] [Bash誕生と普及](../contents/getting-started/shell-history/bash-birth-popularity.md)
+- [x] [Zsh進化とモダン化](../contents/getting-started/shell-history/zsh-evolution-modernization.md)
+- [x] [モダンShell環境](../contents/getting-started/shell-history/modern-shell-environment.md)
+- [x] [Shell将来の発展](../contents/getting-started/shell-history/shell-future-development.md)
+
+#### ベストプラクティスセクション (3記事)
+- [x] [set -e -u -x -o pipefail](../contents/best-practices/error-handling/set-e-u-x-o-pipefail.md)
+- [x] [終了コード確認](../contents/best-practices/error-handling/exit-code-checking.md)
+- [x] [trapコマンド](../contents/best-practices/error-handling/trap-command.md)
+
+### 📋 既存コンテンツ
+
+#### 基本セクション
+- [Shell Script完全ガイド](../contents/home.md)
+- [はじめに](../contents/getting-started/getting-started.md)
+  - [なぜShell Scriptを学ぶのか](../contents/getting-started/why-learn-shell-script.md)
+- [環境構築](../contents/setup/setup.md)
+  - [macOS](../contents/setup/macos.md)
+  - [Windows WSL](../contents/setup/windows-wsl.md)
+  - [Linux](../contents/setup/linux.md)
+- [Shell種類と特徴](../contents/shell-types/shell-types.md)
+  - [Shellとは](../contents/shell-types/what-is-shell.md)
+  - [Bash](../contents/shell-types/bash/)
+    - [Bash特徴と歴史](../contents/shell-types/bash/bash-features-history.md)
+    - [Bash基本設定](../contents/shell-types/bash/bash-basic-configuration.md)
+    - [Bashスクリプト記述](../contents/shell-types/bash/bash-script-writing.md)
+  - [Zsh](../contents/shell-types/zsh/)
+    - [Zsh特徴と違い](../contents/shell-types/zsh/zsh-features-differences.md)
+    - [Oh My Zshカスタマイズ](../contents/shell-types/zsh/oh-my-zsh-customization.md)
+    - [Zshスクリプト互換性](../contents/shell-types/zsh/zsh-script-compatibility.md)
+  - [Fish](../contents/shell-types/fish/)
+    - [Fish特徴と使いやすさ](../contents/shell-types/fish/fish-features-usability.md)
+    - [Fish POSIX違い](../contents/shell-types/fish/fish-posix-differences.md)
+  - [Dash](../contents/shell-types/dash/)
+    - [Dash軽量性とパフォーマンス](../contents/shell-types/dash/dash-lightweight-performance.md)
+    - [システムスクリプト用途](../contents/shell-types/dash/system-script-usage.md)
+  - [その他のShell](../contents/shell-types/other-shells/)
+    - [Korn Shell](../contents/shell-types/other-shells/korn-shell.md)
+    - [tcsh](../contents/shell-types/other-shells/tcsh.md)
+    - [PowerShell](../contents/shell-types/other-shells/powershell.md)
+  - [Shell確認・切り替え](../contents/shell-types/shell-check-switch/)
+    - [現在のShell確認](../contents/shell-types/shell-check-switch/current-shell-check.md)
+    - [デフォルトShell変更](../contents/shell-types/shell-check-switch/default-shell-change.md)
+    - [一時的Shell切り替え](../contents/shell-types/shell-check-switch/temporary-shell-switch.md)
+  - [POSIX互換性](../contents/shell-types/posix-compatibility/)
+    - [POSIX標準](../contents/shell-types/posix-compatibility/posix-standard.md)
+    - [互換スクリプト記述](../contents/shell-types/posix-compatibility/compatible-script-writing.md)
+    - [Shell固有機能](../contents/shell-types/posix-compatibility/shell-specific-features.md)
+
+#### 基本文法
+- [最初のスクリプト](../contents/first-script/first-script.md)
+  - [作成と実行](../contents/first-script/create-and-execute.md)
+  - [Hello World](../contents/first-script/hello-world.md)
+- [コア構文](../contents/core-syntax/core-syntax.md)
+  - [変数](../contents/core-syntax/variables.md)
+  - [クォート](../contents/core-syntax/quoting.md)
+  - [条件分岐](../contents/core-syntax/conditional-branching.md)
+  - [ループ](../contents/core-syntax/loops.md)
+  - [関数](../contents/core-syntax/functions.md)
+  - [配数](../contents/core-syntax/arrays.md)
+
+#### 組み込みコマンド
+- [Shell組み込みコマンド](../contents/builtin-commands/builtin-commands.md)
+  - [echo出力](../contents/builtin-commands/echo-output.md)
+  - [eval文字列実行](../contents/builtin-commands/eval-execute-string.md)
+  - [exitスクリプト終了](../contents/builtin-commands/exit-script-termination.md)
+  - [killプロセス終了](../contents/builtin-commands/kill-process-termination.md)
+  - [psプロセス一覧](../contents/builtin-commands/ps-process-list.md)
+  - [pwd現在ディレクトリ](../contents/builtin-commands/pwd-current-directory.md)
+  - [cdディレクトリ変更](../contents/builtin-commands/cd-directory-change.md)
+  - [readユーザー入力](../contents/builtin-commands/read-user-input.md)
+  - [export環境変数](../contents/builtin-commands/export-environment-variables.md)
+  - [sourceドットスクリプト読み込み](../contents/builtin-commands/source-dot-script-loading.md)
+  - [typeコマンド種別確認](../contents/builtin-commands/type-command-type-check.md)
+  - [setシェルオプション](../contents/builtin-commands/set-shell-options.md)
+  - [unset変数削除](../contents/builtin-commands/unset-variable-removal.md)
+  - [aliasコマンド別名](../contents/builtin-commands/alias-command-alias.md)
+  - [unalias別名削除](../contents/builtin-commands/unalias-alias-removal.md)
+  - [historyコマンド履歴](../contents/builtin-commands/history-command-history.md)
+  - [fc履歴編集](../contents/builtin-commands/fc-history-edit.md)
+  - [fgフォアグラウンドプロセス](../contents/builtin-commands/fg-foreground-process.md)
+  - [bgバックグラウンドプロセス](../contents/builtin-commands/bg-background-process.md)
+  - [jobsバックグラウンド一覧](../contents/builtin-commands/jobs-background-list.md)
+  - [waitプロセス待機](../contents/builtin-commands/wait-process-wait.md)
+  - [return関数終了](../contents/builtin-commands/return-function-exit.md)
+  - [readlinkシンボリックリンク解決](../contents/builtin-commands/readlink-symlink-resolve.md)
+  - [whichコマンドパス](../contents/builtin-commands/which-command-path.md)
+  - [realpath実際のパス](../contents/builtin-commands/realpath-actual-path.md)
+  - [basenameファイル名抽出](../contents/builtin-commands/basename-filename-extract.md)
+  - [dirnameディレクトリ抽出](../contents/builtin-commands/dirname-directory-extract.md)
+  - [lnリンク作成](../contents/builtin-commands/ln-link-create.md)
+  - [mvファイル移動](../contents/builtin-commands/mv-file-move.md)
+  - [cpファイルコピー](../contents/builtin-commands/cp-file-copy.md)
+  - [rmファイル削除](../contents/builtin-commands/rm-file-delete.md)
+  - [mkdirディレクトリ作成](../contents/builtin-commands/mkdir-directory-create.md)
+  - [rmdirディレクトリ削除](../contents/builtin-commands/rmdir-directory-delete.md)
+  - [chmod権限変更](../contents/builtin-commands/chmod-permission-change.md)
+  - [helpヘルプ表示](../contents/builtin-commands/help-help-display.md)
+
+#### I/O制御
+- [I/O制御](../contents/io-control/io-control.md)
+  - [リダイレクション](../contents/io-control/redirection.md)
+  - [ヒアドキュメント](../contents/io-control/heredoc.md)
+  - [パイプ](../contents/io-control/pipes.md)
+  - [コマンド区切り文字](../contents/io-control/command-separators.md)
+  - [グループ化](../contents/io-control/grouping.md)
+
+#### 実践レシピ
+- [実践レシピ](../contents/practical-recipes/practical-recipes.md)
+  - [ファイル・ディレクトリ操作](../contents/practical-recipes/file-directory-operations/)
+    - [ファイル存在確認](../contents/practical-recipes/file-directory-operations/check-file-existence.md)
+    - [一括ファイル名変更](../contents/practical-recipes/file-directory-operations/bulk-rename-files.md)
+    - [ファイル検索と削除](../contents/practical-recipes/file-directory-operations/find-and-delete-files.md)
+    - [バックアップスクリプト](../contents/practical-recipes/file-directory-operations/backup-script.md)
+  - [テキスト処理](../contents/practical-recipes/text-processing/)
+    - [grep抽出](../contents/practical-recipes/text-processing/grep-extraction.md)
+    - [sed置換](../contents/practical-recipes/text-processing/sed-substitution.md)
+    - [awkレポート](../contents/practical-recipes/text-processing/awk-reporting.md)
+    - [CSV操作](../contents/practical-recipes/text-processing/csv-manipulation.md)
+  - [プロセス・ジョブ管理](../contents/practical-recipes/process-job-management/)
+    - [プロセス監視](../contents/practical-recipes/process-job-management/process-monitoring.md)
+    - [バックグラウンドジョブ](../contents/practical-recipes/process-job-management/background-jobs.md)
+  - [Web API統合](../contents/practical-recipes/web-api-integration/)
+    - [curlデータ取得](../contents/practical-recipes/web-api-integration/curl-get-data.md)
+    - [jq JSON解析](../contents/practical-recipes/web-api-integration/jq-parse-json.md)
+
+#### 残りのベストプラクティス
+- [ベストプラクティス](../contents/best-practices/best-practices.md)
+  - [デバッグ](../contents/best-practices/debugging/)
+    - [set -xトレース](../contents/best-practices/debugging/set-x-tracing.md)
+    - [Shellデバッガー](../contents/best-practices/debugging/shell-debugger.md)
+  - [可読性とメンテナンス](../contents/best-practices/readability-and-maintenance/)
+    - [スタイルガイド](../contents/best-practices/readability-and-maintenance/style-guide.md)
+    - [コメント記述](../contents/best-practices/readability-and-maintenance/commenting.md)
+  - [セキュリティ](../contents/best-practices/security/)
+    - [安全な一時ファイル](../contents/best-practices/security/secure-temp-files.md)
+    - [コマンドインジェクション](../contents/best-practices/security/command-injection.md)
+
+#### 高度なテクニック
+- [高度なテクニック](../contents/advanced-techniques/advanced-topics.md)
+  - [正規表現](../contents/advanced-techniques/regular-expressions.md)
+  - [プロセス置換とパイプ](../contents/advanced-techniques/process-substitution-and-pipes.md)
+  - [シグナル処理](../contents/advanced-techniques/signal-handling.md)
+
+#### ツールと統合
+- [ツールと統合](../contents/tools-and-integration/tools-and-integration.md)
+  - [Git統合](../contents/tools-and-integration/git-integration.md)
+  - [Dockerビルド自動化](../contents/tools-and-integration/docker-build-automation.md)
+  - [CI/CDパイプライン](../contents/tools-and-integration/ci-cd-pipelines.md)
+
+---
+
+## 📊 完了状況サマリー
+
+- **✅ 完了**: 11記事 (Shellの歴史8記事 + ベストプラクティス3記事)
+- **📋 既存**: 多数の基本記事が既に完成
+- **🔄 残り**: ベストプラクティス7記事、実践レシピカテゴリページなど
+
+**最終更新**: 2025-09-28

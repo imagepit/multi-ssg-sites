@@ -1,0 +1,63 @@
+{
+  "technical_keywords": "Claude Code",
+  "tech_keyword_id": "claude-code",
+  "research_date": "2025-08-29",
+  "sites_researched": 50,
+  "documentation_analyzed": 25,
+  "demand_identified": 15,
+  "gaps_identified": 8,
+  "opportunities_identified": 12,
+  "wordpress_requirements": 20,
+  "proposal_generated": true,
+  "updated_at": "2025-08-29T10:30:00Z",
+  "research_scope": {
+    "official_sources": [
+      "docs.anthropic.com",
+      "github.com/anthropics/claude-code",
+      "anthropic.com/claude-code",
+      "skilljar.com/claude-code"
+    ],
+    "community_sources": [
+      "stackoverflow.com",
+      "reddit.com",
+      "medium.com",
+      "dev.to"
+    ],
+    "education_sources": [
+      "deeplearning.ai",
+      "coursera.org",
+      "datacamp.com",
+      "codecademy.com"
+    ]
+  },
+  "key_findings": {
+    "high_demand_topics": [
+      "installation_troubleshooting",
+      "best_practices",
+      "mcp_integration",
+      "enterprise_deployment",
+      "prompt_engineering"
+    ],
+    "documentation_gaps": [
+      "japanese_resources",
+      "enterprise_security_guide",
+      "performance_optimization",
+      "advanced_mcp_patterns",
+      "team_collaboration_workflows"
+    ],
+    "training_opportunities": [
+      "beginner_friendly_courses",
+      "enterprise_adoption_consulting",
+      "certification_programs",
+      "hands_on_workshops",
+      "mentorship_programs"
+    ]
+  },
+  "market_analysis": {
+    "target_audience_size": "50000+",
+    "competition_level": "medium",
+    "monetization_potential": "high",
+    "content_demand": "very_high",
+    "seo_opportunity": "excellent"
+  }
+}

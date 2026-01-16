@@ -1,0 +1,9 @@
+.tb-toc { position: sticky; top: 16px; padding: 12px; border: 1px solid var(--tb-border); border-radius: 8px; background: #fff; }
+.tb-toc-title { font-weight: 700; margin: 0 0 8px; font-size: 14px; color: var(--tb-muted); }
+.tb-toc-list { list-style: none; padding-left: 0; margin: 0; }
+.tb-toc-list li { margin: 4px 0; }
+.tb-toc-list a { text-decoration: none; color: var(--tb-text); font-size: 14px; }
+.tb-toc-list a:hover { text-decoration: underline; }
+.tb-toc-list a.active { font-weight: 700; text-decoration: underline; }
+.tb-toc-list .lvl-3 { padding-left: 12px; }
+.tb-toc-list .lvl-4 { padding-left: 24px; }

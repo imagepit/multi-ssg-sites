@@ -1,0 +1,36 @@
+{
+  "technical_keywords": "Docker",
+  "training_keyword_id": "docker",
+  "total_research_count": 1,
+  "latest_research_timestamp": "2025-09-27-200546",
+  "research_history": [
+    {
+      "timestamp": "2025-09-27-200546",
+      "research_date": "2025-09-27",
+      "sites_researched": 18,
+      "data_points": 52,
+      "trends_identified": 8,
+      "needs_identified": 6,
+      "competitors_analyzed": 12,
+      "recommendations": 5,
+      "proposal_generated": true,
+      "directory": "history/2025-09-27-200546/",
+      "key_insights": [
+        "Docker市場は2025年61.2億ドルから2030年163.2億ドルへ急成長",
+        "CVE-2025-9074という重大なセキュリティ脆弱性が発見",
+        "フリーランス月収は経験により39-92万円の幅",
+        "セキュリティ投資が企業コンテナ予算の40%を占める",
+        "Podman等の代替技術が成熟し選択肢が拡大"
+      ],
+      "content_opportunities": [
+        "2025年最新セキュリティ対策ガイド",
+        "Docker vs Podman詳細比較",
+        "実践的なプロダクション運用ノウハウ",
+        "日本企業の2025年の崖対応支援",
+        "高収入キャリアパス構築ガイド"
+      ]
+    }
+  ],
+  "created_at": "2025-09-27-200546",
+  "updated_at": "2025-09-27-200546"
+}

@@ -1,0 +1,82 @@
+{
+  "tech_keyword_id": "cursor",
+  "site_name": "Cursor Master Documentation Hub",
+  "site_type": "documentation",
+  "language": "ja",
+  "created_at": "2025-09-27 19:26:00",
+  "updated_at": "2025-09-27 19:26:00",
+  "phase": "initialized",
+  "research_reference": {
+    "keyword_id": "cursor",
+    "research_date": "2025-09-07",
+    "proposal_available": true
+  },
+  "target_metrics": {
+    "monthly_visitors": "30000",
+    "conversion_rate": "12%",
+    "page_views": "90000",
+    "engagement_time": "7分30秒"
+  },
+  "approvals": {
+    "requirements": {
+      "generated": false,
+      "approved": false,
+      "approved_at": null,
+      "approved_by": null
+    },
+    "design": {
+      "generated": false,
+      "approved": false,
+      "approved_at": null,
+      "approved_by": null
+    },
+    "tasks": {
+      "generated": false,
+      "approved": false,
+      "approved_at": null,
+      "approved_by": null
+    }
+  },
+  "theme_config": {
+    "colors": {
+      "primary": "hsl(15.23deg 61.9% 58.82%)",
+      "secondary": "hsl(15.23deg 61.9% 68.82%)",
+      "accent": "hsl(35deg 100% 60%)",
+      "background": "hsl(0deg 0% 100%)",
+      "surface": "hsl(220deg 13% 97%)",
+      "text": "hsl(220deg 9% 17%)",
+      "muted": "hsl(220deg 14% 52%)"
+    },
+    "fonts": {
+      "heading": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "body": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "mono": "JetBrains Mono, ui-monospace, SFMono-Regular, monospace"
+    },
+    "spacing": {
+      "sidebar": "320px",
+      "content": "1024px",
+      "gap": "2rem"
+    },
+    "features": {
+      "darkMode": true,
+      "animations": true,
+      "blur": true
+    },
+    "branding": {
+      "logo": "/logos/cursor.svg",
+      "favicon": "/favicons/cursor.svg",
+      "og_image": "/og/cursor-og.png"
+    }
+  },
+  "seo_strategy": {
+    "primary_keywords": ["Cursor", "AIコードエディタ", "プログラミング生産性", "VS Code", "GitHub Copilot"],
+    "secondary_keywords": ["AIプログラミング", "コード生成", "自動リファクタリング", "開発ツール", "エディタ比較"],
+    "target_audience": ["フロントエンド開発者", "バックエンド開発者", "フルスタック開発者", "テックリード", "開発マネージャー"],
+    "content_strategy": "Cursorの日本語ドキュメンテーションリーダーとして、実践的なチュートリアルと比較情報を提供"
+  },
+  "monetization_strategy": {
+    "revenue_streams": ["Cursor研修プログラム", "企業向け導入コンサルティング", "プロンプトエンジニアリング講座", "チーム活用ワークショップ"],
+    "conversion_funnels": ["無料コンテンツ → メルマガ登録 → 研修申込", "SEO流入 → 無料トライアル導入 → 有料プランアップグレード"],
+    "pricing_tiers": ["基礎コース: ¥78,000", "実践コース: ¥128,000", "企業研修: ¥980,000", "コンサルティング: ¥350,000/日"]
+  }
+}

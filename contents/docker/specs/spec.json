@@ -1,0 +1,101 @@
+{
+  "tech_keyword_id": "docker",
+  "site_name": "Docker Complete Guide",
+  "site_type": "documentation",
+  "language": "ja",
+  "created_at": "2025-09-27",
+  "updated_at": "2025-09-27 22:16:48",
+  "phase": "requirements",
+  "research_reference": {
+    "keyword_id": "docker",
+    "research_date": "2025-09-27",
+    "proposal_available": true
+  },
+  "target_metrics": {
+    "monthly_visitors": "20000",
+    "conversion_rate": "5%",
+    "page_views": "100000",
+    "engagement_time": "5分",
+    "annual_revenue": "¥30M"
+  },
+  "approvals": {
+    "requirements": {
+      "generated": true,
+      "approved": false,
+      "generated_at": "2025-09-27 22:16:48",
+      "approved_at": null,
+      "approved_by": null
+    },
+    "design": {
+      "generated": false,
+      "approved": false,
+      "approved_at": null,
+      "approved_by": null
+    },
+    "tasks": {
+      "generated": false,
+      "approved": false,
+      "approved_at": null,
+      "approved_by": null
+    }
+  },
+  "theme_config": {
+    "colors": {
+      "primary": "hsl(217deg 91% 60%)",
+      "secondary": "hsl(217deg 71% 50%)",
+      "accent": "hsl(275deg 100% 80%)",
+      "background": "hsl(0deg 0% 100%)",
+      "surface": "hsl(0deg 0% 98%)",
+      "text": "hsl(0deg 0% 13%)",
+      "muted": "hsl(0deg 0% 60%)"
+    },
+    "fonts": {
+      "heading": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "body": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "mono": "JetBrains Mono, ui-monospace, SFMono-Regular, monospace"
+    },
+    "spacing": {
+      "sidebar": "320px",
+      "content": "1024px",
+      "gap": "2rem"
+    },
+    "features": {
+      "darkMode": true,
+      "animations": true,
+      "blur": true
+    },
+    "branding": {
+      "logo": "/logos/docker.svg",
+      "favicon": "/favicons/docker.svg",
+      "og_image": "/og/docker-og.png"
+    }
+  },
+  "market_analysis": {
+    "market_size_2025": "$6.12B",
+    "projected_2030": "$16.32B",
+    "growth_rate": "21.67%",
+    "salary_range": "¥390,000-¥920,000/month",
+    "security_priority": "CVE-2025-9074",
+    "learning_time": "150 minutes basic"
+  },
+  "content_strategy": {
+    "target_audience": [
+      "docker_beginners",
+      "security_focused_teams",
+      "enterprise_decision_makers",
+      "career_advancement_seekers"
+    ],
+    "priority_topics": [
+      "CVE-2025-9074_security_guide",
+      "docker_vs_podman_comparison",
+      "production_best_practices",
+      "kubernetes_integration",
+      "legacy_migration_strategies"
+    ],
+    "monetization": {
+      "free_content": "基礎学習・セキュリティ入門",
+      "paid_content": "高度なセキュリティ・Kubernetes連携",
+      "enterprise": "研修・コンサルティング"
+    }
+  }
+}

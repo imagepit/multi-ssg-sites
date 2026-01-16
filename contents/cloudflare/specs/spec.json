@@ -1,0 +1,106 @@
+{
+  "tech_keyword_id": "cloudflare",
+  "site_name": "Cloudflare Documentation Hub",
+  "site_type": "documentation",
+  "generator": "wordpress",
+  "language": "ja",
+  "created_at": "2025-09-02T10:45:00Z",
+  "updated_at": "2025-09-02T03:21:16Z",
+  "phase": "design",
+  "research_reference": {
+    "keyword_id": "cloudflare",
+    "research_date": "2025-09-02",
+    "proposal_available": true
+  },
+  "target_metrics": {
+    "monthly_visitors": "10000",
+    "conversion_rate": "5%",
+    "page_views": "50000",
+    "engagement_time": "5分"
+  },
+  "integration": {
+    "training_platform": true,
+    "promotion_banners": true,
+    "content_linking": true,
+    "analytics_tracking": true
+  },
+  "approvals": {
+    "requirements": {
+      "generated": true,
+      "approved": false,
+      "generated_at": "2025-09-02T10:55:00Z",
+      "approved_at": null,
+      "approved_by": null
+    },
+    "design": {
+      "generated": true,
+      "approved": true,
+      "generated_at": "2025-09-02T03:21:16Z",
+      "approved": true,
+      "approved_at": "2025-09-02T03:21:16Z",
+      "approved_by": "user"
+    },
+    "tasks": {
+      "generated": false,
+      "approved": false,
+      "approved_at": null,
+      "approved_by": null
+    },
+    "quality": {
+      "checked": false,
+      "passed": false,
+      "checked_at": null,
+      "issues_count": 0
+    }
+  },
+  "wordpress_config": {
+    "docker_image": "imagepit/wp-post:v1",
+    "docker_compose": true,
+    "rest_api": true,
+    "features": {
+      "auto_publish": true,
+      "seo_optimization": true,
+      "media_upload": true,
+      "page_hierarchy": true
+    }
+  },
+  "content_structure": {
+    "getting_started": true,
+    "api_reference": false,
+    "tutorials": true,
+    "best_practices": true,
+    "examples": true,
+    "troubleshooting": true
+  },
+  "theme_config": {
+    "colors": {
+      "primary": "hsl(38 92% 50%)",
+      "secondary": "hsl(38 100% 96%)",
+      "accent": "hsl(38 84% 80%)",
+      "background": "hsl(0 0% 100%)",
+      "surface": "hsl(38 100% 98%)",
+      "text": "hsl(240 10% 3.9%)",
+      "muted": "hsl(240 3.8% 46.1%)"
+    },
+    "fonts": {
+      "heading": "SF Pro Display, Inter, ui-sans-serif, system-ui, sans-serif",
+      "body": "SF Pro Text, Inter, ui-sans-serif, system-ui, sans-serif",
+      "mono": "SF Mono, JetBrains Mono, ui-monospace, monospace"
+    },
+    "spacing": {
+      "sidebar": "300px",
+      "content": "1200px",
+      "gap": "1.5rem"
+    },
+    "features": {
+      "darkMode": true,
+      "animations": true,
+      "blur": true
+    },
+    "branding": {
+      "logo": "/logos/cloudflare-logo.svg",
+      "favicon": "/favicons/cloudflare.ico",
+      "og_image": "/og/cloudflare-og.png"
+    }
+  }
+}

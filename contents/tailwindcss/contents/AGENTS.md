@@ -1,0 +1,1 @@
+/Users/imagepit/Dropbox/imagepit/techdoc/.rules/docpage/AGENTS.md

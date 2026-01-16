@@ -1,0 +1,7 @@
+{
+  "name": "techdoc-root",
+  "private": true,
+  "devDependencies": {
+    "techdoc": "file:./scripts"
+  }
+}

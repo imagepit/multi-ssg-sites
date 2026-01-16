@@ -1,0 +1,24 @@
+{
+  "name": "techdoc",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "techdoc": "bin/techdoc"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "type-check": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "prepare": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "typescript": "^5.9.2",
+    "vitest": "^1.6.1"
+  }
+}

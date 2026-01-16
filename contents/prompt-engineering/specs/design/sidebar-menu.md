@@ -1,0 +1,68 @@
+# サイドメニュー定義
+
+- 基礎編：プロンプトエンジニアリング入門
+  - [概要と重要性](./00-introduction/overview-and-importance.md)
+  - [基本原則](./00-introduction/basic-principles.md)
+  - [クイックスタート](./00-introduction/quick-start.md)
+  - [用語集](./00-introduction/glossary.md)
+- 環境構築ガイド
+  - [開発環境セットアップ](./01-setup-guide/dev-environment-setup.md)
+  - [API設定ガイド](./01-setup-guide/api-configuration.md)
+  - [コスト管理](./01-setup-guide/cost-management.md)
+  - [セキュリティ設定](./01-setup-guide/security-settings.md)
+- 実践テクニック集
+  - 基本技術
+    - [Zero-Shot / One-Shot / Few-Shot Learning](./02-practical-techniques/basic-techniques/few-shot-learning.md)
+    - [システムプロンプトの設計](./02-practical-techniques/basic-techniques/system-prompt-design.md)
+    - [コンテキスト管理とメモリ最適化](./02-practical-techniques/basic-techniques/context-management.md)
+  - 高度な技術
+    - [Chain-of-Thought (CoT) プロンプティング](./02-practical-techniques/advanced-techniques/chain-of-thought.md)
+    - [ReAct フレームワークの実装](./02-practical-techniques/advanced-techniques/react-framework.md)
+    - [Tree-of-Thoughts の応用](./02-practical-techniques/advanced-techniques/tree-of-thoughts.md)
+    - [Self-Consistency による精度向上](./02-practical-techniques/advanced-techniques/self-consistency.md)
+- フレームワーク活用
+  - [LangChain 完全ガイド](./03-frameworks/langchain-guide.md)
+  - [LlamaIndex 実践](./03-frameworks/llmaindex-practice.md)
+  - [Semantic Kernel](./03-frameworks/semantic-kernel.md)
+  - [AutoGen](./03-frameworks/autogen.md)
+- セキュリティとベストプラクティス
+  - [プロンプトインジェクション対策](./04-security-best-practices/prompt-injection-protection.md)
+  - [データプライバシー](./04-security-best-practices/data-privacy.md)
+  - [エラーハンドリング](./04-security-best-practices/error-handling.md)
+  - [監査とロギング](./04-security-best-practices/audit-logging.md)
+- ユースケース別実装ガイド
+  - [カスタマーサポート](./05-use-case-guides/customer-support.md)
+  - [コンテンツ生成](./05-use-case-guides/content-generation.md)
+  - [コード支援](./05-use-case-guides/code-assistance.md)
+  - [データ分析](./05-use-case-guides/data-analysis.md)
+  - [多言語対応](./05-use-case-guides/multilingual-support.md)
+- モデル別最適化
+  - [GPT-4o 攻略ガイド](./06-model-optimization/gpt-4o-guide.md)
+  - [Claude 3.5 活用法](./06-model-optimization/claude-3-5-usage.md)
+  - [Gemini Pro 実践](./06-model-optimization/gemini-pro-practice.md)
+  - [オープンソースLLM](./06-model-optimization/open-source-llms.md)
+- パフォーマンス最適化
+  - [レスポンス速度改善](./07-performance-optimization/response-speed-improvement.md)
+  - [精度向上テクニック](./07-performance-optimization/accuracy-improvement.md)
+  - [コスト削減戦略](./07-performance-optimization/cost-reduction-strategies.md)
+  - [スケーラビリティ](./07-performance-optimization/scalability.md)
+- 評価とテスト
+  - [品質評価メトリクス](./08-evaluation-testing/quality-metrics.md)
+  - [A/Bテスト実施法](./08-evaluation-testing/ab-testing.md)
+  - [自動テストフレームワーク](./08-evaluation-testing/automated-testing-frameworks.md)
+  - [ベンチマーク](./08-evaluation-testing/benchmarks.md)
+- リソースとツール
+  - [プロンプトテンプレート集](./09-resources-tools/prompt-templates.md)
+  - [インタラクティブプレイグラウンド](./09-resources-tools/interactive-playground.md)
+  - [コミュニティフォーラム](./09-resources-tools/community-forum.md)
+  - [最新情報](./09-resources-tools/latest-information.md)
+- エンタープライズ向けガイド
+  - [ガバナンス構築](./10-enterprise-guides/governance.md)
+  - [コンプライアンス対応](./10-enterprise-guides/compliance.md)
+  - [ROI測定](./10-enterprise-guides/roi-measurement.md)
+  - [チーム教育](./10-enterprise-guides/team-education.md)
+- 学習パス
+  - [初心者ロードマップ](./11-learning-paths/beginner-roadmap.md)
+  - [中級者向け実践コース](./11-learning-paths/intermediate-course.md)
+  - [上級者向け研究](./11-learning-paths/advanced-research.md)
+  - [認定資格対策](./11-learning-paths/certification-prep.md)

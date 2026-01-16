@@ -1,0 +1,22 @@
+:root {
+  --tb-text: #111;
+  --tb-muted: #666;
+  --tb-border: #e5e7eb;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji'; color: var(--tb-text); }
+.tb-container { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+.tb-header { border-bottom: 1px solid var(--tb-border); }
+.tb-brand { display: inline-block; padding: 16px 0; font-weight: 700; text-decoration: none; color: var(--tb-text); }
+.tb-nav { float: right; padding: 16px 0; }
+.tb-nav a { margin-left: 16px; text-decoration: none; color: var(--tb-text); font-weight: 600; font-size: 14px; }
+.tb-main { padding: 24px 0; min-height: 70vh; }
+.tb-footer { border-top: 1px solid var(--tb-border); color: var(--tb-muted); padding: 24px 0; font-size: 14px; }
+
+.tb-post-list { list-style: none; padding: 0; margin: 0; }
+.tb-post-item { padding: 12px 0; border-bottom: 1px solid var(--tb-border); }
+.tb-post-title { font-size: 18px; font-weight: 700; margin: 0 0 4px; }
+.tb-post-meta { color: var(--tb-muted); font-size: 13px; }
+
+@import '../styles/PostList.css';
+@import '../styles/MainToc.css';

@@ -1,0 +1,98 @@
+# サイドメニュー定義
+
+-   **Gemini入門**
+    -   [Geminiとは？](/introduction/what-is-gemini)
+    -   [Geminiファミリー（モデル一覧）](/introduction/gemini-family)
+    -   [どれを使うべきか（選び方ガイド）](/introduction/which-to-choose)
+    -   [料金体系とクォータ](/introduction/pricing)
+    -   [クイックスタート](/introduction/quickstart)
+    -   モデルと機能の基礎
+        -   [長文コンテキストとファイル](/introduction/long-context-and-files)
+        -   [マルチモーダル（画像/音声/動画）](/introduction/multimodality)
+        -   [構造化出力（JSON/スキーマ）](/introduction/structured-output)
+        -   [ツール実行（Function Calling）](/introduction/tool-use)
+-   **個人向け活用**
+    -   対話AI (Gemini)
+        -   [基本的な使い方](/for-personal-use/conversational-ai/basic-usage)
+        -   [プロンプトエンジニアリング基礎](/for-personal-use/conversational-ai/prompt-engineering-basics)
+        -   [便利な活用術](/for-personal-use/conversational-ai/useful-tips)
+    -   Gemini Advanced
+        -   [Gemini Advancedとは？](/for-personal-use/gemini-advanced/what-is-gemini-advanced)
+        -   [1.5 Pro/Flashモデル活用](/for-personal-use/gemini-advanced/using-1.5-pro-flash)
+        -   [高度なデータ分析](/for-personal-use/gemini-advanced/advanced-data-analysis)
+        -   画像生成（Images/Imagen）
+            -   [テキストからの画像生成](/for-personal-use/gemini-advanced/images/text-to-image)
+            -   [自然言語での画像編集](/for-personal-use/gemini-advanced/images/image-editing)
+            -   [キャラクターの一貫性を保つ](/for-personal-use/gemini-advanced/images/character-consistency)
+    -   Gems（カスタムAI）
+        -   [Gemsの作成と共有](/for-personal-use/gems/creating-and-sharing-gems)
+        -   [活用事例](/for-personal-use/gems/use-cases)
+-   **ビジネス向け活用**
+    -   Gemini for Google Workspace
+        -   [概要と導入](/for-business-use/gemini-for-google-workspace/overview-and-setup)
+        -   [Gmailでの活用](/for-business-use/gemini-for-google-workspace/using-in-gmail)
+        -   [Google Docsでの活用](/for-business-use/gemini-for-google-workspace/using-in-google-docs)
+        -   [Google Sheetsでの活用](/for-business-use/gemini-for-google-workspace/using-in-google-sheets)
+        -   [Google Slidesでの活用](/for-business-use/gemini-for-google-workspace/using-in-google-slides)
+        -   [業務効率化Tips](/for-business-use/gemini-for-google-workspace/productivity-tips)
+        -   管理者向け
+            -   [ドメイン導入とポリシー](/for-business-use/gemini-for-google-workspace/admin/setup-and-policy)
+            -   [データ保護とコンプライアンス](/for-business-use/gemini-for-google-workspace/admin/data-protection)
+    -   業界別活用事例
+        -   [マーケティング](/for-business-use/industry-use-cases/marketing)
+        -   [営業](/for-business-use/industry-use-cases/sales)
+        -   [カスタマーサポート](/for-business-use/industry-use-cases/customer-support)
+    -   連携・自動化
+        -   [Apps Script/Workspace アドオン](/for-business-use/integrations/apps-script)
+        -   [Zapier/Make連携](/for-business-use/integrations/no-code)
+-   **開発者向け**
+    -   Google AI Studio
+        -   [Google AI Studioとは？](/for-developers/google-ai-studio/what-is-google-ai-studio)
+        -   [プロンプトの設計とテスト](/for-developers/google-ai-studio/prompt-design-testing)
+        -   [APIコードの生成](/for-developers/google-ai-studio/api-code-generation)
+    -   Gemini API / SDK
+        -   [概要と環境セットアップ](/for-developers/gemini-api-sdk/overview-and-setup)
+        -   [SDK一覧（Node/Python/Go/Java）](/for-developers/gemini-api-sdk/sdks)
+        -   [テキスト生成（1.5 Pro/Flash）](/for-developers/gemini-api-sdk/text-generation)
+        -   [マルチモーダル認識（画像/音声/動画）](/for-developers/gemini-api-sdk/multimodal)
+        -   画像生成（Images/Imagen API）
+            -   [画像生成・編集API](/for-developers/gemini-api-sdk/images-api/image-generation-editing)
+            -   [合成・スタイル転移](/for-developers/gemini-api-sdk/images-api/image-fusion-style-transfer)
+        -   [ストリーミング/バッチ](/for-developers/gemini-api-sdk/streaming-and-batch)
+        -   [ファイルAPIと長文コンテキスト](/for-developers/gemini-api-sdk/files-and-long-context)
+        -   [ツール実行（Function Calling）](/for-developers/gemini-api-sdk/function-calling)
+        -   [構造化出力（JSON Schema）](/for-developers/gemini-api-sdk/structured-output)
+        -   [セーフティ設定と安全性](/for-developers/gemini-api-sdk/safety)
+        -   [エラーハンドリング](/for-developers/gemini-api-sdk/error-handling)
+    -   Vertex AI
+        -   [Vertex AI Studio](/for-developers/vertex-ai/vertex-ai-studio)
+        -   [AI StudioとVertexの違い](/for-developers/vertex-ai/ai-studio-vs-vertex)
+        -   [モデルチューニング](/for-developers/vertex-ai/model-tuning)
+        -   [RAG/検索・ナレッジ接続](/for-developers/vertex-ai/rag-and-search)
+        -   [Grounding（Google 検索/データ接続）](/for-developers/vertex-ai/grounding)
+        -   [Agent Builder（会話/タスク）](/for-developers/vertex-ai/agent-builder)
+        -   [Extensions/Connectors](/for-developers/vertex-ai/extensions-connectors)
+        -   [監視・評価・安全性](/for-developers/vertex-ai/monitoring-evaluation-safety)
+    -   Gemini Code Assist
+        -   [概要とセットアップ](/for-developers/gemini-code-assist/overview-and-setup)
+        -   [コード生成と補完](/for-developers/gemini-code-assist/code-generation-completion)
+        -   [デバッグとリファクタリング](/for-developers/gemini-code-assist/debugging-refactoring)
+        -   [VS Code / JetBrains連携](/for-developers/gemini-code-assist/ide-integration)
+    -   オンデバイスAI (Gemini Nano)
+        -   [Gemini Nanoとは？](/for-developers/gemini-nano/what-is-gemini-nano)
+        -   [Android AICoreでの利用方法](/for-developers/gemini-nano/android-aicore)
+        -   [サポートされるデバイス](/for-developers/gemini-nano/supported-devices)
+        -   [活用事例](/for-developers/gemini-nano/use-cases)
+    -   Android Studio連携
+        -   [Gemini in Android Studio](/for-developers/android-studio-integration/gemini-in-android-studio)
+        -   [開発ワークフロー改善](/for-developers/android-studio-integration/improving-workflow)
+-   **比較とリソース**
+    -   [プラン比較](/resources/plan-comparison)
+    -   [制限・クォータ](/resources/quotas-and-limits)
+    -   [競合サービス比較](/resources/competitor-comparison)
+    -   [よくある質問 (FAQ)](/resources/faq)
+    -   [最新ニュース](/resources/latest-news)
+    -   実務リファレンス
+        -   [セキュリティ/データ保護](/resources/security-and-privacy)
+        -   [日本語最適化のコツ](/resources/ja-optimization)
+        -   [評価・テストの進め方](/resources/evaluation-and-testing)

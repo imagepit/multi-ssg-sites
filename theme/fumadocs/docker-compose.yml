@@ -1,0 +1,13 @@
+services:
+  fumadocs: # 開発サーバー・ビルド用
+    # build: .
+    image: imagepit/fumadocs:v1.0.0
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./content:/app/content
+      - ./specs:/app/specs
+      - ./public:/app/public
+    working_dir: /app
+    environment:
+      - NODE_OPTIONS="--max-old-space-size=8192"

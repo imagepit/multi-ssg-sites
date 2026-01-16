@@ -1,0 +1,29 @@
+### ============================================
+### Admin Auth / Health API
+### ============================================
+
+# @host = http://localhost:8787
+@host = https://techdoc-admin.r-takahashi-b81.workers.dev
+@contentType = application/json
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJsb2NhbC1hZG1pbiIsInJvbGVzIjpbImFkbWluIiwiZWRpdG9yIl0sInNpdGVJZHMiOlsibmV4dGpzIl0sImlhdCI6MTc2NjI5MjA3MywiZXhwIjoxNzY2Mjk1NjczfQ.sH9FAVEqH5x6qWEsoNJ8tX2wH36wqqjVu30dzwQ6Iwk
+
+### --------------------------------------------
+### Health check
+### GET /health
+### --------------------------------------------
+
+GET {{host}}/health
+
+### --------------------------------------------
+### whoami (JWT required)
+### GET /auth/whoami
+### --------------------------------------------
+
+GET {{host}}/auth/whoami
+Authorization: Bearer {{token}}
+
+### --------------------------------------------
+### whoami - no token
+### --------------------------------------------
+
+GET {{host}}/auth/whoami

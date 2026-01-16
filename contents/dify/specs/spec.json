@@ -1,0 +1,73 @@
+{
+  "tech_keyword_id": "dify",
+  "site_name": "Dify AI Development Hub",
+  "site_type": "documentation",
+  "generator": "wordpress",
+  "language": "ja",
+  "created_at": "2025-09-02T12:10:00Z",
+  "updated_at": "2025-09-02T12:20:00Z",
+  "phase": "requirements",
+  "research_reference": {
+    "keyword_id": "dify",
+    "research_date": "2025-09-02",
+    "proposal_available": true
+  },
+  "target_metrics": {
+    "monthly_visitors": "10000",
+    "conversion_rate": "2%",
+    "page_views": "30000",
+    "engagement_time": "3m"
+  },
+  "integration": {
+    "training_platform": true,
+    "promotion_banners": true,
+    "content_linking": true,
+    "analytics_tracking": true
+  },
+  "approvals": {
+    "requirements": {
+      "generated": true,
+      "approved": false,
+      "generated_at": "2025-09-02T12:20:00Z",
+      "approved_at": null,
+      "approved_by": null
+    },
+    "design": {
+      "generated": false,
+      "approved": false,
+      "approved_at": null,
+      "approved_by": null
+    },
+    "tasks": {
+      "generated": false,
+      "approved": false,
+      "approved_at": null,
+      "approved_by": null
+    },
+    "quality": {
+      "checked": false,
+      "passed": false,
+      "checked_at": null,
+      "issues_count": 0
+    }
+  },
+  "wordpress_config": {
+    "docker_image": "imagepit/wp-post:v1",
+    "docker_compose": true,
+    "rest_api": true,
+    "features": {
+      "auto_publish": true,
+      "seo_optimization": true,
+      "media_upload": true,
+      "page_hierarchy": true
+    }
+  },
+  "content_structure": {
+    "getting_started": true,
+    "api_reference": true,
+    "tutorials": true,
+    "best_practices": true,
+    "examples": true,
+    "troubleshooting": true
+  }
+}

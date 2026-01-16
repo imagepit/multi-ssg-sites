@@ -1,0 +1,21 @@
+{
+  "technical_keywords": "aws",
+  "training_keyword_id": "aws",
+  "total_research_count": 1,
+  "latest_research_timestamp": "2025-09-27-183141",
+  "research_history": [
+    {
+      "timestamp": "2025-09-27-183141",
+      "research_date": "2025-09-27",
+      "sites_researched": 15,
+      "data_points": 45,
+      "trends_identified": 8,
+      "needs_identified": 12,
+      "competitors_analyzed": 6,
+      "recommendations": 5,
+      "proposal_generated": true,
+      "directory": "history/2025-09-27-183141/"
+    }
+  ],
+  "updated_at": "2025-09-27-183141"
+}

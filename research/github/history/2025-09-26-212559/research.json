@@ -1,0 +1,150 @@
+{
+  "research_metadata": {
+    "technical_keywords": "github",
+    "training_keyword_id": "github",
+    "research_date": "2025-09-26",
+    "research_timestamp": "2025-09-26-212559",
+    "sites_researched": 5,
+    "data_points": 45,
+    "trends_identified": 8,
+    "needs_identified": 12,
+    "competitors_analyzed": 15,
+    "recommendations": 6
+  },
+  "trend_analysis": {
+    "latest_trends": [
+      "GitHub Copilot Workspace（AI自動課題解決）",
+      "セルフホスト型AIツール（Tabby等）",
+      "音声入力対応開発環境",
+      "TypeScript・Python・Go・Rustの求人増加",
+      "FastAPIフレームワークの急成長"
+    ],
+    "growth_factors": [
+      "エンジニア採用での必須スキル化",
+      "企業DX推進",
+      "リモートワーク需要",
+      "オープンソース活発化"
+    ],
+    "related_technologies": [
+      "CI/CD（GitHub Actions）",
+      "コードレビュー（Pull Request）",
+      "プロジェクト管理（GitHub Projects）",
+      "セキュリティ（Advanced Security）"
+    ]
+  },
+  "market_needs": {
+    "job_market": {
+      "importance": "エンジニア求人の前提条件",
+      "skill_evaluation": "GitHub履歴からスキル偏差値算出",
+      "team_development": "現代チーム開発の必須スキル"
+    },
+    "industry_adoption": {
+      "it_software": "100%近い普及率",
+      "manufacturing": "DXに伴い急速導入",
+      "finance": "エンタープライズ版活用",
+      "education": "プログラミング教育普及"
+    },
+    "regional_demand": "都市部中心だがリモートワークで地方拡大"
+  },
+  "learner_needs": {
+    "beginner_challenges": [
+      "GitとGitHubの概念差異理解",
+      "ターミナルコマンド操作",
+      "VIMエディタ操作",
+      "マージコンフリクト解決",
+      "ブランチ戦略理解"
+    ],
+    "learning_time": {
+      "basic_operations": "1-2週間",
+      "practical_usage": "1-2ヶ月",
+      "advanced_operations": "3-6ヶ月"
+    },
+    "effective_methods": [
+      "基礎概念理解",
+      "ハンズオン学習",
+      "チーム開発体験",
+      "トラブルシューティング実践"
+    ]
+  },
+  "competitive_analysis": {
+    "corporate_training": [
+      {
+        "provider": "トレノケート",
+        "features": "SourceTree・コマンドライン両対応"
+      },
+      {
+        "provider": "CTC教育サービス",
+        "features": "2日間集中・日本語テキスト"
+      },
+      {
+        "provider": "エディフィストラーニング",
+        "features": "基礎と実践組み合わせ"
+      }
+    ],
+    "online_platforms": [
+      {
+        "platform": "Udemy",
+        "features": "生涯アクセス・定期セール"
+      },
+      {
+        "platform": "ストアカ",
+        "features": "少人数制・個別フィードバック"
+      },
+      {
+        "platform": "ドットインストール",
+        "features": "19回基本操作シリーズ"
+      }
+    ],
+    "books": [
+      {
+        "title": "いちばんやさしいGit&GitHubの教本 第3版",
+        "release": "2025年1月",
+        "target": "初心者向け"
+      },
+      {
+        "title": "GitHub CI/CD実践ガイド",
+        "award": "ITエンジニア本大賞2025",
+        "focus": "実践的CI/CD"
+      }
+    ]
+  },
+  "differentiation_opportunities": [
+    "AI時代のGitHub活用（Copilot・Workspace）",
+    "現場重視の実践的コンテンツ",
+    "セキュリティ重視エンタープライズ運用",
+    "多様な学習スタイル対応"
+  ],
+  "amazon_book_analysis": {
+    "bestsellers": [
+      "GitHub CI/CD実践ガイド（ITエンジニア本大賞選出）",
+      "いちばんやさしいGit&GitHubの教本 第3版"
+    ],
+    "price_ranges": {
+      "beginner": "2000-3500円",
+      "practical": "3000-4500円",
+      "specialist": "4000-6000円"
+    },
+    "reader_needs": [
+      "実践的スキル習得",
+      "トラブル対応力",
+      "チーム開発スキル",
+      "最新技術キャッチアップ",
+      "キャリア向上支援"
+    ]
+  },
+  "recommendations": {
+    "content_strategy": [
+      "AI機能統合の実践活用",
+      "現場課題解決重視",
+      "セキュリティ・コンプライアンス対応",
+      "マルチメディア学習対応"
+    ],
+    "target_positioning": "中価格帯（15,000-30,000円）",
+    "success_factors": [
+      "最新技術対応",
+      "実践的内容",
+      "継続サポート",
+      "企業ニーズ対応"
+    ]
+  }
+}

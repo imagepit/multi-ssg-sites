@@ -1,0 +1,79 @@
+{
+  "research_metadata": {
+    "technical_keywords": "Docker",
+    "keyword_id": "docker",
+    "research_date": "2025-09-27",
+    "timestamp": "2025-09-27-200546",
+    "research_duration_minutes": 45,
+    "total_sources_analyzed": 52
+  },
+  "research_scope": {
+    "sites_researched": 18,
+    "data_points_collected": 52,
+    "search_queries_executed": 8,
+    "markets_analyzed": [
+      "job_market",
+      "learning_resources",
+      "security_landscape",
+      "technology_trends",
+      "book_market"
+    ]
+  },
+  "key_findings": {
+    "market_size": {
+      "current_2025": "$6.12B",
+      "projected_2030": "$16.32B",
+      "cagr": "21.67%"
+    },
+    "salary_ranges": {
+      "freelance_junior": "¥390,000/month",
+      "freelance_senior": "¥920,000/month",
+      "max_annual": "¥25,000,000"
+    },
+    "learning_metrics": {
+      "basic_learning_time": "150 minutes",
+      "comprehensive_time": "6-10 hours",
+      "difficulty_level": "medium"
+    },
+    "security_criticality": {
+      "latest_cve": "CVE-2025-9074",
+      "cvss_score": 9.3,
+      "security_budget_ratio": "40%"
+    }
+  },
+  "trends_identified": 8,
+  "needs_gaps_found": 6,
+  "competitors_analyzed": 12,
+  "opportunities_identified": [
+    "latest_security_coverage",
+    "practical_production_guidance",
+    "docker_vs_alternatives",
+    "japanese_enterprise_needs",
+    "2025_cliff_solutions"
+  ],
+  "content_recommendations": {
+    "priority_topics": [
+      "CVE-2025-9074_security_guide",
+      "docker_vs_podman_comparison",
+      "production_best_practices",
+      "kubernetes_integration",
+      "legacy_migration_strategies"
+    ],
+    "target_audience": [
+      "docker_beginners",
+      "security_focused_teams",
+      "enterprise_decision_makers",
+      "career_advancement_seekers"
+    ]
+  },
+  "monetization_potential": {
+    "market_demand": "high",
+    "competition_level": "medium",
+    "revenue_opportunity": "¥30M annually",
+    "customer_segments": [
+      "individual_learners",
+      "corporate_training",
+      "consulting_services"
+    ]
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "tech_keyword_id": "openai",
+  "site_name": "OpenAI完全マスターガイド",
+  "site_type": "documentation",
+  "language": "ja",
+  "created_at": "2025-09-26 13:00:59",
+  "updated_at": "2025-09-26 13:00:59",
+  "phase": "initialized",
+  "research_reference": {
+    "keyword_id": "openai",
+    "research_date": "2025-09-26",
+    "proposal_available": true
+  },
+  "target_metrics": {
+    "monthly_visitors": "50,000",
+    "conversion_rate": "15%",
+    "page_views": "200,000",
+    "engagement_time": "8分"
+  },
+  "approvals": {
+    "requirements": {
+      "generated": false,
+      "approved": false,
+      "approved_at": null,
+      "approved_by": null
+    },
+    "design": {
+      "generated": false,
+      "approved": false,
+      "approved_at": null,
+      "approved_by": null
+    },
+    "tasks": {
+      "generated": false,
+      "approved": false,
+      "approved_at": null,
+      "approved_by": null
+    }
+  },
+  "theme_config": {
+    "colors": {
+      "primary": "hsl(142deg 71% 45%)",
+      "secondary": "hsl(142deg 71% 35%)",
+      "accent": "hsl(172deg 71% 55%)",
+      "background": "hsl(0deg 0% 98%)",
+      "surface": "hsl(0deg 0% 100%)",
+      "text": "hsl(224deg 14% 16%)",
+      "muted": "hsl(220deg 9% 46%)"
+    },
+    "fonts": {
+      "heading": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "body": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "mono": "JetBrains Mono, ui-monospace, SFMono-Regular, monospace"
+    },
+    "spacing": {
+      "sidebar": "320px",
+      "content": "1024px",
+      "gap": "2rem"
+    },
+    "features": {
+      "darkMode": true,
+      "animations": true,
+      "blur": true
+    },
+    "branding": {
+      "logo": "/logos/openai.svg",
+      "favicon": "/favicons/openai.svg",
+      "og_image": "/og/openai-og.png"
+    }
+  },
+  "content_stats": {
+    "total_pages": 150,
+    "categories": 12,
+    "learning_levels": 6,
+    "practical_projects": 4,
+    "estimated_learning_hours": 120
+  },
+  "learning_path": {
+    "beginner": {
+      "name": "初心者コース",
+      "duration": "2-3ヶ月",
+      "pages": ["getting-started", "openai-basics", "chatgpt-usage", "prompt-engineering"]
+    },
+    "developer": {
+      "name": "開発者コース",
+      "duration": "3-4ヶ月",
+      "pages": ["api-basics", "practical-integration", "langchain", "rag-implementation"]
+    },
+    "enterprise": {
+      "name": "企業担当者コース",
+      "duration": "2-3ヶ月",
+      "pages": ["enterprise-usage", "azure-openai", "security-ethics", "system-integration"]
+    },
+    "advanced": {
+      "name": "上級者コース",
+      "duration": "3-4ヶ月",
+      "pages": ["latest-technology", "gpt4o-multimodal", "practical-projects", "best-practices"]
+    }
+  },
+  "market_positioning": {
+    "target_audience": ["初心者", "開発者", "企業担当者", "上級者"],
+    "competitive_advantage": [
+      "OpenAI Academy日本語版相当のクオリティ",
+      "段階的学習カリキュラム",
+      "実践重視のハンズオン",
+      "最新技術対応",
+      "企業活用考慮"
+    ],
+    "differentiation_factors": [
+      "完全日本語対応",
+      "理論と実践のバランス",
+      "企業文化・法規制考慮",
+      "継続学習支援"
+    ]
+  }
+}

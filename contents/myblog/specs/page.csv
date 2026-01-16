@@ -1,0 +1,6 @@
+slug,parent,title,filepath,status,post_type,target,goal,seo_title,seo_keywords,seo_description,handson_overview
+home,,Home,contents/home.md,published,page,,,,,,
+posts/hello-world,news,はじめての投稿,contents/posts/hello-world.md,published,post,,,,,,
+posts/performance-tips,tech,Next.js パフォーマンスTIPS,contents/posts/performance-tips.md,published,post,,,,,,
+posts/deploy-to-vercel,guide,Vercelデプロイ手順,contents/posts/deploy-to-vercel.md,published,post,,,,,,
+

@@ -1,0 +1,99 @@
+{
+  "research_metadata": {
+    "technical_keywords": "notion",
+    "keyword_id": "notion",
+    "research_date": "2025-09-26",
+    "research_timestamp": "2025-09-26-215731",
+    "sites_researched": 15,
+    "data_points_analyzed": 45,
+    "trends_identified": 8,
+    "needs_identified": 12,
+    "competitors_analyzed": 5,
+    "books_analyzed": 8
+  },
+  "key_findings": {
+    "latest_trends": [
+      "Notion 3.0 AI革命的機能リリース（2025年9月）",
+      "世界初の知識労働エージェント機能",
+      "ChatGPTとClaudeモデルの直接統合",
+      "データベース機能の大幅改良",
+      "Webhook対応による外部システム連携"
+    ],
+    "market_size": {
+      "job_postings": {
+        "indeed": 3916,
+        "forkwell": 428,
+        "max_salary": "25,000,000円",
+        "min_salary_max": "12,000,000円"
+      }
+    },
+    "learning_resources": {
+      "udemy_courses": [
+        "入門編はじめてのNotion基礎マスターコース",
+        "日本語版対応Notionの機能とワークから学ぶ",
+        "2025年最新版Notion超初心者のためのステップバイステップ講座"
+      ],
+      "top_books": [
+        "Notionで実現する新クリエイティブ仕事術（村上臣著）",
+        "はじめるNotion 使いかたを自由にデザインするための、基本、コツ、アイデア",
+        "Notion×生成AI 自動化大全"
+      ]
+    },
+    "main_challenges": [
+      "機能の豊富さによる学習の迷い",
+      "自由度の高さがかえって使いこなしを困難にする",
+      "完璧なシステムを作ろうとして複雑化",
+      "AI機能の効果的な活用方法が不明"
+    ],
+    "skill_requirements": [
+      "基本操作から応用まで",
+      "データベース設計と管理",
+      "テンプレート作成・カスタマイズ",
+      "チーム運用とワークフロー設計",
+      "AI機能を活用した業務効率化"
+    ],
+    "competitors": [
+      {
+        "name": "Obsidian",
+        "differentiation": "ローカル型知識管理、双方向リンク",
+        "target": "個人の深い思考・研究ノート"
+      },
+      {
+        "name": "Roam Research",
+        "differentiation": "非線形思考ツール、第二の脳構築",
+        "target": "アイデア間の相互関係可視化"
+      },
+      {
+        "name": "Microsoft Loop",
+        "differentiation": "協調作業プラットフォーム",
+        "target": "Office365統合環境"
+      }
+    ],
+    "market_opportunities": [
+      "Notion 3.0のAI機能に特化した研修",
+      "業界・職種別の実践的カリキュラム",
+      "エンタープライズ導入の成功パターン体系化",
+      "継続的なアップデート対応とコミュニティ形成"
+    ]
+  },
+  "recommendations": {
+    "target_audience": [
+      "Notion初心者から中級者",
+      "企業のデジタル化推進担当者",
+      "チーム導入を検討している管理職",
+      "AI活用に関心がある実務者"
+    ],
+    "content_focus": [
+      "段階的スキルアップの体系化",
+      "実際のビジネス課題解決型アプローチ",
+      "AI機能活用の専門的指導",
+      "チーム導入・運用の成功パターン提供"
+    ],
+    "differentiation_strategy": [
+      "最新AI機能への完全対応",
+      "実践重視のハンズオン学習",
+      "業界特化型カリキュラム",
+      "継続サポート体制の充実"
+    ]
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "tech_keyword_id": "kubernetes",
+  "site_name": "Kubernetes Complete Guide",
+  "site_type": "documentation",
+  "language": "ja",
+  "created_at": "2025-09-27",
+  "updated_at": "2025-09-27",
+  "phase": "initialized",
+  "research_reference": {
+    "keyword_id": "kubernetes",
+    "research_date": null,
+    "proposal_available": false
+  },
+  "target_metrics": {
+    "monthly_visitors": "10000",
+    "conversion_rate": "5%",
+    "page_views": "50000",
+    "engagement_time": "5分"
+  },
+  "approvals": {
+    "requirements": {
+      "generated": false,
+      "approved": false,
+      "approved_at": null,
+      "approved_by": null
+    },
+    "design": {
+      "generated": false,
+      "approved": false,
+      "approved_at": null,
+      "approved_by": null
+    },
+    "tasks": {
+      "generated": false,
+      "approved": false,
+      "approved_at": null,
+      "approved_by": null
+    }
+  },
+  "theme_config": {
+    "colors": {
+      "primary": "hsl(218deg 91% 60%)",
+      "secondary": "hsl(218deg 71% 50%)",
+      "accent": "hsl(275deg 100% 80%)",
+      "background": "hsl(0deg 0% 100%)",
+      "surface": "hsl(0deg 0% 98%)",
+      "text": "hsl(0deg 0% 13%)",
+      "muted": "hsl(0deg 0% 60%)"
+    },
+    "fonts": {
+      "heading": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "body": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "mono": "JetBrains Mono, ui-monospace, SFMono-Regular, monospace"
+    },
+    "spacing": {
+      "sidebar": "320px",
+      "content": "1024px",
+      "gap": "2rem"
+    },
+    "features": {
+      "darkMode": true,
+      "animations": true,
+      "blur": true
+    },
+    "branding": {
+      "logo": "/logos/kubernetes.svg",
+      "favicon": "/favicons/kubernetes.svg",
+      "og_image": "/og/kubernetes-og.png"
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "tech_keyword_id": "gitlab",
+  "site_name": "GitLab実践ガイド - CI/CD・DevOps完全マスター",
+  "site_type": "documentation",
+  "generator": "wordpress",
+  "language": "ja",
+  "created_at": "2025-09-01T10:45:00Z",
+  "updated_at": "2025-09-26T00:00:00Z",
+  "phase": "design",
+  "research_reference": {
+    "keyword_id": "gitlab",
+    "research_date": "2025-09-01",
+    "proposal_available": true
+  },
+  "target_metrics": {
+    "monthly_visitors": "10,000",
+    "conversion_rate": "3%",
+    "page_views": "50,000",
+    "engagement_time": "5分"
+  },
+  "integration": {
+    "training_platform": true,
+    "promotion_banners": true,
+    "content_linking": true,
+    "analytics_tracking": true
+  },
+  "approvals": {
+    "requirements": {
+      "generated": true,
+      "approved": false,
+      "generated_at": "2025-09-04T11:13:51Z",
+      "approved_at": null,
+      "approved_by": null
+    },
+    "design": {
+      "generated": true,
+      "approved": true,
+      "generated_at": "2025-09-26T00:00:00Z",
+      "approved_at": "2025-09-26T00:00:00Z",
+      "approved_by": "user"
+    },
+    "tasks": {
+      "generated": false,
+      "approved": false,
+      "approved_at": null,
+      "approved_by": null
+    },
+    "quality": {
+      "checked": false,
+      "passed": false,
+      "checked_at": null,
+      "issues_count": 0
+    }
+  },
+  "wordpress_config": {
+    "docker_image": "imagepit/wp-post:v1",
+    "docker_compose": true,
+    "rest_api": true,
+    "features": {
+      "auto_publish": true,
+      "seo_optimization": true,
+      "media_upload": true,
+      "page_hierarchy": true
+    }
+  },
+  "content_structure": {
+    "getting_started": true,
+    "api_reference": false,
+    "tutorials": true,
+    "best_practices": true,
+    "examples": true,
+    "troubleshooting": true
+  }
+}

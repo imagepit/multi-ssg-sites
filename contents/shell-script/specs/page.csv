@@ -1,0 +1,168 @@
+sidebar_position,slug,parent,title,status,post_type,seo_title,seo_keywords,seo_description,handson_overview
+1,introduction,,シェルスクリプト入門,draft,pages,シェルスクリプト入門 | 基礎から学ぶ最初のステップ,"シェルスクリプト 入門, 初心者, 基礎, 環境構築",シェルスクリプトの世界へようこそ。この章では、スクリプトの基本概念から環境構築、そして最初の「Hello World!」まで、初心者がつまずかずに学べるよう丁寧にガイドします。,シェルの基本操作を確認し、スクリプトファイルを作成して実行するまでの一連の流れを体験します。
+2,what-is-shell-script,introduction,シェルスクリプトとは？,draft,pages,シェルスクリプトとは？ | 基礎概念とメリットを理解する,"シェルスクリプト, 基礎, 概念, メリット, 自動化",シェルスクリプトの基本概念、コマンドを記述したファイルとしての役割、自動化の基礎となる仕組みについて初心者向けに解説します。,簡単なコマンドの組み合わせで、日常作業を効率化できることを体験します。
+3,shell-history,introduction,シェルの歴史,draft,pages,シェルの歴史 | UNIXからBash、Zshまでの進化の道のり,"シェル 歴史, UNIX, Thompson Shell, Bourne Shell, Bash, Zsh",UNIXの誕生から現代のシェル環境まで、シェルの歴史と進化を辿ります。各シェルの特徴と時代背景を理解することで、より深い知識を得られます。,歴史的な各シェルの違いと特徴を実際にコマンドで確認します。
+4,unix-birth-thompson-shell,shell-history,UNIXの誕生とThompson Shell,draft,pages,UNIXの誕生とThompson Shell | シェルの原点,"UNIX, Thompson Shell, Ken Thompson, シェル 起源",1969年、Ken ThompsonによるUNIXの誕生と、最初のシェルであるThompson Shellの特徴と歴史的意義を解説します。,Thompson Shellの基本的な動作原理を理解します。
+5,bourne-shell,shell-history,Bourne Shell (sh) の登場,draft,pages,Bourne Shell (sh) の登場 | 標準シェルの確立,"Bourne Shell, sh, Stephen Bourne, POSIX",1977年にStephen Bourneが開発したBourne Shellは、現代のシェルの基礎となりました。その革新的な機能と影響を解説します。,shコマンドの基本的な使い方を確認します。
+6,c-shell-tcsh,shell-history,C Shell (csh) とTcsh,draft,pages,C Shell (csh) とTcsh | C言語風の構文を持つシェル,"C Shell, csh, tcsh, Bill Joy",Bill Joyが開発したC Shellとその拡張版Tcshの特徴、C言語風の構文がもたらした利便性について解説します。,C Shellの独自機能を試してみます。
+7,korn-shell-innovation,shell-history,Korn Shell (ksh) の革新,draft,pages,Korn Shell (ksh) の革新 | 高機能シェルの登場,"Korn Shell, ksh, David Korn, AIX",David Kornが開発したKorn Shellの革新的な機能と、商用UNIXでの採用について解説します。,Korn Shellの先進的な機能を体験します。
+8,bash-birth-popularity,shell-history,Bash の誕生と普及,draft,pages,Bash の誕生と普及 | デファクトスタンダードへの道,"Bash, GNU, Brian Fox, Linux, デファクトスタンダード",1989年にGNUプロジェクトで生まれたBashが、どのようにしてデファクトスタンダードになったのかを解説します。,Bashの豊富な機能を実際に使ってみます。
+9,zsh-evolution-modernization,shell-history,Zsh の進化と現代化,draft,pages,Zsh の進化と現代化 | モダンシェルの代表格,"Zsh, Z Shell, Oh My Zsh, macOS, モダンシェル",1990年から開発が続くZshの進化と、Oh My Zshによる使いやすさの向上、macOSでの標準採用について解説します。,Zshの便利な補完機能を体験します。
+10,modern-shell-environment,shell-history,現代のシェル環境,draft,pages,現代のシェル環境 | 多様化するシェルの世界,"モダンシェル, Fish, PowerShell, クロスプラットフォーム",Fish、PowerShellなど、現代の多様なシェル環境と、それぞれの特徴・用途について解説します。,複数のシェルを比較して違いを確認します。
+11,shell-future-development,shell-history,シェルの未来と発展,draft,pages,シェルの未来と発展 | 次世代シェルの可能性,"シェル 未来, AI統合, クラウドネイティブ, 自動化",AI統合やクラウドネイティブ対応など、シェルの未来の発展方向性について考察します。,最新のシェル技術トレンドを調査します。
+12,why-learn-shell-script,introduction,なぜシェルスクリプトを学ぶのか,draft,pages,なぜ今シェルスクリプトを学ぶのか？自動化と生産性向上の鍵,"シェルスクリプト メリット, 自動化, なぜ学ぶ, 生産性向上",日常的な反復作業を自動化し、開発ワークフローを劇的に効率化するシェルスクリプトの強力なメリットを解説します。,身の回りの手作業を特定し、それを自動化する簡単なスクリプトの構想を立てます。
+13,environment,introduction,環境構築,draft,pages,"シェルスクリプト実行環境の構築ガイド | macOS, Windows, Linux","シェルスクリプト 環境構築, WSL, Mac, Linux, Bash",macOS、Windows (WSL)、Linuxの各OSでシェルスクリプトを実行するための環境設定手順を詳しく解説します。,各OSのターミナルを起動し、Bashのバージョンを確認します。
+14,macos,environment,macOS,draft,pages,macOSで始めるシェルスクリプト環境構築,"macOS, シェルスクリプト, 環境構築, Homebrew, iTerm2",macOSに標準搭載のBash/Zshを使いこなすための設定や、Homebrew、iTerm2といった便利なツール導入法を解説します。,Homebrewを使って最新のbashとshellcheckをインストールします。
+15,windows-wsl,environment,Windows (WSL),draft,pages,Windows(WSL)で始めるシェルスクリプト環境構築,"Windows, WSL, シェルスクリプト, 環境構築, Ubuntu",Windows Subsystem for Linux (WSL)を有効化し、Ubuntuを導入して本格的なLinux環境を構築する手順を解説します。,Microsoft StoreからUbuntuをインストールし、WSLを起動します。
+16,linux,environment,Linux,draft,pages,Linuxで始めるシェルスクリプト環境構築,"Linux, シェルスクリプト, 環境構築, Ubuntu, CentOS",主要なLinuxディストリビューション(Ubuntu、CentOS)におけるシェル環境の確認と、開発に役立つツールのインストール方法を解説します。,パッケージマネージャを使い、開発ツールをインストールします。
+17,shell-types-features,introduction,シェルの種類と特徴,draft,pages,シェルの種類と特徴 | 各シェルの違いを理解する,"シェル 種類, Bash, Zsh, Fish, Dash, 比較",様々なシェルの種類と特徴、用途に応じた使い分け、POSIXとの互換性について体系的に学びます。,複数のシェルを切り替えて、それぞれの特徴を体験します。
+18,what-is-shell,shell-types-features,シェルとは何か,draft,pages,シェルとは何か | OSとユーザーをつなぐインターフェース,"シェル, コマンドインタープリタ, カーネル, インターフェース",シェルの基本的な役割、カーネルとの関係、コマンドインタープリタとしての機能について解説します。,シェルがコマンドをどのように解釈・実行するか確認します。
+19,bash,shell-types-features,Bash (Bourne Again Shell),draft,pages,Bash (Bourne Again Shell) | 最も広く使われるシェル,"Bash, Bourne Again Shell, GNU, Linux標準",最も広く使われているBashの特徴、歴史、基本設定、スクリプトの書き方について詳しく解説します。,Bashの主要な機能を実際に使ってみます。
+20,bash-features-history,bash,Bashの特徴と歴史,draft,pages,Bashの特徴と歴史 | GNUプロジェクトが生んだ標準シェル,"Bash 特徴, Bash 歴史, GNU, Brian Fox",Bashの開発背景、主要な機能、なぜデファクトスタンダードになったのかを解説します。,Bashの独自機能を確認します。
+21,bash-basic-configuration,bash,Bashの基本設定,draft,pages,Bashの基本設定 | .bashrcと.bash_profileの使い方,"Bash 設定, .bashrc, .bash_profile, 環境設定",Bashの設定ファイル（.bashrc、.bash_profile）の役割と、カスタマイズ方法を解説します。,自分好みのBash環境を設定します。
+22,bash-script-writing,bash,Bashスクリプトの書き方,draft,pages,Bashスクリプトの書き方 | 基本構文とベストプラクティス,"Bashスクリプト, 書き方, シェバング, ベストプラクティス",Bashスクリプトの基本的な書き方、シェバング、デバッグ方法などを解説します。,実用的なBashスクリプトを作成します。
+23,zsh,shell-types-features,Zsh (Z Shell),draft,pages,Zsh (Z Shell) | macOSの標準シェル,"Zsh, Z Shell, macOS標準, Oh My Zsh",macOSの標準シェルであるZshの特徴、Bashとの違い、カスタマイズ方法について解説します。,Zshの強力な補完機能を体験します。
+24,zsh-features-differences,zsh,Zshの特徴とBashとの違い,draft,pages,Zshの特徴とBashとの違い | より強力な補完と拡張性,"Zsh 特徴, Bash 違い, 補完機能, プロンプト",Zshの独自機能、Bashとの互換性、移行時の注意点について詳しく解説します。,ZshとBashで同じスクリプトを実行して違いを確認します。
+25,oh-my-zsh-customization,zsh,Oh My Zshとカスタマイズ,draft,pages,Oh My Zshとカスタマイズ | Zshを使いやすくする,"Oh My Zsh, Zsh カスタマイズ, テーマ, プラグイン",Oh My Zshのインストール方法、テーマやプラグインによるカスタマイズ方法を解説します。,Oh My Zshをインストールして、人気のテーマを試します。
+26,zsh-script-compatibility,zsh,Zshスクリプトの互換性,draft,pages,Zshスクリプトの互換性 | Bashスクリプトとの相互運用,"Zsh 互換性, Bash 互換, スクリプト 移植",ZshでBashスクリプトを実行する際の注意点、互換性の問題と対処法を解説します。,BashスクリプトをZshで実行して互換性を確認します。
+27,fish,shell-types-features,Fish (Friendly Interactive Shell),draft,pages,Fish (Friendly Interactive Shell) | ユーザーフレンドリーなシェル,"Fish, Friendly Interactive Shell, ユーザビリティ, 自動補完",ユーザーフレンドリーを追求したFishシェルの特徴と、POSIXとの非互換性について解説します。,Fishの直感的な自動補完機能を体験します。
+28,fish-features-usability,fish,Fishの特徴とユーザビリティ,draft,pages,Fishの特徴とユーザビリティ | 初心者に優しい設計思想,"Fish 特徴, ユーザビリティ, 自動補完, シンタックスハイライト",Fishの革新的な機能、Webベースの設定画面、優れたユーザビリティについて解説します。,Fishの便利な機能を実際に使ってみます。
+29,fish-posix-differences,fish,FishとPOSIXシェルの違い,draft,pages,FishとPOSIXシェルの違い | 互換性よりも使いやすさを優先,"Fish POSIX, 非互換, 独自構文, 移植性",FishがPOSIX準拠を捨てて得た利便性と、その代償について解説します。,POSIXスクリプトとFishスクリプトの違いを確認します。
+30,dash,shell-types-features,Dash (Debian Almquist Shell),draft,pages,Dash (Debian Almquist Shell) | 軽量高速なPOSIXシェル,"Dash, Debian Almquist Shell, 軽量, 高速, POSIX",Debian/Ubuntuのシステムシェルとして採用されているDashの特徴と用途を解説します。,Dashの高速性をベンチマークで確認します。
+31,dash-lightweight-performance,dash,Dashの軽量性とパフォーマンス,draft,pages,Dashの軽量性とパフォーマンス | システムスクリプトに最適,"Dash パフォーマンス, 軽量シェル, 起動速度, メモリ使用量",Dashが実現する高速起動と低メモリ使用量、その実装の秘密を解説します。,DashとBashの起動速度を比較測定します。
+32,system-script-usage,dash,システムスクリプトでの利用,draft,pages,システムスクリプトでのDash利用 | /bin/shの正体,"Dash システムスクリプト, /bin/sh, init, 起動スクリプト",多くのLinuxディストリビューションで/bin/shがDashを指す理由と、その影響を解説します。,システムスクリプトでのDashの使用例を確認します。
+33,other-shells,shell-types-features,その他のシェル,draft,pages,その他のシェル | Ksh、Tcsh、PowerShell,"Korn Shell, Tcsh, PowerShell, その他のシェル",Korn Shell、Tcsh、PowerShellなど、その他の重要なシェルについて解説します。,各シェルの特徴的な機能を試します。
+34,korn-shell,other-shells,Ksh (Korn Shell),draft,pages,Ksh (Korn Shell) | 商用UNIXの標準シェル,"Korn Shell, ksh, AIX, Solaris, 商用UNIX",商用UNIXで広く使われているKorn Shellの特徴と、現在の位置づけを解説します。,Korn Shellの独自機能を確認します。
+35,tcsh,other-shells,Tcsh (TENEX C Shell),draft,pages,Tcsh (TENEX C Shell) | C Shellの拡張版,"Tcsh, TENEX C Shell, csh拡張, FreeBSD",C Shellの拡張版であるTcshの特徴と、FreeBSDでの採用について解説します。,Tcshのコマンドライン編集機能を体験します。
+36,powershell,other-shells,PowerShell (Windows/Linux/macOS),draft,pages,PowerShell | クロスプラットフォームの次世代シェル,"PowerShell, Windows, クロスプラットフォーム, オブジェクト指向",Microsoftが開発したPowerShellの革新的な設計思想と、クロスプラットフォーム対応について解説します。,PowerShellのオブジェクト指向的な操作を体験します。
+37,shell-check-switch,shell-types-features,シェルの確認と切り替え,draft,pages,シェルの確認と切り替え | 複数シェルの使い分け,"シェル 確認, シェル 切り替え, chsh, デフォルトシェル",現在使用中のシェルの確認方法と、シェルの切り替え方法について解説します。,複数のシェルを切り替えて使い分けます。
+38,current-shell-check,shell-check-switch,現在のシェルの確認方法,draft,pages,現在のシェルの確認方法 | $SHELL vs $0の違い,"シェル 確認, $SHELL, $0, echo, ps",現在使用しているシェルを確認する複数の方法と、それぞれの違いについて解説します。,様々な方法で現在のシェルを確認します。
+39,default-shell-change,shell-check-switch,デフォルトシェルの変更,draft,pages,デフォルトシェルの変更 | chshコマンドの使い方,"デフォルトシェル, chsh, /etc/shells, ログインシェル",ログインシェル（デフォルトシェル）を変更する方法と注意点を解説します。,chshコマンドでデフォルトシェルを変更します（元に戻す方法も確認）。
+40,temporary-shell-switch,shell-check-switch,一時的なシェルの切り替え,draft,pages,一時的なシェルの切り替え | サブシェルの活用,"シェル 切り替え, サブシェル, exec, 一時的",一時的に別のシェルを使う方法と、元のシェルに戻る方法を解説します。,サブシェルを起動して、異なるシェル環境を体験します。
+41,posix-compatibility,shell-types-features,POSIXとシェル互換性,draft,pages,POSIXとシェル互換性 | ポータブルなスクリプトを書く,"POSIX, シェル互換性, ポータブル, 標準規格",POSIX標準の重要性と、互換性のあるスクリプトの書き方について解説します。,POSIX準拠のスクリプトを作成して、複数のシェルで動作確認します。
+42,posix-standard,posix-compatibility,POSIX標準とは,draft,pages,POSIX標準とは | シェルスクリプトの共通仕様,"POSIX標準, IEEE Std 1003.1, シェル仕様, 互換性",POSIX（Portable Operating System Interface）標準の概要と、シェルに関する規定を解説します。,POSIX準拠のコマンドと非準拠のコマンドを比較します。
+43,compatible-script-writing,posix-compatibility,互換性のあるスクリプトの書き方,draft,pages,互換性のあるスクリプトの書き方 | どこでも動くコードを,"互換スクリプト, ポータブル, POSIX準拠, ベストプラクティス",異なるシェル環境でも動作するポータブルなスクリプトの書き方を解説します。,POSIX準拠のスクリプトを作成し、複数環境でテストします。
+44,shell-specific-features,posix-compatibility,シェル固有機能の使い分け,draft,pages,シェル固有機能の使い分け | 互換性と機能性のバランス,"シェル固有機能, Bash拡張, Zsh拡張, フォールバック",シェル固有の便利な機能を使いつつ、互換性も保つ技術について解説します。,シェルを判定して適切な機能を使い分けるスクリプトを作成します。
+45,first-script,introduction,はじめてのスクリプト,draft,pages,初めてのシェルスクリプト作成 | Hello World!,"シェルスクリプト, Hello World, 最初のスクリプト, 実行権限",記念すべき最初のシェルスクリプトを作成します。ファイルの作成、実行権限の付与、そして実行までの一連の流れを体験しましょう。,テキストエディタで`hello.sh`を作成し、実行権限を付与して実行します。
+46,create-and-execute,first-script,ファイルの作成と実行権限,draft,pages,シェルスクリプトの作成と実行権限（chmod）の基本,"シェルスクリプト, ファイル作成, 実行権限, chmod, shebang",スクリプトファイルの基本的な構造と、`chmod`コマンドによる実行権限の付与、Shebangの重要性について学びます。,`touch`で空のファイルを作成し、`chmod 755`で権限を変更します。
+47,hello-world,first-script,Hello World!,draft,pages,シェルスクリプトでHello World! | echoコマンドの基本,"シェルスクリプト, Hello World, echo, 基本コマンド",最も基本的な`echo`コマンドを使い、画面に「Hello World!」と表示するスクリプトを作成します。,`echo`コマンドを使い、様々な文字列を表示するスクリプトを作成・実行します。
+48,core-syntax,,コア文法マスター,draft,pages,シェルスクリプトのコア文法マスターガイド,"シェルスクリプト 文法, 変数, 制御構文, if, for, 関数, 配列",スクリプトを自在に操るための必須知識。変数、引用符、条件分岐、ループ、関数、配列といったコア文法を体系的に学びます。,各文法項目について、簡単なサンプルスクリプトを作成します。
+49,variables,core-syntax,変数,draft,pages,シェルスクリプトの変数 | 宣言、参照、特殊変数、環境変数,"シェルスクリプト 変数, 使い方, 特殊変数, 環境変数",文字列や数値を格納する変数の使い方をマスターします。基本的な宣言・参照方法から、特殊変数、環境変数までを網羅。,ユーザー名やホームディレクトリを変数に格納し、`echo`で表示します。
+50,declaration-and-reference,variables,変数の宣言と参照,draft,pages,シェルスクリプトの変数宣言と参照方法,"シェルスクリプト 変数, 宣言, 参照, 代入",シェルスクリプトにおける変数の基本的な使い方、`=`を使った代入、`$`を使った参照方法を学びます。,"`VAR=""hoge""`のように変数を宣言し、`echo $VAR`で表示します。"
+51,special-variables,variables,特殊な変数 ($? $# $@),draft,pages,シェルスクリプトの特殊変数 ($? $# $@) 完全ガイド,"シェルスクリプト, 特殊変数, $?, $#, $@, 引数, 終了コード","直前のコマンドの終了ステータス(`$?`)や、スクリプトに渡された引数(`$#`, `$@`, `$1`)など、自動的に設定される特殊な変数の使い方を解説します。",引数を2つ受け取り、その個数と内容を表示するスクリプトを作成します。
+52,environment-variables,variables,環境変数,draft,pages,シェルスクリプトと環境変数 (PATH、HOME) の関係,"シェルスクリプト, 環境変数, PATH, HOME, export",`PATH`や`HOME`など、シェルの動作環境を定義する環境変数の役割と、`export`コマンドによる設定方法を学びます。,"`export MY_VAR=""test""`で環境変数を設定し、新しいシェルでも参照できることを確認します。"
+53,quoting,core-syntax,引用符,draft,pages,シェルスクリプトの引用符 | シングル vs ダブルクォート、コマンド置換,"シェルスクリプト 引用符, クォート, シングル, ダブル, コマンド置換",文字列を正しく扱うための引用符の重要性を解説。変数展開の有無を決めるシングル/ダブルクォートの違いや、コマンド置換を学びます。,変数を含む文字列をシングルクォートとダブルクォートで囲み、表示の違いを確認します。
+54,single-vs-double-quotes,quoting,シングルクォート vs ダブルクォート,draft,pages,シングルクォート vs ダブルクォートの違いと使い分け,"シェルスクリプト, シングルクォート, ダブルクォート, 違い",変数展開や特殊文字の解釈を抑制するシングルクォートと、それらを展開するダブルクォート。二つの違いを理解し、適切に使い分ける方法を学びます。,"`VAR=""World""`とし、`echo 'Hello $VAR'`と`echo ""Hello $VAR""`を実行して結果を比較します。"
+55,command-substitution,quoting,コマンド置換,draft,pages,シェルスクリプトのコマンド置換 | `$(...)`とバッククォート,"シェルスクリプト, コマンド置換, $(), バッククォート",コマンドの実行結果を変数に代入したり、別のコマンドの引数として渡す「コマンド置換」の使い方をマスターします。,`DATE=$(date +%Y-%m-%d)`で今日の日付を変数に格納し、表示します。
+56,conditional-branching,core-syntax,制御構文: 条件分岐,draft,pages,シェルスクリプトの条件分岐 | if、test、case文の使い方,"シェルスクリプト, 条件分岐, if, test, case",スクリプトに知性を与える条件分岐を学びます。`if`文、`test`コマンド、`case`文までを解説。,引数によって異なるメッセージを表示する`case`文を使ったスクリプトを作成します。
+57,if-statement,conditional-branching,if文 (基本 else elif),draft,pages,シェルスクリプトのif文 | 基本、else、 elifの使い方,"シェルスクリプト, if文, else, elif, 条件分岐",条件に応じて処理を分岐させる`if`文の基本構文を学びます。`if-then-fi`から`else`や`elif`を使った複数条件の分岐まで。,数値が正・負・ゼロかを判定する`if-elif-else`スクリプトを作成します。
+58,test-command,conditional-branching,testコマンドと[],draft,pages,testコマンドと`[]` | ファイル・数値・文字列の条件判定,"シェルスクリプト, testコマンド, [], 条件判定, 比較",`if`文の条件式で使われる`test`コマンド（`[`）の使い方を詳解。ファイルのチェック、数値比較、文字列判定などを学びます。,引数で与えられたパスがファイルかディレクトリかを判定するスクリプトを作成します。
+59,case-statement,conditional-branching,case文,draft,pages,シェルスクリプトのcase文 | 複数条件分岐を簡潔に書く,"シェルスクリプト, case文, 条件分岐, パターンマッチ",多くの選択肢から一致するものを探して処理を分岐させる`case`文の使い方を学びます。,引数に応じて挨拶を出し分けるスクリプトを`case`文で作成します。
+60,loops,core-syntax,制御構文: ループ,draft,pages,シェルスクリプトのループ処理 | for、while、until文,"シェルスクリプト, ループ, for, while, until, 繰り返し",反復処理を行うためのループ構文をマスターします。`for`、`while`、`until`ループを解説。,1から10までの数字を順番に表示するループを作成します。
+61,for-loop,loops,forループ,draft,pages,シェルスクリプトのforループ | リストや連番の繰り返し処理,"シェルスクリプト, forループ, 繰り返し, in, seq",リストの各要素に対して処理を繰り返す`for`文の基本を学びます。,`for fruit in apple banana orange`で各果物の名前を表示します。
+62,while-loop,loops,whileループ,draft,pages,シェルスクリプトのwhileループ | 条件が真の間繰り返す,"シェルスクリプト, whileループ, 繰り返し, 無限ループ",指定した条件が真である限り処理を繰り返す`while`ループの使い方を学びます。,カウンタ変数を1ずつ増やしながら5になるまでループします。
+63,until-loop,loops,untilループ,draft,pages,シェルスクリプトのuntilループ | 条件が偽の間繰り返す,"シェルスクリプト, untilループ, 繰り返し, 条件",`while`ループとは逆に、条件が偽である限り処理を繰り返す`until`ループを学びます。,カウンタ変数を1ずつ増やし、5より大きくなるまでループします。
+64,functions,core-syntax,関数,draft,pages,シェルスクリプトの関数 | 定義、引数、戻り値、スコープ,"シェルスクリプト, 関数, function, 引数, 戻り値, スコープ",処理をまとめて再利用可能にする「関数」の作り方を学びます。,2つの数値を受け取り、その合計を返す関数を作成します。
+65,definition-and-call,functions,関数の定義と呼び出し,draft,pages,シェルスクリプトの関数定義と呼び出し方法,"シェルスクリプト, 関数, 定義, 呼び出し, function",処理をブロックとしてまとめる関数の基本的な定義方法と呼び出し方法を学びます。,現在時刻を表示する`print_time`関数を定義し、呼び出します。
+66,arguments-and-return-values,functions,引数と戻り値,draft,pages,シェルスクリプトの関数の引数と戻り値,"シェルスクリプト, 関数, 引数, 戻り値, $1, return",関数にデータを渡すための「引数」と、実行結果を返すための「戻り値」の扱い方を学びます。,名前を引数として受け取り、挨拶を表示する関数を作成します。
+67,scope,functions,スコープ,draft,pages,シェルスクリプトの変数スコープ | local変数,"シェルスクリプト, スコープ, local, グローバル変数",関数内で定義した変数のスコープと、`local`コマンドを使ったローカル変数を解説します。,`local`を付けた場合と付けない場合で変数の値がどう変わるか確認します。
+68,arrays,core-syntax,配列,draft,pages,シェルスクリプトの配列 | 宣言、操作、連想配列,"シェルスクリプト, 配列, 使い方, 宣言, 連想配列",複数の値をまとめて管理できる「配列」の使い方を学びます。インデックス配列から連想配列まで。,複数の果物名を配列に格納し、ループで順番に表示します。
+69,indexed-arrays,arrays,配列の宣言と操作,draft,pages,シェルスクリプトのインデックス配列 | 宣言・参照・要素の追加,"シェルスクリプト, 配列, 宣言, 参照, 追加",数値のインデックスを持つ標準的な配列の宣言方法、要素参照、要素追加などを学びます。,空の配列を宣言し、ループで1から5までの数値を追加して表示します。
+70,associative-arrays,arrays,連想配列,draft,pages,シェルスクリプトの連想配列 (Bash 4+),"シェルスクリプト, 連想配列, ハッシュ, マップ, declare -A",文字列をキーとして値にアクセスできる「連想配列」の使い方を学びます。,個人情報を連想配列に格納し、キーを指定して値を表示します。
+71,shell-builtin-commands,core-syntax,シェル組み込みコマンド,draft,pages,シェル組み込みコマンド | 内部コマンドの完全ガイド,"シェル組み込みコマンド, builtin, 内部コマンド, echo, cd",シェルに組み込まれた内部コマンドの使い方を体系的に学びます。外部コマンドとの違いも解説。,主要な組み込みコマンドを実際に使って動作を確認します。
+72,echo-output,shell-builtin-commands,echo: 文字列の出力,draft,pages,echoコマンド | 文字列の出力と改行制御,"echo, 文字列出力, -n, -e, エスケープシーケンス",最も基本的な出力コマンド`echo`の使い方とオプションを詳しく解説します。,`echo`のオプションを使って様々な形式で文字列を出力します。
+73,eval-execute-string,shell-builtin-commands,eval: 文字列をコマンドとして実行,draft,pages,evalコマンド | 文字列を動的にコマンドとして実行,"eval, 動的実行, 文字列評価, メタプログラミング",文字列をシェルコマンドとして評価・実行する`eval`の使い方と危険性を解説します。,変数に格納したコマンド文字列を`eval`で実行します。
+74,exit-script-termination,shell-builtin-commands,exit: スクリプトの終了,draft,pages,exitコマンド | スクリプトの終了と終了コード,"exit, 終了コード, スクリプト終了, ステータス",スクリプトを終了させる`exit`コマンドと、終了コードの意味について解説します。,異なる終了コードでスクリプトを終了し、`$?`で確認します。
+75,kill-process-termination,shell-builtin-commands,kill: プロセスの終了,draft,pages,killコマンド | プロセスにシグナルを送る,"kill, プロセス終了, シグナル, SIGTERM, SIGKILL",プロセスにシグナルを送って終了させる`kill`コマンドの使い方を解説します。,バックグラウンドプロセスを起動し、`kill`で終了させます。
+76,ps-process-list,shell-builtin-commands,ps: プロセス一覧の表示,draft,pages,psコマンド | 実行中のプロセスを確認,"ps, プロセス一覧, プロセス確認, aux, ef",実行中のプロセスを表示する`ps`コマンドのオプションと見方を解説します。,`ps aux`や`ps ef`で現在のプロセスを確認します。
+77,pwd-current-directory,shell-builtin-commands,pwd: 現在のディレクトリ表示,draft,pages,pwdコマンド | カレントディレクトリの確認,"pwd, カレントディレクトリ, 作業ディレクトリ, パス",現在の作業ディレクトリを表示する`pwd`コマンドの使い方を解説します。,`pwd`で現在位置を確認しながらディレクトリを移動します。
+78,cd-directory-change,shell-builtin-commands,cd: ディレクトリの移動,draft,pages,cdコマンド | ディレクトリの移動と便利な使い方,"cd, ディレクトリ移動, チェンジディレクトリ, ~, -",ディレクトリを移動する`cd`コマンドの基本と便利な使い方を解説します。,`cd ~`、`cd -`などの便利な移動方法を試します。
+79,read-user-input,shell-builtin-commands,read: ユーザー入力の受け取り,draft,pages,readコマンド | ユーザーからの入力を受け取る,"read, ユーザー入力, 対話的, プロンプト, -p",ユーザーからの入力を受け取る`read`コマンドの使い方を解説します。,`read`を使った対話的なスクリプトを作成します。
+80,export-environment-variables,shell-builtin-commands,export: 環境変数のエクスポート,draft,pages,exportコマンド | 環境変数を子プロセスに引き継ぐ,"export, 環境変数, エクスポート, 子プロセス",環境変数を子プロセスに引き継ぐ`export`コマンドの使い方を解説します。,`export`した変数が子シェルで参照できることを確認します。
+81,source-dot-script-loading,shell-builtin-commands,source/.: スクリプトの読み込み,draft,pages,source/. コマンド | 外部スクリプトの読み込み,"source, ., スクリプト読み込み, 設定ファイル",外部スクリプトを現在のシェルで実行する`source`（`.`）コマンドを解説します。,設定ファイルを`source`で読み込んで環境を構築します。
+82,type-command-type-check,shell-builtin-commands,type: コマンドの種類確認,draft,pages,typeコマンド | コマンドの種類と場所を確認,"type, コマンド種類, which, 組み込み, エイリアス",コマンドの種類（組み込み、外部、エイリアス）を確認する`type`を解説します。,`type`で様々なコマンドの種類を確認します。
+83,set-shell-options,shell-builtin-commands,set: シェルのオプション設定,draft,pages,setコマンド | シェルの動作オプションを設定,"set, シェルオプション, -e, -u, -x, デバッグ",シェルの動作を制御する`set`コマンドとそのオプションを解説します。,`set -x`でデバッグモードを有効にしてスクリプトを実行します。
+84,unset-variable-removal,shell-builtin-commands,unset: 環境変数の削除,draft,pages,unsetコマンド | 変数や関数の削除,"unset, 変数削除, 環境変数削除, 関数削除",変数や関数を削除する`unset`コマンドの使い方を解説します。,変数を定義後、`unset`で削除して参照できなくなることを確認します。
+85,alias-command-alias,shell-builtin-commands,alias: コマンドのエイリアス設定,draft,pages,aliasコマンド | コマンドの別名を設定,"alias, エイリアス, 別名, ショートカット",よく使うコマンドに別名を付ける`alias`の使い方を解説します。,`alias ll='ls -la'`のような便利なエイリアスを設定します。
+86,unalias-alias-removal,shell-builtin-commands,unalias: コマンドのエイリアス削除,draft,pages,unaliasコマンド | エイリアスの削除,"unalias, エイリアス削除, 別名削除",設定したエイリアスを削除する`unalias`コマンドを解説します。,エイリアスを設定後、`unalias`で削除します。
+87,history-command-history,shell-builtin-commands,history: コマンド履歴の表示,draft,pages,historyコマンド | コマンド履歴の確認と再実行,"history, コマンド履歴, 履歴, !!, !n",過去に実行したコマンドの履歴を表示する`history`を解説します。,`history`で履歴を確認し、`!!`や`!n`で再実行します。
+88,fc-history-edit,shell-builtin-commands,fc: コマンド履歴の編集,draft,pages,fcコマンド | コマンド履歴の編集と再実行,"fc, 履歴編集, コマンド編集, 再実行",コマンド履歴を編集して再実行する`fc`コマンドを解説します。,`fc`で直前のコマンドを編集して再実行します。
+89,fg-foreground-process,shell-builtin-commands,fg: バックグラウンドプロセスのフォアグラウンドへの移行,draft,pages,fgコマンド | バックグラウンドジョブを前面に,"fg, フォアグラウンド, ジョブ制御, バックグラウンド",バックグラウンドジョブをフォアグラウンドに戻す`fg`を解説します。,Ctrl+Zで停止したジョブを`fg`で再開します。
+90,bg-background-process,shell-builtin-commands,bg: フォアグラウンドプロセスのバックグラウンドへの移行,draft,pages,bgコマンド | 停止中のジョブをバックグラウンドで再開,"bg, バックグラウンド, ジョブ制御, 再開",停止中のジョブをバックグラウンドで再開する`bg`を解説します。,Ctrl+Zで停止したジョブを`bg`でバックグラウンド実行します。
+91,jobs-background-list,shell-builtin-commands,jobs: バックグラウンドプロセスの一覧表示,draft,pages,jobsコマンド | バックグラウンドジョブの確認,"jobs, ジョブ一覧, バックグラウンド, プロセス",バックグラウンドで実行中のジョブを表示する`jobs`を解説します。,複数のバックグラウンドジョブを起動し、`jobs`で確認します。
+92,wait-process-wait,shell-builtin-commands,wait: バックグラウンドプロセスの完了を待つ,draft,pages,waitコマンド | バックグラウンドジョブの完了待機,"wait, プロセス待機, バックグラウンド, 同期",バックグラウンドジョブの完了を待つ`wait`コマンドを解説します。,バックグラウンドジョブを起動し、`wait`で完了を待ちます。
+93,return-function-exit,shell-builtin-commands,return: 関数の終了,draft,pages,returnコマンド | 関数から値を返す,"return, 関数終了, 戻り値, 終了コード",関数から戻り値を返す`return`コマンドの使い方を解説します。,関数内で`return`を使って異なる値を返します。
+94,readlink-symlink-resolve,shell-builtin-commands,readlink: シンボリックリンクの解決,draft,pages,readlinkコマンド | シンボリックリンクの実体を確認,"readlink, シンボリックリンク, リンク解決, -f",シンボリックリンクの実際のパスを表示する`readlink`を解説します。,シンボリックリンクを作成し、`readlink -f`で実体を確認します。
+95,which-command-path,shell-builtin-commands,which: コマンドのパスを表示,draft,pages,whichコマンド | コマンドの実行ファイルパスを確認,"which, コマンドパス, 実行ファイル, PATH",コマンドの実行ファイルのパスを表示する`which`を解説します。,`which`で様々なコマンドのパスを確認します。
+96,realpath-actual-path,shell-builtin-commands,realpath: ファイルの実際のパスを表示,draft,pages,realpathコマンド | 相対パスを絶対パスに変換,"realpath, 絶対パス, パス変換, 正規化",相対パスを絶対パスに変換する`realpath`コマンドを解説します。,相対パスを`realpath`で絶対パスに変換します。
+97,basename-filename-extract,shell-builtin-commands,basename: ファイル名の抽出,draft,pages,basenameコマンド | パスからファイル名を抽出,"basename, ファイル名, パス処理, 抽出",パスからファイル名部分を抽出する`basename`を解説します。,フルパスから`basename`でファイル名だけを取り出します。
+98,dirname-directory-extract,shell-builtin-commands,dirname: ディレクトリ名の抽出,draft,pages,dirnameコマンド | パスからディレクトリ名を抽出,"dirname, ディレクトリ名, パス処理, 抽出",パスからディレクトリ部分を抽出する`dirname`を解説します。,フルパスから`dirname`でディレクトリ部分を取り出します。
+99,ln-link-create,shell-builtin-commands,ln: リンクの作成,draft,pages,lnコマンド | ハードリンクとシンボリックリンクの作成,"ln, リンク作成, シンボリックリンク, ハードリンク, -s",ファイルへのリンクを作成する`ln`コマンドを解説します。,`ln -s`でシンボリックリンクを作成し、動作を確認します。
+100,mv-file-move,shell-builtin-commands,mv: ファイルの移動,draft,pages,mvコマンド | ファイルの移動とリネーム,"mv, ファイル移動, リネーム, 名前変更",ファイルの移動とリネームを行う`mv`コマンドを解説します。,ファイルを別ディレクトリに移動し、名前も変更します。
+101,cp-file-copy,shell-builtin-commands,cp: ファイルのコピー,draft,pages,cpコマンド | ファイルとディレクトリのコピー,"cp, ファイルコピー, 複製, -r, -p",ファイルやディレクトリをコピーする`cp`コマンドを解説します。,`cp -r`でディレクトリを丸ごとコピーします。
+102,rm-file-delete,shell-builtin-commands,rm: ファイルの削除,draft,pages,rmコマンド | ファイルとディレクトリの削除,"rm, ファイル削除, 削除, -r, -f",ファイルやディレクトリを削除する`rm`コマンドと安全な使い方を解説します。,不要なファイルを`rm`で削除（事前に確認）します。
+103,mkdir-directory-create,shell-builtin-commands,mkdir: ディレクトリの作成,draft,pages,mkdirコマンド | ディレクトリの作成,"mkdir, ディレクトリ作成, フォルダ作成, -p",ディレクトリを作成する`mkdir`コマンドを解説します。,`mkdir -p`で階層的にディレクトリを作成します。
+104,rmdir-directory-delete,shell-builtin-commands,rmdir: ディレクトリの削除,draft,pages,rmdirコマンド | 空のディレクトリを削除,"rmdir, ディレクトリ削除, 空ディレクトリ",空のディレクトリを削除する`rmdir`コマンドを解説します。,空のディレクトリを作成し、`rmdir`で削除します。
+105,chmod-permission-change,shell-builtin-commands,chmod: ファイルのパーミッション変更,draft,pages,chmodコマンド | ファイルの権限を変更,"chmod, パーミッション, 権限変更, 755, rwx",ファイルの実行権限などを変更する`chmod`コマンドを解説します。,スクリプトに実行権限を付与し、権限を確認します。
+106,help-help-display,shell-builtin-commands,help: ヘルプの表示,draft,pages,helpコマンド | 組み込みコマンドのヘルプ表示,"help, ヘルプ, マニュアル, 使い方",組み込みコマンドのヘルプを表示する`help`コマンドを解説します。,`help`で各組み込みコマンドの使い方を確認します。
+107,io-control,core-syntax,入出力制御,draft,pages,シェルスクリプトの入出力制御 | リダイレクトとパイプの完全ガイド,"入出力制御, リダイレクト, パイプ, ヒアドキュメント",標準入出力の制御方法を体系的に学びます。リダイレクト、パイプ、ヒアドキュメントなど。,様々な入出力制御の方法を実際に試します。
+108,redirection,io-control,リダイレクト,draft,pages,シェルスクリプトのリダイレクト | 入出力の向き先を変える,"リダイレクト, 標準出力, 標準エラー, 標準入力, >, >>",コマンドの入出力先を変更するリダイレクトの仕組みと使い方を解説します。,コマンドの出力をファイルに保存し、エラーを別ファイルに記録します。
+109,stdout-redirection,redirection,標準出力のリダイレクト (> >>),draft,pages,標準出力のリダイレクト | > と >> の使い分け,"標準出力, リダイレクト, >, >>, 上書き, 追記",標準出力をファイルにリダイレクトする方法と、上書き・追記の違いを解説します。,`>`で上書き、`>>`で追記の動作を確認します。
+110,stderr-redirection,redirection,標準エラーのリダイレクト (2> 2>>),draft,pages,標準エラーのリダイレクト | エラーメッセージの制御,"標準エラー, リダイレクト, 2>, 2>>, エラー出力",エラーメッセージをファイルにリダイレクトする方法を解説します。,意図的にエラーを発生させ、`2>`でエラーをファイルに記録します。
+111,stdin-redirection,redirection,標準入力のリダイレクト (<),draft,pages,標準入力のリダイレクト | ファイルから入力を読み込む,"標準入力, リダイレクト, <, 入力リダイレクト",ファイルの内容を標準入力として読み込む方法を解説します。,ファイルの内容を`<`でコマンドに渡します。
+112,stdout-stderr-merge,redirection,標準出力と標準エラーの統合 (&> 2>&1),draft,pages,標準出力と標準エラーの統合 | すべての出力を一つに,"標準出力, 標準エラー, 統合, &>, 2>&1",標準出力と標準エラーを一つのファイルにまとめる方法を解説します。,`&>`や`2>&1`を使って出力を統合します。
+113,heredoc,io-control,ヒアドキュメント,draft,pages,ヒアドキュメント | 複数行の入力を扱う,"ヒアドキュメント, <<, ヒアストリング, <<<, 複数行",複数行のテキストをコマンドに渡すヒアドキュメントの使い方を解説します。,ヒアドキュメントで複数行のテキストをcatに渡します。
+114,basic-heredoc,heredoc,基本的なヒアドキュメント (<<),draft,pages,基本的なヒアドキュメント | << の使い方,"ヒアドキュメント, <<, EOF, 複数行入力",`<<`を使った基本的なヒアドキュメントの構文を解説します。,`<< EOF`で複数行のテキストを作成します。
+115,herestring,heredoc,ヒアストリング (<<<),draft,pages,ヒアストリング | <<< で単一行を渡す,"ヒアストリング, <<<, 単一行, Bash拡張",Bash拡張の`<<<`を使った単一行の入力方法を解説します。,`<<<`で文字列を直接コマンドに渡します。
+116,variable-expansion-control,heredoc,変数展開の制御,draft,pages,ヒアドキュメントの変数展開制御 | クォートの有無による違い,"ヒアドキュメント, 変数展開, クォート, 'EOF'",ヒアドキュメント内での変数展開を制御する方法を解説します。,`<< EOF`と`<< 'EOF'`で変数展開の違いを確認します。
+117,pipes,io-control,パイプ,draft,pages,シェルスクリプトのパイプ | コマンドを連結する,"パイプ, |, コマンド連結, パイプライン",コマンドの出力を次のコマンドの入力につなぐパイプの使い方を解説します。,複数のコマンドをパイプでつないでデータを処理します。
+118,basic-pipe,pipes,基本的なパイプ (|),draft,pages,基本的なパイプ | | でコマンドをつなぐ,"パイプ, |, 基本, コマンド連結",`|`を使った基本的なパイプの使い方を解説します。,`ls | grep`のような基本的なパイプを作成します。
+119,multiple-command-chain,pipes,複数コマンドの連結,draft,pages,複数コマンドの連結 | 長いパイプラインを作る,"パイプ, 複数連結, パイプライン, フィルタ",3つ以上のコマンドをパイプで連結する方法を解説します。,`cat | grep | sort | uniq`のような長いパイプラインを作成します。
+120,tee-command-branch,pipes,teeコマンドでの分岐,draft,pages,teeコマンド | パイプの途中で出力を分岐,"tee, パイプ分岐, 出力複製, ログ",パイプの途中で出力を複製する`tee`コマンドを解説します。,`tee`を使ってパイプの途中結果をファイルに保存します。
+121,command-separators,io-control,コマンドセパレータ,draft,pages,コマンドセパレータ | 複数コマンドの実行制御,"; && || &, コマンドセパレータ, 実行制御",複数のコマンドを組み合わせて実行する方法を解説します。,`;`、`&&`、`||`、`&`の違いを確認します。
+122,sequential-execution,command-separators,順次実行 (;),draft,pages,順次実行 | ; で複数コマンドを順番に実行,"; セミコロン, 順次実行, 連続実行",`;`を使って複数のコマンドを順番に実行する方法を解説します。,`;`で区切って複数のコマンドを一行で実行します。
+123,conditional-execution,command-separators,条件付き実行 (&& ||),draft,pages,条件付き実行 | && と || で成功・失敗を判定,"&& ||, 条件付き実行, 短絡評価, エラー処理",前のコマンドの成功・失敗によって次の実行を制御する方法を解説します。,`&&`で成功時のみ、`||`で失敗時のみ実行を確認します。
+124,background-execution,command-separators,バックグラウンド実行 (&),draft,pages,バックグラウンド実行 | & で並列処理,"&, バックグラウンド, 並列処理, 非同期",コマンドをバックグラウンドで実行する`&`の使い方を解説します。,時間のかかる処理を`&`でバックグラウンド実行します。
+125,grouping,io-control,グルーピング,draft,pages,コマンドのグルーピング | サブシェルとコマンドグループ,"グルーピング, サブシェル, (), {}, プロセス置換",複数のコマンドをグループ化する方法を解説します。,`()`と`{}`の違いを実際に確認します。
+126,subshell,grouping,サブシェル (()),draft,pages,サブシェル | () で新しいシェル環境を作る,"サブシェル, (), 子プロセス, 環境分離",`()`で新しいシェル環境を作って実行する方法を解説します。,`()`内で変数を変更し、外に影響しないことを確認します。
+127,command-group,grouping,コマンドグループ ({}),draft,pages,コマンドグループ | {} で現在のシェルでグループ化,"{}, コマンドグループ, グルーピング, 現在のシェル",`{}`で現在のシェル内でコマンドをグループ化する方法を解説します。,`{}`内で変数を変更し、外に影響することを確認します。
+128,process-substitution,grouping,プロセス置換 (<() >()),draft,pages,プロセス置換 | コマンドの出力を仮想ファイルとして扱う,"プロセス置換, <(), >(), 仮想ファイル, Bash拡張",コマンドの出力を仮想的なファイルとして扱うプロセス置換を解説します。,`diff <(cmd1) <(cmd2)`で2つのコマンド出力を比較します。
+129,practical-recipes,,実践レシピ集（逆引き）,draft,pages,シェルスクリプト実践レシピ集 | やりたいことから探す逆引きガイド,"シェルスクリプト, レシピ, 実践, 逆引き, サンプル",日々の業務で役立つシェルスクリプトのサンプルを「やりたいこと」から探せる逆引き形式で提供。,提示されたレシピの中から一つを選び、実行してみます。
+130,file-directory-operations,practical-recipes,ファイル・ディレクトリ操作,draft,pages,シェルスクリプトによるファイル・ディレクトリ操作レシピ,"シェルスクリプト, ファイル操作, ディレクトリ, find, rename",ファイルの存在確認、一括リネーム、検索、バックアップなどの実践的なスクリプトを集めました。,カレントディレクトリ以下の`.log`ファイルを検索してリネームします。
+131,check-file-existence,file-directory-operations,ファイルの存在確認,draft,pages,シェルスクリプトでファイルの存在を確認する方法 | `if [ -f ... ]`,"シェルスクリプト, ファイル, 存在確認, -f, -d",スクリプトの実行前に、処理対象のファイルやディレクトリが存在するかどうかを確認する方法を学びます。,引数で渡されたファイルの存在を確認するスクリプトを作成します。
+132,bulk-rename-files,file-directory-operations,複数ファイルの一括リネーム,draft,pages,シェルスクリプトで複数ファイルを一括リネームする方法,"シェルスクリプト, 一括リネーム, for, mv, rename",大量のファイル名を特定のルールに従って一括で変更するスクリプトを作成します。,連番付きファイルを日付付きファイル名にリネームします。
+133,find-and-delete-files,file-directory-operations,特定のファイルを検索・削除,draft,pages,シェルスクリプトで特定のファイルを検索・削除する方法 | find、xargs,"シェルスクリプト, 検索, 削除, find, xargs, rm",`find`コマンドで特定の条件に一致するファイルを検索し、安全に削除する方法を学びます。,古い一時ファイルを検索し、確認後に削除します。
+134,backup-script,file-directory-operations,バックアップスクリプト作成,draft,pages,シェルスクリプトで簡単なバックアップスクリプトを作成する方法,"シェルスクリプト, バックアップ, rsync, tar, cron",指定したディレクトリの内容を、日付を付けたアーカイブファイルとして保存するバックアップスクリプトを作成します。,重要なディレクトリを日付付きアーカイブとしてバックアップします。
+135,text-processing,practical-recipes,テキスト処理,draft,pages,シェルスクリプトによるテキスト処理レシピ | grep、sed、awk,"シェルスクリプト, テキスト処理, grep, sed, awk",ログファイルの解析やデータ整形に欠かせないテキスト処理のレシピ集。,Webサーバーのアクセスログからエラーを抽出・集計します。
+136,grep-extraction,text-processing,grep: 特定の文字列を抽出,draft,pages,grepコマンドで特定の文字列を抽出するテクニック,"シェルスクリプト, grep, 抽出, 正規表現, パイプ",ファイルや標準入力から、正規表現に一致する行を抽出する`grep`コマンドの使い方を学びます。,ログファイルからエラーメッセージを抽出します。
+137,sed-substitution,text-processing,sed: 文字列の置換,draft,pages,sedコマンドで文字列を置換するテクニック,"シェルスクリプト, sed, 置換, 正規表現, ストリームエディタ",ファイルの内容を書き換えることなく、ストリーム上で文字列の置換を行う`sed`コマンドの使い方を学びます。,設定ファイル内の値を新しい値に置換します。
+138,awk-reporting,text-processing,awk: テキストの集計とレポート,draft,pages,awkコマンドでテキストを集計・レポート作成するテクニック,"シェルスクリプト, awk, 集計, レポート, フィールド処理",スペースやカンマで区切られたテキストデータを、列ごとに処理できる`awk`の強力な機能を学びます。,CSVファイルの数値を集計して平均値を計算します。
+139,csv-manipulation,text-processing,CSVファイルの操作,draft,pages,シェルスクリプトでCSVファイルを操作する方法,"シェルスクリプト, CSV, 操作, while, read, IFS",`while read`ループと`IFS`を使い、CSVファイルを1行ずつ読み込んで処理する方法を学びます。,CSVファイルから特定の列を抽出して表示します。
+140,process-job-management,practical-recipes,プロセス・ジョブ管理,draft,pages,シェルスクリプトによるプロセス・ジョブ管理レシピ,"シェルスクリプト, プロセス管理, ジョブ, ps, kill, &, nohup",実行中のプロセスを監視・制御したり、バックグラウンドで実行するためのテクニックを解説します。,特定のプロセスを監視し、必要に応じて再起動します。
+141,process-monitoring,process-job-management,プロセスの監視と制御,draft,pages,シェルスクリプトでプロセスを監視・制御する方法 | ps、kill,"シェルスクリプト, プロセス, 監視, 制御, ps, kill, pgrep",`ps`や`pgrep`でプロセスの状態を確認し、`kill`コマンドでプロセスを制御する方法を学びます。,CPU使用率の高いプロセスを特定してログに記録します。
+142,background-jobs,process-job-management,ジョブのバックグラウンド実行,draft,pages,シェルスクリプトでジョブをバックグラウンド実行する方法 | &、nohup,"シェルスクリプト, バックグラウンド, ジョブ, &, nohup, jobs, fg",時間のかかる処理をバックグラウンドで実行する方法を学びます。,重い処理をバックグラウンドで実行し、ログアウト後も継続させます。
+143,web-api-integration,practical-recipes,Web・API連携,draft,pages,シェルスクリプトによるWeb・API連携レシピ | curl、jq,"シェルスクリプト, API連携, Web, curl, jq",`curl`でWeb APIを呼び出し、`jq`でJSONデータをパースする、モダンなシェルスクリプトの活用法を学びます。,天気予報APIから今日の天気情報を取得して表示します。
+144,curl-get-data,web-api-integration,curl: APIからデータを取得,draft,pages,curlコマンドでAPIからデータを取得する方法,"シェルスクリプト, curl, API, データ取得, GET, POST",HTTPリクエストを送信するための`curl`の基本的な使い方を学びます。,GitHubのAPIからリポジトリ情報を取得します。
+145,jq-parse-json,web-api-integration,jq: JSONデータのパース,draft,pages,jqコマンドでJSONデータをパースする方法,"シェルスクリプト, jq, JSON, パース, データ抽出",JSONデータを自在に処理できる`jq`コマンドの使い方をマスターします。,取得したJSONから必要な情報を抽出して表示します。
+146,best-practices,,堅牢なスクリプトの書き方,draft,pages,堅牢なシェルスクリプトの書き方 | ベストプラクティス集,"シェルスクリプト, ベストプラクティス, 堅牢, エラー処理, デバッグ",他人が読んでも分かりやすく、予期せぬエラーにも強い「堅牢な」スクリプトを書くためのベストプラクティスを集めました。,既存のスクリプトをベストプラクティスに従ってリファクタリングします。
+147,error-handling,best-practices,エラーハンドリング,draft,pages,シェルスクリプトのエラーハンドリング | set、trap,"シェルスクリプト, エラーハンドリング, set, trap, 終了コード",コマンドの失敗を即座に検知し、スクリプトを安全に終了させるためのエラーハンドリング手法を学びます。,`trap`を使ってエラー時のクリーンアップ処理を実装します。
+148,set-e-u-x-o-pipefail,error-handling,set -euxo pipefail,draft,pages,set -euxo pipefail | 安全なスクリプトのためのおまじない,"シェルスクリプト, set, -e, -u, -x, -o pipefail, 安全",スクリプトの冒頭に書くことで、多くの潜在的なバグを防ぐことができる`set`コマンドのオプション群を解説します。,各オプションがどのようなエラーを防ぐか確認します。
+149,exit-code-checking,error-handling,終了コードのチェック,draft,pages,シェルスクリプトの終了コードチェック | $? の活用,"シェルスクリプト, 終了コード, $?, エラーチェック, ステータス",コマンドの実行結果を`$?`でチェックし、適切にエラー処理する方法を解説します。,コマンドの終了コードに応じて処理を分岐させます。
+150,trap-command,error-handling,trapコマンド,draft,pages,trapコマンド | シグナルやエラー時の処理を定義,"シェルスクリプト, trap, シグナル, エラー処理, クリーンアップ",スクリプトの終了時やエラー発生時に実行する処理を定義する`trap`コマンドを解説します。,一時ファイルを確実に削除するtrapハンドラを設定します。
+151,debugging,best-practices,デバッグ手法,draft,pages,シェルスクリプトのデバッグ手法 | トラブルシューティング,"シェルスクリプト, デバッグ, トレース, set -x, bashdb",スクリプトの問題を素早く見つけて修正するためのデバッグ手法を解説します。,`set -x`を使ってスクリプトの実行をトレースします。
+152,set-x-tracing,debugging,set -xによるトレース,draft,pages,set -x によるトレース | 実行コマンドの可視化,"シェルスクリプト, set -x, トレース, デバッグ, 実行追跡",実行されるコマンドを表示する`set -x`を使ったデバッグ方法を解説します。,`set -x`でスクリプトの実行過程を詳細に追跡します。
+153,shell-debugger,debugging,シェルスクリプトのデバッガ,draft,pages,シェルスクリプトデバッガ | bashdbの使い方,"シェルスクリプト, デバッガ, bashdb, ステップ実行, ブレークポイント",bashdbなどのデバッガを使ったステップ実行やブレークポイントの設定方法を解説します。,bashdbでスクリプトをステップ実行してバグを特定します。
+154,readability-and-maintenance,best-practices,可読性と保守性,draft,pages,シェルスクリプトの可読性と保守性 | 読みやすいコードの書き方,"シェルスクリプト, 可読性, 保守性, スタイルガイド, コメント",他人（未来の自分も含む）が読んでも理解しやすいコードの書き方を解説します。,既存のスクリプトを読みやすくリファクタリングします。
+155,style-guide,readability-and-maintenance,スタイルガイドと命名規則,draft,pages,シェルスクリプトのスタイルガイド | 一貫性のあるコード,"シェルスクリプト, スタイルガイド, 命名規則, コーディング規約",一貫性のあるコードを書くためのスタイルガイドと命名規則を解説します。,Google Shell Style Guideに従ってコードを整形します。
+156,commenting,readability-and-maintenance,コメントの書き方,draft,pages,シェルスクリプトのコメント | 効果的なドキュメンテーション,"シェルスクリプト, コメント, ドキュメント, 説明, #",コードの意図を明確に伝える効果的なコメントの書き方を解説します。,適切なコメントを追加してコードの可読性を向上させます。
+157,security,best-practices,セキュリティ,draft,pages,シェルスクリプトのセキュリティ | 安全なコードの書き方,"シェルスクリプト, セキュリティ, インジェクション, 一時ファイル",セキュリティ上の脆弱性を作らないための安全なコーディング手法を解説します。,ユーザー入力を安全に処理するスクリプトを作成します。
+158,secure-temp-files,security,一時ファイルの安全な作成,draft,pages,シェルスクリプトで一時ファイルを安全に作成する方法,"シェルスクリプト, 一時ファイル, mktemp, セキュリティ, /tmp",予測不可能な名前の一時ファイルを安全に作成する`mktemp`の使い方を解説します。,`mktemp`を使って安全な一時ファイルを作成・削除します。
+159,command-injection,security,コマンドインジェクション対策,draft,pages,コマンドインジェクション対策 | ユーザー入力の安全な処理,"シェルスクリプト, コマンドインジェクション, セキュリティ, サニタイズ",ユーザー入力を含むコマンドを安全に実行する方法を解説します。,ユーザー入力を適切にエスケープして安全に処理します。
+160,advanced-topics,,高度なトピック,draft,pages,シェルスクリプトの高度なトピック | 上級者向け技術,"シェルスクリプト, 高度, 正規表現, プロセス置換, シグナル",より高度なシェルスクリプト技術を学びます。正規表現、プロセス置換、シグナルハンドリングなど。,高度な技術を組み合わせた実践的なスクリプトを作成します。
+161,regular-expressions,advanced-topics,正規表現,draft,pages,シェルスクリプトと正規表現 | パターンマッチングの極意,"シェルスクリプト, 正規表現, パターンマッチ, grep, sed",シェルスクリプトで使える正規表現の詳細と、実践的な使い方を解説します。,複雑な正規表現を使ってログファイルを解析します。
+162,process-substitution-and-pipes,advanced-topics,プロセス置換とパイプ,draft,pages,プロセス置換とパイプの高度な使い方,"シェルスクリプト, プロセス置換, パイプ, <(), >()",プロセス置換とパイプを組み合わせた高度なデータ処理技術を解説します。,複数のコマンド出力を同時に処理する高度なスクリプトを作成します。
+163,signal-handling,advanced-topics,シグナルハンドリング,draft,pages,シェルスクリプトのシグナルハンドリング | 割り込み処理,"シェルスクリプト, シグナル, trap, SIGINT, SIGTERM",シグナルを受け取って適切に処理する方法を解説します。,Ctrl+Cなどのシグナルを適切に処理するスクリプトを作成します。
+164,tools-and-integration,,ツールと連携,draft,pages,シェルスクリプトとツールの連携 | 実践的な自動化,"シェルスクリプト, Git, Docker, CI/CD, 自動化",Git、Docker、CI/CDツールとシェルスクリプトを連携させる実践的な方法を解説します。,各ツールと連携した自動化スクリプトを作成します。
+165,git-integration,tools-and-integration,Git連携スクリプト,draft,pages,シェルスクリプトでGitを自動化 | バージョン管理の効率化,"シェルスクリプト, Git, 自動化, バージョン管理, フック",Gitコマンドをシェルスクリプトで自動化し、開発ワークフローを効率化する方法を解説します。,定期的なコミットやプッシュを自動化するスクリプトを作成します。
+166,docker-build-automation,tools-and-integration,Dockerイメージビルドの自動化,draft,pages,シェルスクリプトでDockerビルドを自動化,"シェルスクリプト, Docker, ビルド, 自動化, コンテナ",Dockerイメージのビルドやデプロイをシェルスクリプトで自動化する方法を解説します。,複数のDockerイメージを一括でビルド・プッシュするスクリプトを作成します。
+167,ci-cd-pipelines,tools-and-integration,CI/CDパイプラインでの活用 (GitHub Actions),draft,pages,CI/CDパイプラインでシェルスクリプトを活用 | GitHub Actions,"シェルスクリプト, CI/CD, GitHub Actions, 自動化, パイプライン",GitHub ActionsなどのCI/CDツールでシェルスクリプトを活用する方法を解説します。,GitHub Actionsワークフローでシェルスクリプトを実行します。

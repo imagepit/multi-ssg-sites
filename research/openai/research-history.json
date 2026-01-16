@@ -1,0 +1,21 @@
+{
+  "technical_keywords": "OpenAI",
+  "training_keyword_id": "openai",
+  "total_research_count": 1,
+  "latest_research_timestamp": "2025-09-26-123552",
+  "research_history": [
+    {
+      "timestamp": "2025-09-26-123552",
+      "research_date": "2025-09-26",
+      "sites_researched": 25,
+      "data_points": 150,
+      "trends_identified": 15,
+      "needs_identified": 12,
+      "competitors_analyzed": 8,
+      "recommendations": 20,
+      "proposal_generated": true,
+      "directory": "history/2025-09-26-123552/"
+    }
+  ],
+  "updated_at": "2025-09-26-123552"
+}

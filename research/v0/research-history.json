@@ -1,0 +1,21 @@
+{
+  "technical_keywords": "v0",
+  "training_keyword_id": "v0",
+  "total_research_count": 1,
+  "latest_research_timestamp": "2025-09-26-220810",
+  "research_history": [
+    {
+      "timestamp": "2025-09-26-220810",
+      "research_date": "2025-09-26",
+      "sites_researched": 15,
+      "data_points": 42,
+      "trends_identified": 8,
+      "needs_identified": 12,
+      "competitors_analyzed": 6,
+      "recommendations": 4,
+      "proposal_generated": true,
+      "directory": "history/2025-09-26-220810/"
+    }
+  ],
+  "updated_at": "2025-09-26-220810"
+}

@@ -1,0 +1,92 @@
+{
+  "tech_keyword_id": "shell-script",
+  "site_name": "シェルスクリプトマスターガイド",
+  "site_type": "documentation",
+  "generator": "wordpress",
+  "language": "ja",
+  "created_at": "2025-09-05T14:10:00Z",
+  "updated_at": "2025-09-05T14:30:00Z",
+  "phase": "design",
+  "research_reference": {
+    "keyword_id": "shell-script",
+    "research_date": "2025-09-05",
+    "proposal_available": true
+  },
+  "target_metrics": {
+    "monthly_visitors": "10000",
+    "conversion_rate": "1%",
+    "page_views": "30000",
+    "engagement_time": "3分"
+  },
+  "integration": {
+    "training_platform": true,
+    "promotion_banners": true,
+    "content_linking": true,
+    "analytics_tracking": true
+  },
+  "approvals": {
+    "requirements": {
+      "generated": true,
+      "approved": true,
+      "generated_at": "2025-09-05T14:20:00Z",
+      "approved_at": "2025-09-05T14:30:00Z",
+      "approved_by": "user"
+    },
+    "design": {
+      "generated": true,
+      "approved": true,
+      "generated_at": "2025-09-05T14:30:00Z",
+      "approved_at": "2025-09-05T14:30:00Z",
+      "approved_by": "user"
+    },
+    "tasks": {
+      "generated": true,
+      "approved": true,
+      "approved_at": "2025-09-28T00:00:00Z",
+      "approved_by": "claude"
+    },
+    "quality": {
+      "checked": true,
+      "passed": true,
+      "checked_at": "2025-09-28T00:00:00Z",
+      "issues_count": 0
+    }
+  },
+  "theme_config": {
+    "colors": {
+      "primary": "#000000",
+      "secondary": "hsl(266deg 85% 68%)",
+      "accent": "hsl(35deg 100% 60%)",
+      "background": "hsl(0deg 0% 100%)",
+      "surface": "hsl(220deg 13% 97%)",
+      "text": "hsl(220deg 9% 17%)",
+      "muted": "hsl(220deg 14% 52%)"
+    },
+    "fonts": {
+      "heading": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "body": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "mono": "JetBrains Mono, ui-monospace, SFMono-Regular, monospace"
+    },
+    "spacing": {
+      "sidebar": "320px",
+      "content": "1024px",
+      "gap": "2rem"
+    },
+    "features": {
+      "darkMode": true,
+      "animations": true,
+      "blur": true
+    },
+    "branding": {
+      "logo": "logo.svg",
+      "favicon": "logo.svg",
+      "og_image": "logo-og.drawio.svg"
+    }
+  },
+  "seo_strategy": {
+    "primary_keywords": ["shell script", "bash", "sh", "Linux", "Unix"],
+    "secondary_keywords": ["command line", "scripting", "automation", "terminal"],
+    "target_audience": ["Linux/Unix管理者", "システムエンジニア", "プログラマー", "コマンドライン愛好家"],
+    "content_strategy": "実用的なスクリプト例を中心に、効率的なコマンドラインワークフローを解説"
+  }
+}

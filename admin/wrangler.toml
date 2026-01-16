@@ -1,0 +1,76 @@
+name = "techdoc-admin"
+main = "src/index.ts"
+compatibility_date = "2025-01-15"
+
+[vars]
+ENV = "dev"
+
+[triggers]
+# Cloudflare crons use UTC (JST=UTC+9)
+# hourly at :05 JST == "5 * * * *" UTC, daily at 00:30 JST == "30 15 * * *" UTC
+crons = ["5 * * * *", "30 15 * * *"]
+
+# D1 binding (dev)
+[[d1_databases]]
+binding = "DB"
+database_name = "techdoc-admin-dev"
+database_id = "f21f0c13-5956-4c04-93c4-684431d62b83"
+
+[[r2_buckets]]
+binding = "PAID_CONTENT"
+bucket_name = "techdoc-paid-content-dev"
+
+[[queues.producers]]
+binding = "EVENTS_QUEUE"
+queue = "events-dev"
+
+[[queues.consumers]]
+queue = "events-dev"
+max_batch_size = 10
+max_batch_timeout = 30
+[env.stg.vars]
+ENV = "stg"
+
+[env.stg.triggers]
+crons = ["5 * * * *", "30 15 * * *"]
+
+[[env.stg.d1_databases]]
+binding = "DB"
+database_name = "techdoc-admin-stg"
+database_id = "ebe846f5-7caf-4a2c-a626-ece30a100dcd"
+
+[env.stg.r2_buckets]
+binding = "PAID_CONTENT"
+bucket_name = "techdoc-paid-content-stg"
+
+[[env.stg.queues.producers]]
+binding = "EVENTS_QUEUE"
+queue = "events-stg"
+
+[[env.stg.queues.consumers]]
+queue = "events-stg"
+max_batch_size = 10
+max_batch_timeout = 30
+[env.prod.vars]
+ENV = "prod"
+
+[env.prod.triggers]
+crons = ["5 * * * *", "30 15 * * *"]
+
+[[env.prod.d1_databases]]
+binding = "DB"
+database_name = "techdoc-admin-prod"
+database_id = "eaed2b51-57b1-4e09-8723-23b4881c2f1b"
+
+[env.prod.r2_buckets]
+binding = "PAID_CONTENT"
+bucket_name = "techdoc-paid-content-prod"
+
+[[env.prod.queues.producers]]
+binding = "EVENTS_QUEUE"
+queue = "events-prod"
+
+[[env.prod.queues.consumers]]
+queue = "events-prod"
+max_batch_size = 10
+max_batch_timeout = 30

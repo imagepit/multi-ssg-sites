@@ -1,0 +1,19 @@
+{
+  "name": "@techdoc/admin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "vitest run",
+    "type-check": "tsc -p tsconfig.json --noEmit",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250921.0",
+    "typescript": "^5.9.2",
+    "vitest": "^1.6.0",
+    "wrangler": "^4.56.0"
+  }
+}

@@ -1,0 +1,160 @@
+### ============================================
+### Admin Sync / Sites / Pages API
+### ============================================
+
+# @host = http://localhost:8787
+@host = https://techdoc-admin.r-takahashi-b81.workers.dev
+@contentType = application/json
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJsb2NhbC1hZG1pbiIsInJvbGVzIjpbImFkbWluIiwiZWRpdG9yIl0sInNpdGVJZHMiOlsibmV4dGpzIl0sImlhdCI6MTc2NjI5MjA3MywiZXhwIjoxNzY2Mjk1NjczfQ.sH9FAVEqH5x6qWEsoNJ8tX2wH36wqqjVu30dzwQ6Iwk
+@adminApiKey = local-dev-key
+
+### --------------------------------------------
+### Sync (CI use)
+### POST /admin/sync
+### --------------------------------------------
+
+POST {{host}}/admin/sync
+Content-Type: {{contentType}}
+X-Admin-Api-Key: {{adminApiKey}}
+
+{
+  "site": {
+    "siteId": "nextjs",
+    "name": "Next.js",
+    "status": "active"
+  },
+  "pages": [
+    {
+      "path": "/best-practices",
+      "slug": "best-practices",
+      "title": "ベストプラクティス",
+      "status": "publish",
+      "parent": "",
+      "target_user": "実践者"
+    }
+  ],
+  "sync": {
+    "mode": "full"
+  }
+}
+
+### --------------------------------------------
+### Sites list (viewer+)
+### GET /admin/sites
+### --------------------------------------------
+
+GET {{host}}/admin/sites
+Authorization: Bearer {{token}}
+
+### --------------------------------------------
+### Sites create (admin)
+### POST /admin/sites
+### --------------------------------------------
+
+POST {{host}}/admin/sites
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "siteId": "nextjs",
+  "name": "Next.js",
+  "status": "active"
+}
+
+### --------------------------------------------
+### Sites update (admin)
+### PATCH /admin/sites
+### --------------------------------------------
+
+PATCH {{host}}/admin/sites
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "siteId": "nextjs",
+  "name": "Next.js Guide",
+  "status": "active"
+}
+
+### --------------------------------------------
+### Sites update domain (admin)
+### PATCH /admin/sites
+### --------------------------------------------
+
+PATCH {{host}}/admin/sites
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "siteId": "nextjs",
+  "name": "Next.js Guide",
+  "domain": "nextjs.example.com",
+  "status": "active"
+}
+
+### --------------------------------------------
+### Sites disable (admin)
+### DELETE /admin/sites?site_id=...
+### --------------------------------------------
+
+DELETE {{host}}/admin/sites?site_id=nextjs
+Authorization: Bearer {{token}}
+
+### --------------------------------------------
+### Pages list (viewer+) - site_id required
+### GET /admin/pages
+### --------------------------------------------
+
+GET {{host}}/admin/pages?site_id=nextjs&limit=5
+Authorization: Bearer {{token}}
+
+### --------------------------------------------
+### Pages list (viewer+) - resolve site_id via Host
+### GET /admin/pages
+### --------------------------------------------
+
+GET {{host}}/admin/pages?limit=5
+Authorization: Bearer {{token}}
+X-Forwarded-Host: nextjs.example.com
+
+### --------------------------------------------
+### Pages create (editor+)
+### POST /admin/pages
+### --------------------------------------------
+
+POST {{host}}/admin/pages
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "siteId": "nextjs",
+  "path": "/intro",
+  "slug": "intro",
+  "title": "Intro",
+  "status": "publish"
+}
+
+### --------------------------------------------
+### Pages update (editor+)
+### PATCH /admin/pages
+### --------------------------------------------
+
+PATCH {{host}}/admin/pages
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "siteId": "nextjs",
+  "path": "/intro",
+  "slug": "intro",
+  "title": "Intro Updated",
+  "status": "published"
+}
+
+### --------------------------------------------
+### Pages archive (editor+)
+### DELETE /admin/pages?site_id=...&path=...
+### --------------------------------------------
+
+DELETE {{host}}/admin/pages?site_id=nextjs&path=/intro
+Authorization: Bearer {{token}}

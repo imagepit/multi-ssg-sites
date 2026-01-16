@@ -1,0 +1,48 @@
+# syntax=docker/dockerfile:1
+FROM node:20-alpine AS base
+WORKDIR /app
+
+# pnpm (optional). fallback to npm if not present on host
+RUN corepack enable && corepack prepare pnpm@latest --activate || true
+
+# Install dependencies
+COPY package.json pnpm-lock.yaml* package-lock.json* yarn.lock* ./
+RUN if [ -f pnpm-lock.yaml ]; then pnpm install --frozen-lockfile --ignore-scripts; \
+    elif [ -f package-lock.json ]; then npm ci --ignore-scripts; \
+    elif [ -f yarn.lock ]; then yarn install --frozen-lockfile --ignore-scripts; \
+    else npm i --ignore-scripts; fi
+
+# Build stage
+FROM base AS builder
+COPY . .
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+RUN if [ -f pnpm-lock.yaml ]; then pnpm build; \
+    elif [ -f package-lock.json ]; then npm run build; \
+    elif [ -f yarn.lock ]; then yarn build; \
+    else npm run build; fi
+
+# Production stage
+FROM node:20-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV HOST=0.0.0.0
+ENV PORT=4000
+
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Copy built application
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+# Set correct permissions
+RUN chown -R nextjs:nodejs /app
+USER nextjs
+
+EXPOSE 4000
+
+CMD ["node", "server.js"]
+# docker buildx build --platform linux/amd64,linux/arm64 -t imagepit/fumadocs:v1.0.0 --push .

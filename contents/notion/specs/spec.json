@@ -1,0 +1,71 @@
+{
+  "tech_keyword_id": "notion",
+  "site_name": "Notion Complete Guide",
+  "site_type": "documentation",
+  "language": "ja",
+  "created_at": "2025-09-26T22:00:00+09:00",
+  "updated_at": "2025-09-26T22:00:00+09:00",
+  "phase": "initialized",
+  "research_reference": {
+    "keyword_id": "notion",
+    "research_date": "2025-09-26",
+    "proposal_available": true
+  },
+  "target_metrics": {
+    "monthly_visitors": "50,000",
+    "conversion_rate": "5%",
+    "page_views": "200,000",
+    "engagement_time": "8分"
+  },
+  "approvals": {
+    "requirements": {
+      "generated": false,
+      "approved": false,
+      "approved_at": null,
+      "approved_by": null
+    },
+    "design": {
+      "generated": false,
+      "approved": false,
+      "approved_at": null,
+      "approved_by": null
+    },
+    "tasks": {
+      "generated": false,
+      "approved": false,
+      "approved_at": null,
+      "approved_by": null
+    }
+  },
+  "theme_config": {
+    "colors": {
+      "primary": "hsl(220, 90%, 56%)",
+      "secondary": "hsl(220, 90%, 66%)",
+      "accent": "hsl(280, 100%, 70%)",
+      "background": "hsl(220, 27%, 98%)",
+      "surface": "hsl(220, 27%, 95%)",
+      "text": "hsl(220, 13%, 18%)",
+      "muted": "hsl(220, 13%, 60%)"
+    },
+    "fonts": {
+      "heading": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "body": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "mono": "JetBrains Mono, ui-monospace, SFMono-Regular, monospace"
+    },
+    "spacing": {
+      "sidebar": "320px",
+      "content": "1024px",
+      "gap": "2rem"
+    },
+    "features": {
+      "darkMode": true,
+      "animations": true,
+      "blur": true
+    },
+    "branding": {
+      "logo": "/logos/notion.svg",
+      "favicon": "/favicons/notion.svg",
+      "og_image": "/og/notion-og.png"
+    }
+  }
+}

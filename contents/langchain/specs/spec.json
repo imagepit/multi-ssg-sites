@@ -1,0 +1,105 @@
+{
+  "tech_keyword_id": "langchain",
+  "site_name": "LangChain実践開発ガイド",
+  "site_type": "documentation",
+  "generator": "wordpress",
+  "language": "ja",
+  "created_at": "2025-08-29T12:00:00Z",
+  "updated_at": "2025-09-21T14:18:12Z",
+  "phase": "design",
+  "research_reference": {
+    "keyword_id": "langchain",
+    "research_date": "2025-08-29",
+    "proposal_available": true
+  },
+  "target_metrics": {
+    "monthly_visitors": "10000",
+    "conversion_rate": "5%",
+    "page_views": "30000",
+    "engagement_time": "3 minutes"
+  },
+  "integration": {
+    "training_platform": true,
+    "promotion_banners": true,
+    "content_linking": true,
+    "analytics_tracking": true
+  },
+  "approvals": {
+    "requirements": {
+      "generated": true,
+      "approved": false,
+      "generated_at": "2025-08-29T13:30:35Z",
+      "approved_at": null,
+      "approved_by": null
+    },
+    "design": {
+      "generated": true,
+      "approved": true,
+      "generated_at": "2025-09-21T14:18:12Z",
+      "approved_at": "2025-09-21T14:18:12Z",
+      "approved_by": "user"
+    },
+    "tasks": {
+      "generated": false,
+      "approved": false,
+      "approved_at": null,
+      "approved_by": null
+    },
+    "quality": {
+      "checked": false,
+      "passed": false,
+      "checked_at": null,
+      "issues_count": 0
+    }
+  },
+  "wordpress_config": {
+    "docker_image": "imagepit/wp-post:v1",
+    "docker_compose": true,
+    "rest_api": true,
+    "features": {
+      "auto_publish": true,
+      "seo_optimization": true,
+      "media_upload": true,
+      "page_hierarchy": true
+    }
+  },
+  "content_structure": {
+    "getting_started": true,
+    "api_reference": true,
+    "tutorials": true,
+    "best_practices": true,
+    "examples": true,
+    "troubleshooting": true
+  },
+  "theme_config": {
+    "colors": {
+      "primary": "#1d3c3b",
+      "secondary": "#1d3c3b",
+      "accent": "#1d3c3b",
+      "background": "#1d3c3b",
+      "surface": "#1d3c3b",
+      "text": "#1d3c3b",
+      "muted": "#1d3c3b"
+    },
+    "fonts": {
+      "heading": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "body": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "mono": "JetBrains Mono, ui-monospace, SFMono-Regular, monospace"
+    },
+    "spacing": {
+      "sidebar": "320px",
+      "content": "1024px",
+      "gap": "2rem"
+    },
+    "features": {
+      "darkMode": true,
+      "animations": true,
+      "blur": true
+    },
+    "branding": {
+      "logo": "/logos/langchain.svg",
+      "favicon": "/favicons/langchain.svg",
+      "og_image": "/og/langchain-og.png"
+    }
+  }
+}

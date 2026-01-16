@@ -1,0 +1,106 @@
+{
+  "tech_keyword_id": "nextjs",
+  "site_name": "Next.js実践開発マスターガイド",
+  "site_type": "documentation",
+  "generator": "wordpress",
+  "language": "ja",
+  "created_at": "2025-09-07T22:30:00Z",
+  "updated_at": "2025-09-08T07:29:00Z",
+  "phase": "tasks",
+  "research_reference": {
+    "keyword_id": "nextjs",
+    "research_date": "2025-09-07",
+    "proposal_available": true
+  },
+  "target_metrics": {
+    "monthly_visitors": "10,000人",
+    "conversion_rate": "3%",
+    "page_views": "30,000PV",
+    "engagement_time": "8分"
+  },
+  "integration": {
+    "training_platform": true,
+    "promotion_banners": true,
+    "content_linking": true,
+    "analytics_tracking": true
+  },
+  "approvals": {
+    "requirements": {
+      "generated": true,
+      "approved": false,
+      "generated_at": "2025-09-07T23:00:00Z",
+      "approved_at": null,
+      "approved_by": null
+    },
+    "design": {
+      "generated": true,
+      "approved": true,
+      "generated_at": "2025-09-07T23:45:00Z",
+      "approved_at": "2025-09-07T23:45:00Z",
+      "approved_by": "user"
+    },
+    "tasks": {
+      "generated": true,
+      "approved": true,
+      "generated_at": "2025-09-08T07:29:00Z",
+      "approved_at": "2025-09-08T07:29:00Z",
+      "approved_by": null
+    },
+    "quality": {
+      "checked": false,
+      "passed": false,
+      "checked_at": null,
+      "issues_count": 0
+    }
+  },
+  "wordpress_config": {
+    "docker_image": "imagepit/wp-post:v1",
+    "docker_compose": true,
+    "rest_api": true,
+    "features": {
+      "auto_publish": true,
+      "seo_optimization": true,
+      "media_upload": true,
+      "page_hierarchy": true
+    }
+  },
+  "content_structure": {
+    "getting_started": true,
+    "api_reference": false,
+    "tutorials": true,
+    "best_practices": true,
+    "examples": true,
+    "troubleshooting": true
+  },
+  "theme_config": {
+    "colors": {
+      "primary": "#000",
+      "secondary": "#fff",
+      "accent": "#000",
+      "background": "#fff",
+      "surface": "#fff",
+      "text": "#000",
+      "muted": "#000"
+    },
+    "fonts": {
+      "heading": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "body": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "mono": "JetBrains Mono, ui-monospace, SFMono-Regular, monospace"
+    },
+    "spacing": {
+      "sidebar": "320px",
+      "content": "1024px",
+      "gap": "2rem"
+    },
+    "features": {
+      "darkMode": true,
+      "animations": true,
+      "blur": true
+    },
+    "branding": {
+      "logo": "/logos/nextjs.svg",
+      "favicon": "/favicons/nextjs.svg",
+      "og_image": "/og/nextjs-og.png"
+    }
+  }
+}

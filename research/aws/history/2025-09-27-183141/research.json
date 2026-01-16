@@ -1,0 +1,140 @@
+{
+  "research_metadata": {
+    "technical_keywords": "aws",
+    "training_keyword_id": "aws",
+    "research_date": "2025-09-27",
+    "execution_timestamp": "2025-09-27-183141",
+    "sites_researched": 15,
+    "data_points_analyzed": 45,
+    "trends_identified": 8,
+    "needs_identified": 12,
+    "competitors_analyzed": 6,
+    "recommendations_generated": 5
+  },
+  "market_analysis": {
+    "market_size": {
+      "aws_market_share": "30%",
+      "job_postings": 103455,
+      "growth_trajectory": "stable_leadership"
+    },
+    "salary_ranges": {
+      "entry_level": "400-500万円",
+      "mid_level": "450-800万円",
+      "senior_level": "800-1200万円",
+      "expert_level": "1000万円+"
+    },
+    "regional_demand": "nationwide_high_demand_with_remote_work_growth"
+  },
+  "technology_trends": {
+    "emerging_technologies": [
+      "生成AI統合 (Amazon Bedrock, Titan, SageMaker)",
+      "サーバーレス技術普及",
+      "Infrastructure as Code標準化",
+      "ゼロトラストセキュリティ",
+      "グリーンクラウドアーキテクチャ"
+    ],
+    "market_positioning": {
+      "aws_share": 30,
+      "azure_share": 20,
+      "gcp_share": 13
+    },
+    "future_outlook": "continued_dominance_with_ai_focus"
+  },
+  "learning_needs": {
+    "beginner_challenges": [
+      "学習の始め方がわからない",
+      "実務経験なしでの学習困難",
+      "学習時間の確保 (100-150時間必要)"
+    ],
+    "effective_methods": [
+      "ゲーム感覚での学習 (AWS Cloud Quest)",
+      "実践的ハンズオン演習",
+      "体系的な資格取得プログラム"
+    ],
+    "support_infrastructure": [
+      "AWS JumpStart 2025",
+      "公式ハンズオンコンテンツ",
+      "無料学習リソース"
+    ]
+  },
+  "competitive_landscape": {
+    "major_platforms": {
+      "udemy": {
+        "strengths": ["豊富なコース数", "手頃な価格", "生涯アクセス"],
+        "weaknesses": ["品質のばらつき", "日本語コンテンツ限定"]
+      },
+      "coursera": {
+        "strengths": ["大学・企業提携", "高品質コンテンツ", "認定価値"],
+        "weaknesses": ["高価格", "日本語対応限定"]
+      },
+      "pluralsight": {
+        "strengths": ["技術特化", "構造化学習", "専門講師"],
+        "weaknesses": ["サブスクリプション必須", "英語中心"]
+      }
+    },
+    "differentiation_opportunities": [
+      "日本語での包括的コンテンツ",
+      "最新技術トレンド対応",
+      "実践的プロジェクトベース学習",
+      "業界特化型コンテンツ",
+      "コミュニティ学習サポート"
+    ]
+  },
+  "book_market_analysis": {
+    "bestsellers_2025": [
+      {
+        "title": "図解即戦力 Amazon Web Servicesのしくみと技術がこれ1冊でしっかりわかる教科書 ［改訂2版］",
+        "pages": 352,
+        "rating": 4.2,
+        "features": ["網羅的知識", "図解重視"]
+      },
+      {
+        "title": "AWSの基本・仕組み・重要用語が全部わかる教科書 (見るだけ図解)",
+        "features": ["豊富な図解", "導入例豊富"]
+      },
+      {
+        "title": "AWS運用入門 改訂第2版",
+        "pages": 552,
+        "release": "2025年7月",
+        "features": ["最新情報対応", "実践的運用ノウハウ"]
+      }
+    ],
+    "reader_preferences": [
+      "視覚的でわかりやすい説明",
+      "実践的な演習とハンズオン",
+      "最新情報への対応",
+      "段階的学習プログラム",
+      "資格取得直結内容"
+    ],
+    "price_ranges": {
+      "entry_books": "2500-3500円",
+      "certification_books": "3000-4500円",
+      "advanced_books": "4000-6000円"
+    }
+  },
+  "recommendations": {
+    "content_strategy": [
+      "2025年最新技術対応 (生成AI, サーバーレス)",
+      "実践重視の学習設計",
+      "日本語での包括的解説",
+      "段階的レベル設計 (基礎→実践→応用)"
+    ],
+    "differentiation_strategy": [
+      "日本企業事例特化",
+      "インタラクティブ学習体験",
+      "コミュニティベース学習",
+      "最新技術の迅速反映"
+    ],
+    "target_segments": [
+      "IT初心者・転職希望者",
+      "現役エンジニアのスキルアップ",
+      "企業研修・組織的学習"
+    ],
+    "success_factors": [
+      "継続的コンテンツ更新体制",
+      "実践的ハンズオン提供",
+      "資格取得サポート充実",
+      "コミュニティ機能強化"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "phase": "design",
+  "approvals": {
+    "requirements": {
+      "approved": true
+    },
+    "design": {
+      "generated": true,
+      "approved": false,
+      "generated_at": "2025-09-23T15:00:00Z",
+      "approved_at": null,
+      "approved_by": null
+    }
+  },
+  "updated_at": "2025-09-23T15:00:00Z"
+}
