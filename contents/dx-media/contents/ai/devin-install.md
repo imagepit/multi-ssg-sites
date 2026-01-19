@@ -2,7 +2,7 @@
 title: Devinのインストール
 slug: devin-install
 date: "2025-04-01"
-categories: ["AIと機械学習"]
+categories: ["AI"]
 tags: ["Devin", "AI開発"]
 status: "publish"
 description: "Devinのインストール手順を画像付きで解説。DX系メディアの記事制作に必要なツールのセットアップ方法をステップバイステップで紹介。"

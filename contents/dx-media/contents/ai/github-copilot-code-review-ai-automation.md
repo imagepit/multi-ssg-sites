@@ -2,19 +2,8 @@
 title: 「GitHub Copilotコードレビュー」正式リリース コードレビュー作業を生成AIが代行
 slug: github-copilot-code-review-ai-automation
 date: "2025-04-01"
-categories:
-  - AIと機械学習
-tags:
-  - GitHub
-  - Copilot
-  - コードレビュー
-  - 生成AI
-  - 開発効率化
-  - DevOps
-  - 自動化
-  - プログラミング
-  - ソフトウェア開発
-  - 品質管理
+categories: ["AI"]
+tags: ["GitHub", "Copilot", "コードレビュー", "生成AI", "開発効率化", "DevOps", "自動化", "プログラミング", "ソフトウェア開発", "品質管理"]
 description: "GitHub Copilotコードレビューが正式リリース。AIがコードを自動分析し、バグ検出や改善提案を行う。レビュー時間短縮と品質向上を実現。利用方法と開発プロセスへの影響を解説。"
 status: publish
 ---

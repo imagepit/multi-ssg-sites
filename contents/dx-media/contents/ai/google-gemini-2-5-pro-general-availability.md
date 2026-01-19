@@ -2,19 +2,8 @@
 title: Google Gemini 2.5 Proの一般提供開始：AI StudioとVertex AIで利用可能に
 slug: google-gemini-2-5-pro-general-availability
 date: "2025-04-09"
-categories:
-  - AIと機械学習
-tags:
-  - Google
-  - Gemini
-  - 生成AI
-  - AI Studio
-  - Vertex AI
-  - マルチモーダル
-  - 大規模言語モデル
-  - LLM
-  - DX
-  - クラウドAI
+categories: ["AI"]
+tags: ["Google", "Gemini", "生成AI", "AI Studio", "Vertex AI", "マルチモーダル", "大規模言語モデル", "LLM", "DX", "クラウドAI"]
 description: "Google Gemini 2.5 ProがAI StudioとVertex AIで一般提供開始。マルチモーダル対応で最大2百万トークンのコンテキスト処理が可能。企業のDX推進における活用シナリオと導入事例を紹介。"
 status: publish
 ---

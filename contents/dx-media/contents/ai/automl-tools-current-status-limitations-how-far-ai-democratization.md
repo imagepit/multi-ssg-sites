@@ -2,7 +2,7 @@
 title: AutoMLツールの現状と限界：AI開発の民主化はどこまで進んだか？
 slug: automl-tools-current-status-limitations-how-far-ai-democratization
 date: "2025-04-02"
-categories: ["AIと機械学習"]
+categories: ["AI"]
 tags: ["AutoML", "機械学習", "データサイエンス"]
 status: "publish"
 description: "AutoMLツールの現状と限界を解説。機械学習モデル構築の自動化により開発効率は向上したが、解釈可能性やドメイン知識の反映など課題も存在。AI開発の民主化の現実を考察"

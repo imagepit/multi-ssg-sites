@@ -2,7 +2,7 @@
 title: "画像認識AIの進化と産業応用：製造・医療・小売における活用事例"
 slug: "image-recognition-ai-evolution-industrial-applications-manufacturing-healthcare-retail"
 date: "2025-04-25"
-categories: ["AIと機械学習"]
+categories: ["AI"]
 tags: ["画像認識", "コンピュータビジョン", "AI", "ディープラーニング", "CNN", "ViT", "DX", "製造業", "医療", "小売", "産業応用"]
 status: "publish"
 description: "画像認識AIの進化と産業応用を解説。CNNからViTへ、製造業の外観検査・予知保全、医療の診断支援、小売の顧客行動分析など具体的活用事例と効果、今後の展望を紹介。"

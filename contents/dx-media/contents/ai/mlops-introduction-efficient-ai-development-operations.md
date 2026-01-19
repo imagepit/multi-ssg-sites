@@ -2,19 +2,8 @@
 title: MLOps導入：AI開発・運用を効率化・高速化する基盤構築
 slug: mlops-introduction-efficient-ai-development-operations
 date: "2025-04-18"
-categories:
-  - AIと機械学習
-tags:
-  - MLOps
-  - 機械学習
-  - DevOps
-  - CI/CD
-  - モデル管理
-  - パイプライン
-  - モニタリング
-  - 自動化
-  - スケーラビリティ
-  - ガバナンス
+categories: ["AI"]
+tags: ["MLOps", "機械学習", "DevOps", "CI/CD", "モデル管理", "パイプライン", "モニタリング", "自動化", "スケーラビリティ", "ガバナンス"]
 description: "MLOpsは機械学習モデルの開発から運用までを効率化する方法論。データ管理、実験追跡、CI/CD、モデルサービング、モニタリングの主要コンポーネントと段階的導入戦略を解説。"
 status: publish
 ---

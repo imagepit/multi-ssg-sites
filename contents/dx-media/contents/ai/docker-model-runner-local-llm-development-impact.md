@@ -2,13 +2,8 @@
 title: Docker Model Runner登場：ローカルでの大規模言語モデル実行が開発にもたらす変化
 slug: docker-model-runner-local-llm-development-impact
 date: "2025-04-08"
-categories:
-  - AIと機械学習
-tags:
-  - Docker
-  - LLM
-  - AI開発
-  - DevOps
+categories: ["AI"]
+tags: ["Docker", "LLM", "AI開発", "DevOps"]
 description: "Docker Model Runnerはローカル環境でLLMを実行できる新機能。クラウドAPI依存からの脱却、プライバシー保護、オフライン開発を実現。AI開発ワークフローへの影響と実践例を解説。"
 status: publish
 ---

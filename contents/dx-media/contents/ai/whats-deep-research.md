@@ -2,14 +2,8 @@
 title: Deep Researchとは？AIを活用した高度なリサーチ機能の全貌
 slug: whats-deep-research
 date: "2025-04-03T10:00:00.000Z"
-categories:
-  - AIと機械学習
-tags:
-  - OpenAI
-  - Deep Research
-  - AIエージェント
-  - 情報収集
-  - レポート生成
+categories: ["AI"]
+tags: ["OpenAI", "Deep Research", "AIエージェント", "情報収集", "レポート生成"]
 status: publish
 description: "Deep ResearchはOpenAIやGoogleが開発したAIリサーチエージェント機能。Web上の情報を自律的に探索・分析し、包括的なレポートを生成。数時間かかる調査を数分で完了させる革新的技術。"
 ---

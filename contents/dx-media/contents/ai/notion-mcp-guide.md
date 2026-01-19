@@ -4,14 +4,8 @@ slug: notion-mcp-guide
 date: "2025-04-10"
 status: publish
 description: "Notion MCPはAIアシスタントがNotionワークスペースと直接連携する技術。ClaudeなどのAIがNotionのデータベースやページにアクセスし、情報取得や更新が可能。設定方法と活用例を解説。"
-categories:
-  - AIと機械学習
-tags:
-  - Notion
-  - MCP
-  - Claude
-  - ツール連携
-  - 生産性向上
+categories: ["AI"]
+tags: ["Notion", "MCP", "Claude", "ツール連携", "生産性向上"]
 ---
 ![](../../../../images/dx-media/ai/notion-mcp-guide.png)
 ## はじめに

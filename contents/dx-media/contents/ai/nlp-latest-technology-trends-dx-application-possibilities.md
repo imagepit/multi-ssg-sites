@@ -2,19 +2,8 @@
 title: 自然言語処理（NLP）の最新技術トレンドとDXにおける応用可能性
 slug: nlp-latest-technology-trends-dx-application-possibilities
 date: "2025-04-22"
-categories:
-  - AIと機械学習
-tags:
-  - NLP
-  - 自然言語処理
-  - LLM
-  - トランスフォーマー
-  - BERT
-  - GPT
-  - DX
-  - RAG
-  - ファインチューニング
-  - 多言語モデル
+categories: ["AI"]
+tags: ["NLP", "自然言語処理", "LLM", "トランスフォーマー", "BERT", "GPT", "DX", "RAG", "ファインチューニング", "多言語モデル"]
 description: "自然言語処理の最新技術トレンドとDX応用を解説。トランスフォーマーからLLMへ、RAGやファインチューニングなどの実用化技術、金融・医療・製造・小売での活用事例を紹介。"
 status: publish
 ---

@@ -2,19 +2,8 @@
 title: 生成AI（Generative AI）のビジネス活用：業務効率化から新規事業創出までのロードマップ
 slug: generative-ai-business-use-efficiency-new-business-roadmap
 date: "2025-04-01"
-categories:
-  - AIと機械学習
-tags:
-  - 生成AI
-  - Generative AI
-  - ビジネス活用
-  - DX
-  - ROI
-  - 業務効率化
-  - 新規事業
-  - LLM
-  - プロンプトエンジニアリング
-  - AI戦略
+categories: ["AI"]
+tags: ["生成AI", "Generative AI", "ビジネス活用", "DX", "ROI", "業務効率化", "新規事業", "LLM", "プロンプトエンジニアリング", "AI戦略"]
 description: "生成AIのビジネス活用ロードマップを解説。業務効率化から顧客体験向上、既存事業拡張、新規事業創出までの4段階アプローチ。プロンプトエンジニアリングの実践テクニックも紹介。"
 status: publish
 ---

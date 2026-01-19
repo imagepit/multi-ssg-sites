@@ -1,15 +1,23 @@
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import { getBranding, getSiteName } from '@/lib/site-config';
-const navLinks: BaseLayoutProps['links'] = [
-  { type: 'main', text: 'AI', url: '#', active: 'none' },
-  { type: 'main', text: 'クラウド', url: '#', active: 'none' },
-  { type: 'main', text: 'DevOps', url: '#', active: 'none' },
-  { type: 'main', text: 'フロントエンド', url: '#', active: 'none' },
-  { type: 'main', text: 'バックエンド', url: '#', active: 'none' },
-  { type: 'main', text: 'セキュリティ', url: '#', active: 'none' },
-  { type: 'main', text: 'データベース', url: '#', active: 'none' },
-  { type: 'main', text: 'システム設計', url: '#', active: 'none' },
-]
+import { getCategoryHref } from '@/lib/content-utils';
+
+const navCategories = [
+  'AI',
+  'クラウド',
+  'DevOps',
+  'フロントエンド',
+  'バックエンド',
+  'セキュリティ',
+  'ソフトウェアアーキテクチャ',
+];
+
+const navLinks: BaseLayoutProps['links'] = navCategories.map((category) => ({
+  type: 'main',
+  text: category,
+  url: getCategoryHref(category),
+  active: 'none',
+}));
 
 /**
  * Shared layout configurations

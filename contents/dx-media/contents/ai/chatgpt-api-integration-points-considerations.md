@@ -2,14 +2,8 @@
 title: ChatGPT API連携：自社サービスにAIを組み込む際のポイントと注意点
 slug: chatgpt-api-integration-points-considerations
 date: "2025-04-09"
-categories:
-  - AIと機械学習
-tags:
-  - ChatGPT
-  - OpenAI
-  - LLM
-  - プロンプト設計
-  - AI実装
+categories: ["AI"]
+tags: ["ChatGPT", "OpenAI", "LLM", "プロンプト設計", "AI実装"]
 description: "ChatGPT APIを自社サービスに統合する際のポイントと注意点を解説。プロンプト設計、トークン管理、エラーハンドリング、コスト管理、セキュリティ対策など実装時の重要事項を網羅"
 status: publish
 ---
