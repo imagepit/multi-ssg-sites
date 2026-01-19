@@ -3,7 +3,7 @@
 @import 'fumadocs-ui/css/preset.css';
 
 #nd-page {
-  max-width: 900px;
+  max-width: 740px;
   margin-inline: auto;
   width: 100%;
 }

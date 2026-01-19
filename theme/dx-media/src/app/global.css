@@ -2,8 +2,18 @@
 @import 'fumadocs-ui/css/black.css';
 @import 'fumadocs-ui/css/preset.css';
 
+#nd-page .prose {
+  font-size: 1.1rem;
+  line-height: 2rem;
+}
+
+#nd-page .page-description {
+  font-size: 1.1rem;
+  line-height: 2rem;
+}
+
 #nd-page {
-  max-width: 900px;
+  max-width: 740px;
   margin-inline: auto;
   width: 100%;
 }

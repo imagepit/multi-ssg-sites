@@ -69,7 +69,7 @@ export function LayoutContent({
     const { className, children, ...rest } = props
     return (
       <div
-        className={['flex flex-col gap-3 p-4 pb-2 empty:hidden', className]
+        className={['pt-14 flex flex-col gap-3 p-4 pb-2 empty:hidden', className]
           .filter(Boolean)
           .join(' ')}
         {...rest}

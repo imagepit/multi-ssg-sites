@@ -30,7 +30,7 @@ export default async function Page(props: { params: Promise<{ slug?: string[] }>
       includeSeparator: true
     }}>
       <DocsTitle className="mt-4 text-bold text-4xl">{page.data.title}</DocsTitle>
-      <DocsDescription className="mb-0 mt-4 text-md text-fd-muted-foreground">{page.data.description}</DocsDescription>
+      <DocsDescription className="page-description mb-0 mt-4 text-md text-fd-muted-foreground">{page.data.description}</DocsDescription>
       <DocsBody>
         <Suspense fallback={null}>
           <SearchHighlighter />
