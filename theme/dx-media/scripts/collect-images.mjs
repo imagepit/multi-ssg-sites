@@ -19,6 +19,7 @@ async function main() {
   const appRoot = process.cwd()
   const workspaceRoot = path.resolve(appRoot, '..', '..')
   const siteContentsRoot = path.join(workspaceRoot, 'contents', siteId, 'contents')
+  const imagesRoot = path.join(workspaceRoot, 'images')
   if (!fs.existsSync(siteContentsRoot)) {
     console.warn(`[collect-images] contents not found: ${siteContentsRoot}`)
     return
@@ -32,44 +33,57 @@ async function main() {
 
   const entries = new Map() // dest -> src
 
+  function addImage(raw, baseDir, options = {}) {
+    const cleaned = (raw || '').trim()
+    if (!cleaned || /^https?:|^data:|^blob:/i.test(cleaned)) return
+
+    let resolved
+    if (cleaned.startsWith('/images/')) {
+      const rel = cleaned.replace(/^\/images\//, '')
+      resolved = path.join(imagesRoot, rel)
+    } else if (options.allowImagesPrefix && cleaned.startsWith('images/')) {
+      const rel = cleaned.replace(/^images\//, '')
+      resolved = path.join(imagesRoot, rel)
+    } else if (cleaned.startsWith('/')) {
+      return
+    } else {
+      resolved = path.resolve(baseDir, cleaned)
+    }
+
+    let dest
+    if (resolved.startsWith(imagesRoot + path.sep)) {
+      const rel = path.relative(imagesRoot, resolved).replace(/\\/g, '/')
+      dest = `/images/${rel}`
+    } else if (resolved.startsWith(siteContentsRoot + path.sep)) {
+      const rel = path.relative(siteContentsRoot, resolved).replace(/\\/g, '/')
+      dest = `/images/${siteId}/${rel}`
+    } else {
+      dest = `/images/${siteId}/misc/${path.basename(resolved)}`
+    }
+
+    if (!micromatch.isMatch(dest.toLowerCase(), '**/*.{png,jpg,jpeg,webp,avif,gif,svg}')) return
+    entries.set(dest, resolved)
+  }
+
   for (const abs of files) {
     const text = fs.readFileSync(abs, 'utf8')
     const dir = path.dirname(abs)
     for (const m of text.matchAll(reImg)) {
       const raw = (m[1] || m[2] || '').trim()
-      if (!raw || /^https?:|^data:|^blob:/i.test(raw)) continue
+      addImage(raw, dir)
+    }
+  }
 
-      const imagesRoot = path.join(workspaceRoot, 'images')
-      let resolved
-      if (raw.startsWith('/images/')) {
-        // Absolute workspace images path: map to workspace imagesRoot
-        const rel = raw.replace(/^\/images\//, '')
-        resolved = path.join(imagesRoot, rel)
-      } else if (raw.startsWith('/')) {
-        // Other absolute paths are not supported; skip
-        continue
-      } else {
-        // Relative to markdown file
-        resolved = path.resolve(dir, raw)
+  const specPath = path.join(workspaceRoot, 'contents', siteId, 'specs', 'spec.json')
+  if (fs.existsSync(specPath)) {
+    try {
+      const spec = JSON.parse(fs.readFileSync(specPath, 'utf8'))
+      const profileImage = spec?.theme_config?.profile?.image
+      if (typeof profileImage === 'string') {
+        addImage(profileImage, imagesRoot, { allowImagesPrefix: true })
       }
-
-      // Compute destination under /images, allowing any path within imagesRoot
-      let dest
-      if (resolved.startsWith(imagesRoot + path.sep)) {
-        const rel = path.relative(imagesRoot, resolved).replace(/\\/g, '/')
-        dest = `/images/${rel}`
-      } else if (resolved.startsWith(siteContentsRoot + path.sep)) {
-        // Local images placed near MDX files -> namespace under siteId
-        const rel = path.relative(siteContentsRoot, resolved).replace(/\\/g, '/')
-        dest = `/images/${siteId}/${rel}`
-      } else {
-        // Fallback: place under /images/[siteId]/misc/ preserving filename
-        dest = `/images/${siteId}/misc/${path.basename(resolved)}`
-      }
-
-      // crude filter to include only common image extensions
-      if (!micromatch.isMatch(dest.toLowerCase(), '**/*.{png,jpg,jpeg,webp,avif,gif,svg}')) continue
-      entries.set(dest, resolved)
+    } catch (error) {
+      console.warn('[collect-images] failed to read spec.json:', error?.message || error)
     }
   }
 
@@ -82,4 +96,3 @@ async function main() {
 }
 
 main()
-

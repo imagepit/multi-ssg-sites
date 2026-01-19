@@ -47,6 +47,13 @@
       "logo": "logo.svg",
       "favicon": "logo.svg",
       "og_image": "logo-og.drawio.svg"
+    },
+    "profile": {
+      "name": "RYO",
+      "role": "エンジニア / 講師",
+      "bio": "クラウドネイティブやアーキテクチャ設計の講師として活動しながら、ITエンジニアのDXを推進するために新しい技術やベストプラクティスを常に学び、エンジニアの生産性と開発品質の向上に貢献することを目指しています。猫5匹飼っています。山奥のポツンと一軒家に住んでいて、事務所は海の近くです。",
+      "image": "/images/profile/profile02.png",
+      "x_url": "https://x.com/dxtechblog64382"
     }
   },
   "seo_strategy": {

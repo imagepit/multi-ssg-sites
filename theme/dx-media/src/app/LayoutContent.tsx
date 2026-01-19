@@ -9,6 +9,7 @@ import type { PageTree } from 'fumadocs-core/server'
 import { CustomStaticSearchDialog } from '@/components/CustomStaticSearchDialog'
 import { SharedNavbar } from '@/components/SharedNavbar'
 import { ProfileSidebar } from '@/components/ProfileSidebar'
+import type { ProfileConfig } from '@/lib/site-config'
 
 interface LayoutContentProps {
   children: React.ReactNode
@@ -20,6 +21,7 @@ interface LayoutContentProps {
   sidebar?: Omit<DocsLayoutProps['sidebar'], 'components'>
   containerProps?: React.HTMLAttributes<HTMLDivElement>
   profileSidebar?: boolean
+  profile?: ProfileConfig
 }
 
 export function LayoutContent({
@@ -32,6 +34,7 @@ export function LayoutContent({
   sidebar,
   containerProps,
   profileSidebar = false,
+  profile,
 }: LayoutContentProps) {
   // クライアントコンポーネントで直接環境変数を読み取る
   const isStaticSearchActual = process.env.NEXT_PUBLIC_SEARCH_STATIC === '1'
@@ -72,7 +75,7 @@ export function LayoutContent({
         {...rest}
       >
         {children}
-        <ProfileSidebar />
+        <ProfileSidebar profile={profile} />
       </div>
     )
   }
