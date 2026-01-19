@@ -1,5 +1,5 @@
 import { type InferPageType, loader } from 'fumadocs-core/source'
-import type { PageTree } from 'fumadocs-core/server'
+import type * as PageTree from 'fumadocs-core/page-tree'
 import { getBranding } from '../site/spec.js'
 
 export function createSource(docs: any) {
@@ -26,7 +26,8 @@ export function getPageImage(page: InferPageType<ReturnType<typeof createSource>
 }
 
 export async function getLLMText(page: InferPageType<ReturnType<typeof createSource>>) {
-  const processed = await page.data.getText('raw')
+  const getText = (page.data as { getText?: (format: string) => Promise<string> }).getText
+  const processed = getText ? await getText('raw') : ''
   return `# ${page.data.title} (${page.url})\n\n${processed}`
 }
 
