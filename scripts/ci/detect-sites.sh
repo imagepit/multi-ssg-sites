@@ -40,7 +40,7 @@ else
 fi
 
 if $force_all; then
-  sites=$(git ls-tree -d --name-only "$HEAD" contents | sort -u)
+  sites=$(git ls-tree -d --name-only "$HEAD" contents/ | awk -F/ '{print $2}' | sort -u)
 else
   if $use_rg; then
     content_sites=$(printf "%s\n" "$changed" | rg '^contents/[^/]+/' || true)
