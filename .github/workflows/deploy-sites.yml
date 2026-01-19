@@ -91,6 +91,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build shared fumadocs-engine
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+        working-directory: shared/fumadocs-engine
+
       - name: Install wrangler
         run: npm install -g wrangler
 
