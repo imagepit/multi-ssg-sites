@@ -40,7 +40,7 @@ docs/
 
 # production
 /build
-/dist
+**/dist
 
 # misc
 *.pem

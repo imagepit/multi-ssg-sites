@@ -6,6 +6,13 @@ export function createSource(docs: any) {
   return loader({
     baseUrl: '/',
     source: docs.toFumadocsSource(),
+    pageTree: {
+      transformers: [
+        {
+          root: (node) => ({ ...node, name: 'ホーム' }),
+        },
+      ],
+    },
   })
 }
 
