@@ -39,35 +39,54 @@ else
   fi
 fi
 
-if $force_all; then
-  sites=$(git ls-tree -d --name-only "$HEAD" contents/ | awk -F/ '{print $2}' | sort -u)
+if $use_rg; then
+  content_sites=$(printf "%s\n" "$changed" | rg '^contents/[^/]+/' || true)
+  content_sites=$(printf "%s\n" "$content_sites" | awk -F/ '{print $2}')
+  image_files=$(printf "%s\n" "$changed" | rg '^images/' || true)
+  theme_ids=$(printf "%s\n" "$changed" | rg '^theme/[^/]+/' || true)
+  theme_ids=$(printf "%s\n" "$theme_ids" | awk -F/ '{print $2}' | sort -u)
 else
-  if $use_rg; then
-    content_sites=$(printf "%s\n" "$changed" | rg '^contents/[^/]+/' || true)
-    content_sites=$(printf "%s\n" "$content_sites" | awk -F/ '{print $2}')
-    image_files=$(printf "%s\n" "$changed" | rg '^images/' || true)
-  else
-    content_sites=$(printf "%s\n" "$changed" | grep -E '^contents/[^/]+/' || true)
-    content_sites=$(printf "%s\n" "$content_sites" | awk -F/ '{print $2}')
-    image_files=$(printf "%s\n" "$changed" | grep -E '^images/' || true)
-  fi
+  content_sites=$(printf "%s\n" "$changed" | grep -E '^contents/[^/]+/' || true)
+  content_sites=$(printf "%s\n" "$content_sites" | awk -F/ '{print $2}')
+  image_files=$(printf "%s\n" "$changed" | grep -E '^images/' || true)
+  theme_ids=$(printf "%s\n" "$changed" | grep -E '^theme/[^/]+/' || true)
+  theme_ids=$(printf "%s\n" "$theme_ids" | awk -F/ '{print $2}' | sort -u)
+fi
 
-  image_sites=""
-  if [ -n "$image_files" ]; then
-    while IFS= read -r image; do
-      [ -z "$image" ] && continue
-      if $use_rg; then
-        matches=$(rg -l --fixed-strings "$image" contents --glob '*.md' --glob '*.mdx' || true)
-      else
-        matches=$(grep -R -l -F -- "$image" contents --include '*.md' --include '*.mdx' || true)
-      fi
-      if [ -n "$matches" ]; then
-        image_sites="${image_sites}"$'\n'"$(printf "%s\n" "$matches" | awk -F/ '{print $2}')"
-      fi
-    done <<< "$image_files"
-  fi
+image_sites=""
+if [ -n "$image_files" ]; then
+  while IFS= read -r image; do
+    [ -z "$image" ] && continue
+    if $use_rg; then
+      matches=$(rg -l --fixed-strings "$image" contents --glob '*.md' --glob '*.mdx' || true)
+    else
+      matches=$(grep -R -l -F -- "$image" contents --include '*.md' --include '*.mdx' || true)
+    fi
+    if [ -n "$matches" ]; then
+      image_sites="${image_sites}"$'\n'"$(printf "%s\n" "$matches" | awk -F/ '{print $2}')"
+    fi
+  done <<< "$image_files"
+fi
 
-  sites=$(printf "%s\n%s\n" "${content_sites:-}" "${image_sites:-}" | awk 'NF' | sort -u)
+theme_sites=""
+if [ -n "$theme_ids" ]; then
+  while IFS= read -r theme; do
+    [ -z "$theme" ] && continue
+    for spec in contents/*/specs/spec.json; do
+      [ -f "$spec" ] || continue
+      site=$(basename "$(dirname "$(dirname "$spec")")")
+      theme_id=$(node -e "const fs=require('fs');const p=process.argv[1];try{const spec=JSON.parse(fs.readFileSync(p,'utf8'));console.log(spec.theme_id||spec.themeId||'');}catch{console.log('');}" "$spec")
+      if [ "$theme_id" = "$theme" ]; then
+        theme_sites="${theme_sites}"$'\n'"$site"
+      fi
+    done
+  done <<< "$theme_ids"
+fi
+
+sites=$(printf "%s\n%s\n%s\n" "${content_sites:-}" "${image_sites:-}" "${theme_sites:-}" | awk 'NF' | sort -u)
+
+if $force_all && [ -z "$sites" ]; then
+  sites=$(git ls-tree -d --name-only "$HEAD" contents/ | awk -F/ '{print $2}' | sort -u)
 fi
 
 filter_sites_with_contents() {

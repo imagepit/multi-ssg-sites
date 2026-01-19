@@ -18,6 +18,7 @@ tags:
 description: "Google Gemini 2.5 ProがAI StudioとVertex AIで一般提供開始。マルチモーダル対応で最大2百万トークンのコンテキスト処理が可能。企業のDX推進における活用シナリオと導入事例を紹介。"
 status: publish
 ---
+
 ![](../../../../images/dx-media/ai/google-gemini-2-5-pro.png)
 
 GoogleはGemini 2.5 Proの一般提供を開始しました。このモデルはAI StudioおよびVertex AIプラットフォームを通じて利用できるようになり、より高度なAI機能を開発者やビジネスユーザーに提供します。
