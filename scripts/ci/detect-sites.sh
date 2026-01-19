@@ -70,6 +70,19 @@ else
   sites=$(printf "%s\n%s\n" "${content_sites:-}" "${image_sites:-}" | awk 'NF' | sort -u)
 fi
 
+filter_sites_with_contents() {
+  while IFS= read -r site; do
+    [ -z "$site" ] && continue
+    if [ -d "contents/$site/contents" ]; then
+      printf "%s\n" "$site"
+    fi
+  done
+}
+
+if [ -n "${sites:-}" ]; then
+  sites=$(printf "%s\n" "$sites" | filter_sites_with_contents)
+fi
+
 if command -v jq >/dev/null 2>&1; then
   printf "%s\n" "$sites" | jq -R -s -c 'split("\n") | map(select(length>0))'
   exit 0

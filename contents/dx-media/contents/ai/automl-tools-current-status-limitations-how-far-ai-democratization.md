@@ -10,7 +10,9 @@ description: "AutoMLツールの現状と限界を解説。機械学習モデル
 
 ![](../../../../images/dx-media/ai/automl-tools-current-status-limitations-how-far-ai-democratization.png)
 
-AutoML（Automated Machine Learning）は、機械学習モデル構築のプロセスを自動化する技術として注目を集め、AI開発の「民主化」を推進する可能性を秘めています。専門知識がないユーザーでもAIモデルを構築できるという期待が高まる一方で、その能力には限界も指摘されています。
+AutoML（Automated Machine Learning）は、機械学習モデル構築のプロセスを自動化する技術として注目を集め、AI開発の「民主化」を推進する可能性を秘めています。
+
+専門知識がないユーザーでもAIモデルを構築できるという期待が高まる一方で、その能力には限界も指摘されています。
 
 本記事では、AutoMLツールの現状、主要な機能、メリットと限界を整理し、AI開発の民主化が実際にどこまで進んでいるのか、そして今後の展望について考察します。
 
