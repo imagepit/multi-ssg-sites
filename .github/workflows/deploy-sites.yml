@@ -100,11 +100,31 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           project_name="${{ matrix.site }}"
-          if ! wrangler pages project list 2>/dev/null | grep -q "^${project_name}$"; then
-            echo "Creating Cloudflare Pages project: ${project_name}"
-            wrangler pages project create "${project_name}" --production-branch main
-          else
+          exists=false
+
+          if projects_json=$(wrangler pages project list --format json 2>/dev/null); then
+            if node -e "const fs=require('fs');const name=process.argv[1];const data=JSON.parse(fs.readFileSync(0,'utf8'));process.exit(data.some((p)=>p.name===name)?0:1);" "$project_name" <<< "$projects_json"; then
+              exists=true
+            fi
+          fi
+
+          if [ "$exists" = "true" ]; then
             echo "Cloudflare Pages project already exists: ${project_name}"
+            exit 0
+          fi
+
+          echo "Creating Cloudflare Pages project: ${project_name}"
+          set +e
+          create_output=$(wrangler pages project create "${project_name}" --production-branch main 2>&1)
+          status=$?
+          set -e
+          if [ $status -ne 0 ]; then
+            if echo "$create_output" | grep -qi "already exists"; then
+              echo "Cloudflare Pages project already exists: ${project_name}"
+            else
+              echo "$create_output"
+              exit $status
+            fi
           fi
 
       - name: Build and deploy
