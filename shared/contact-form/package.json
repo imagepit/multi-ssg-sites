@@ -13,6 +13,10 @@
     "./ContactForm": {
       "import": "./src/ContactForm.tsx",
       "types": "./src/ContactForm.tsx"
+    },
+    "./ContactFormModal": {
+      "import": "./src/ContactFormModal.tsx",
+      "types": "./src/ContactFormModal.tsx"
     }
   },
   "peerDependencies": {

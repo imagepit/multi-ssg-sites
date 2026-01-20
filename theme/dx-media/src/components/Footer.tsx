@@ -2,10 +2,10 @@ import Link from 'next/link'
 import { getCategoryHref } from '@/lib/content-utils'
 import { navCategories } from '@/lib/layout.shared'
 import { getProfileConfig, getSiteName } from '@/lib/site-config'
+import { ContactButton } from './ContactButton'
 
 const footerLinks = [
   { label: 'ホーム', href: '/' },
-  { label: 'お問い合わせ', href: '/contact' },
   { label: 'プライバシーポリシー', href: '/privacy-policy' },
 ]
 
@@ -63,12 +63,7 @@ export function Footer() {
         <div className="max-w-xs space-y-3">
           <p className="font-semibold text-fd-foreground">お問い合わせ</p>
           <p className="text-fd-muted-foreground">ご質問やアドバイスがございましたらお気軽にご連絡ください。</p>
-          <Link
-            href="/contact"
-            className="inline-flex items-center justify-center rounded-full bg-fd-primary px-4 py-2 text-sm font-semibold text-fd-primary-foreground hover:opacity-90 transition"
-          >
-            お問い合わせ
-          </Link>
+          <ContactButton siteName={siteName} />
         </div>
       </div>
       <div className="text-center text-xs text-fd-muted-foreground pb-6">
