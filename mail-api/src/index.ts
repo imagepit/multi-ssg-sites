@@ -99,7 +99,21 @@ app.post('/contact', async (c) => {
     const { name, email, subject, body: messageBody, siteName } = result.data;
 
     // メール送信
-    const mailProvider = createMailProvider(c.env);
+    let mailProvider;
+    try {
+      mailProvider = createMailProvider(c.env);
+    } catch (providerError) {
+      console.error('Failed to create mail provider:', providerError);
+      return c.json(
+        {
+          success: false,
+          message: 'メール設定エラー',
+          debug: providerError instanceof Error ? providerError.message : 'Unknown provider error',
+        },
+        500
+      );
+    }
+
     const sendResult = await mailProvider.send({
       fromName: name,
       fromEmail: email,
@@ -114,6 +128,7 @@ app.post('/contact', async (c) => {
         {
           success: false,
           message: 'メールの送信に失敗しました。しばらく経ってから再度お試しください。',
+          debug: sendResult.error,
         },
         500
       );
@@ -129,6 +144,7 @@ app.post('/contact', async (c) => {
       {
         success: false,
         message: 'サーバーエラーが発生しました。しばらく経ってから再度お試しください。',
+        debug: error instanceof Error ? error.message : 'Unknown error',
       },
       500
     );
