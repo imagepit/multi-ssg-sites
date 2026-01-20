@@ -67,3 +67,56 @@ jobs:
           SITE_DOMAIN: ${{ secrets.SITE_DOMAIN }}
           THEME_ID: ${{ secrets.THEME_ID }}
         run: node scripts/sync-pages.mjs --site-id ${{ matrix.site }}
+
+  notify:
+    needs: [detect, sync]
+    if: always() && needs.detect.outputs.sites != '[]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          if [ -z "$SLACK_WEBHOOK_URL" ]; then
+            echo "SLACK_WEBHOOK_URL is not set, skipping notification"
+            exit 0
+          fi
+
+          RESULT="${{ needs.sync.result }}"
+          if [ "$RESULT" = "success" ]; then
+            COLOR="#36a64f"
+            EMOJI=":white_check_mark:"
+            STATUS="成功"
+          else
+            COLOR="#dc3545"
+            EMOJI=":x:"
+            STATUS="失敗"
+          fi
+
+          curl -X POST "$SLACK_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -d @- <<EOF
+          {
+            "attachments": [{
+              "color": "$COLOR",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "$EMOJI *Sync Admin Metadata* - $STATUS"
+                  }
+                },
+                {
+                  "type": "context",
+                  "elements": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "<${{ github.server_url }}/${{ github.repository }}|${{ github.repository }}> | <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Run>"
+                    }
+                  ]
+                }
+              ]
+            }]
+          }
+          EOF
