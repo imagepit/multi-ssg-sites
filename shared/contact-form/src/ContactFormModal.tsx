@@ -89,23 +89,68 @@ export function ContactFormModal({
 
       {/* モーダルコンテンツ */}
       <div
-        className={`relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border border-fd-border bg-fd-background shadow-2xl ${
-          isClosing ? 'animate-scale-out' : 'animate-scale-in'
-        }`}
+        className={isClosing ? 'animate-scale-out' : 'animate-scale-in'}
+        style={{
+          position: 'relative',
+          width: '100%',
+          maxWidth: '512px',
+          maxHeight: '90vh',
+          overflowY: 'auto',
+          borderRadius: '16px',
+          border: '1px solid var(--color-fd-border, #e5e7eb)',
+          backgroundColor: 'var(--color-fd-background, #ffffff)',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+        }}
       >
         {/* ヘッダー */}
-        <div className="sticky top-0 z-10 flex items-start justify-between border-b border-fd-border bg-fd-background px-8 pt-6 pb-5">
-          <div className="flex-1 pr-4">
-            <h2 id="contact-modal-title" className="text-xl font-semibold text-fd-foreground">
+        <div
+          style={{
+            position: 'sticky',
+            top: 0,
+            zIndex: 10,
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+            borderBottom: '1px solid var(--color-fd-border, #e5e7eb)',
+            backgroundColor: 'var(--color-fd-background, #ffffff)',
+            padding: '24px 32px 20px 32px',
+          }}
+        >
+          <div style={{ flex: 1, paddingRight: '16px' }}>
+            <h2
+              id="contact-modal-title"
+              style={{
+                fontSize: '1.25rem',
+                fontWeight: 600,
+                color: 'var(--color-fd-foreground, #111827)',
+              }}
+            >
               {title}
             </h2>
             {description && (
-              <p className="mt-2 text-sm text-fd-muted-foreground leading-relaxed">{description}</p>
+              <p
+                style={{
+                  marginTop: '8px',
+                  fontSize: '0.875rem',
+                  color: 'var(--color-fd-muted-foreground, #6b7280)',
+                  lineHeight: 1.625,
+                }}
+              >
+                {description}
+              </p>
             )}
           </div>
           <button
             onClick={handleClose}
-            className="flex-shrink-0 rounded-lg p-2 text-fd-muted-foreground hover:bg-fd-muted hover:text-fd-foreground transition"
+            style={{
+              flexShrink: 0,
+              borderRadius: '8px',
+              padding: '8px',
+              color: 'var(--color-fd-muted-foreground, #6b7280)',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+            }}
             aria-label="閉じる"
           >
             <svg
@@ -126,7 +171,7 @@ export function ContactFormModal({
         </div>
 
         {/* フォーム */}
-        <div className="px-8 py-6">
+        <div style={{ padding: '24px 32px 32px 32px' }}>
           <ContactForm {...formProps} onSuccess={handleSuccess} />
         </div>
       </div>
