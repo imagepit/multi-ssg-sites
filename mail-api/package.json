@@ -4,10 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "wrangler pages dev",
-    "build": "tsc",
-    "deploy": "wrangler pages deploy dist --project-name=techdoc-mail-api",
-    "deploy:production": "wrangler pages deploy dist --project-name=techdoc-mail-api --branch=main"
+    "dev": "wrangler pages dev dist",
+    "build": "node build.mjs",
+    "typecheck": "tsc --noEmit",
+    "deploy": "pnpm build && wrangler pages deploy dist --project-name=techdoc-mail-api",
+    "deploy:production": "pnpm build && wrangler pages deploy dist --project-name=techdoc-mail-api --branch=main"
   },
   "dependencies": {
     "hono": "^4.6.0",
@@ -15,6 +16,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20241205.0",
+    "esbuild": "^0.24.0",
     "typescript": "^5.9.2",
     "wrangler": "^4.0.0"
   }
