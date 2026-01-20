@@ -2,7 +2,7 @@
 
 import { RootProvider } from 'fumadocs-ui/provider/next'
 import DefaultSearchDialog from 'fumadocs-ui/components/dialog/search-default'
-import { HomeLayout } from 'fumadocs-ui/layouts/home'
+import { HomeLayout } from '@/components/ClientHomeLayout'
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared'
 import { CustomStaticSearchDialog } from '@/components/CustomStaticSearchDialog'
 import { SharedNavbar } from '@/components/SharedNavbar'

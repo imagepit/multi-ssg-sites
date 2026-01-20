@@ -2,7 +2,7 @@ import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import { getBranding, getSiteName } from '@/lib/site-config';
 import { getCategoryHref } from '@/lib/content-utils';
 
-const navCategories = [
+export const navCategories = [
   'AI',
   'クラウド',
   'DevOps',

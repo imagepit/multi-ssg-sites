@@ -5,7 +5,7 @@ export type PageLike = {
 
 const isDev = process.env.NODE_ENV === 'development'
 const excludedIndexUrls = new Set(['/llms-full.txt', '/tags'])
-export const fallbackCover = '/brand/logos/nextjs.svg'
+export const fallbackCover = '/brand/logo.svg'
 
 const toTrimmedString = (value: unknown): string | null => {
   if (typeof value !== 'string') return null

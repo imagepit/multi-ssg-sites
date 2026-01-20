@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import ExportedImage from '@/components/ExportedImage'
+import { Footer } from '@/components/Footer'
 import {
   byDateDesc,
   fallbackCover,
@@ -193,46 +194,7 @@ export async function PostIndexLayout({ pages, header }: PostIndexLayoutProps) {
         ))}
       </div>
 
-      <footer className="mt-14 border-t border-fd-border/70 bg-fd-muted/30">
-        <div className="mx-auto max-w-(--fd-layout-width) px-4 md:px-6 lg:px-8 py-8 text-sm text-fd-muted-foreground flex flex-col gap-6 md:flex-row md:justify-between">
-          <div>
-            <p className="font-semibold text-fd-foreground">DX Tech Media</p>
-            <p className="text-fd-muted-foreground mt-1">最新のデジタルトランスフォーメーション情報をお届けします。</p>
-          </div>
-          <div className="grid grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <p className="font-semibold text-fd-foreground">カテゴリー</p>
-              <ul className="space-y-1 text-fd-muted-foreground">
-                {[...categories.keys()].map((category) => (
-                  <li key={category}>{category}</li>
-                ))}
-              </ul>
-            </div>
-            <div className="space-y-2">
-              <p className="font-semibold text-fd-foreground">リンク</p>
-              <ul className="space-y-1 text-fd-muted-foreground">
-                <li>ホーム</li>
-                <li>人気記事</li>
-                <li>お問い合わせ</li>
-                <li>プライバシーポリシー</li>
-              </ul>
-            </div>
-          </div>
-          <div className="space-y-3">
-            <p className="font-semibold text-fd-foreground">お問い合わせ</p>
-            <p className="text-fd-muted-foreground">ご質問やアドバイスがございましたらお気軽にご連絡ください。</p>
-            <Link
-              href="/contact"
-              className="inline-flex items-center justify-center rounded-full bg-fd-primary px-4 py-2 text-sm font-semibold text-fd-primary-foreground hover:opacity-90 transition"
-            >
-              お問い合わせ
-            </Link>
-          </div>
-        </div>
-        <div className="text-center text-xs text-fd-muted-foreground pb-6">
-          © 2025 DX Tech Media. All rights reserved.
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }

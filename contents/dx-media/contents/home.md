@@ -11,7 +11,7 @@ status: "publish"
 
 ## ようこそ
 
-このサイトは、DX Tech Media（WordPress）テーマのデザインを、Next.jsマルチサイトの`media`テーマとして移植したデモです。
+このサイトはDX Tech Media（WordPress）テーマのデザインを、Next.jsマルチサイトの`media`テーマとして移植したデモです。
 
 - 記事ヘッダー（タイトル/日付/著者）
 - 記事本文のタイポグラフィ（メディア向けProse）
