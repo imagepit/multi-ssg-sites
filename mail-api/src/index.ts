@@ -114,13 +114,16 @@ app.post('/contact', async (c) => {
       );
     }
 
-    const sendResult = await mailProvider.send({
+    const mailParams = {
       fromName: name,
       fromEmail: email,
       subject,
       body: messageBody,
       siteName,
-    });
+    };
+
+    // 1. 管理者への通知メール送信
+    const sendResult = await mailProvider.send(mailParams);
 
     if (!sendResult.success) {
       console.error(`Mail send failed (${mailProvider.name}):`, sendResult.error);
@@ -132,6 +135,14 @@ app.post('/contact', async (c) => {
         },
         500
       );
+    }
+
+    // 2. 問い合わせ者への自動返信メール送信
+    const autoReplyResult = await mailProvider.sendAutoReply(mailParams);
+
+    if (!autoReplyResult.success) {
+      // 自動返信の失敗はログに記録するが、エラーとはしない（管理者への通知は成功しているため）
+      console.error(`Auto-reply mail failed (${mailProvider.name}):`, autoReplyResult.error);
     }
 
     return c.json({

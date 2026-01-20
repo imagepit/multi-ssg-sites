@@ -27,8 +27,10 @@ export interface SendMailResult {
 export interface MailProvider {
   /** プロバイダー名 */
   readonly name: string;
-  /** メール送信 */
+  /** 管理者への通知メール送信 */
   send(params: SendMailParams): Promise<SendMailResult>;
+  /** 問い合わせ者への自動返信メール送信 */
+  sendAutoReply(params: SendMailParams): Promise<SendMailResult>;
 }
 
 /** サポートするプロバイダー種別 */

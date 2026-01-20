@@ -5,6 +5,7 @@
 
 import type { MailProvider, SendMailParams, SendMailResult } from '../types';
 import { formatSubject, formatPlainTextBody } from '../templates/contact';
+import { formatAutoReplySubject, formatAutoReplyPlainTextBody } from '../templates/auto-reply';
 
 interface GmailCredentials {
   clientId: string;
@@ -34,7 +35,64 @@ export class GmailProvider implements MailProvider {
         };
       }
 
-      const rawMessage = this.createRawMessage(params);
+      const rawMessage = this.createRawMessage(
+        this.toEmail,
+        params.fromEmail,
+        formatSubject(params),
+        formatPlainTextBody(params)
+      );
+
+      const response = await fetch(
+        'https://gmail.googleapis.com/gmail/v1/users/me/messages/send',
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            raw: rawMessage,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({})) as { error?: { message?: string } };
+        return {
+          success: false,
+          error: errorData.error?.message || `HTTP ${response.status}: ${response.statusText}`,
+        };
+      }
+
+      const data = await response.json() as { id: string };
+      return {
+        success: true,
+        messageId: data.id,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
+
+  async sendAutoReply(params: SendMailParams): Promise<SendMailResult> {
+    try {
+      const accessToken = await this.getAccessToken();
+      if (!accessToken) {
+        return {
+          success: false,
+          error: 'Failed to obtain access token',
+        };
+      }
+
+      const rawMessage = this.createRawMessage(
+        params.fromEmail,
+        undefined,
+        formatAutoReplySubject(params),
+        formatAutoReplyPlainTextBody(params)
+      );
 
       const response = await fetch(
         'https://gmail.googleapis.com/gmail/v1/users/me/messages/send',
@@ -105,13 +163,15 @@ export class GmailProvider implements MailProvider {
     }
   }
 
-  private createRawMessage(params: SendMailParams): string {
-    const subject = formatSubject(params);
-    const body = formatPlainTextBody(params);
-
+  private createRawMessage(
+    to: string,
+    replyTo: string | undefined,
+    subject: string,
+    body: string
+  ): string {
     const messageParts = [
-      `To: ${this.toEmail}`,
-      `Reply-To: ${params.fromEmail}`,
+      `To: ${to}`,
+      ...(replyTo ? [`Reply-To: ${replyTo}`] : []),
       `Subject: =?UTF-8?B?${this.base64Encode(subject)}?=`,
       'MIME-Version: 1.0',
       'Content-Type: text/plain; charset=UTF-8',
