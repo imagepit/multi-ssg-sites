@@ -1,7 +1,6 @@
 name = "techdoc-mail-api"
 compatibility_date = "2024-12-01"
 pages_build_output_dir = "dist"
-
 # 環境変数（非機密情報のみ）
 # 機密情報（APIキー等）はCloudflareダッシュボードのシークレットで設定
 # [vars]
