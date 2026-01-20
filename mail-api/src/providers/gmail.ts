@@ -1,5 +1,5 @@
 /**
- * Gmail API メールプロバイダー
+ * GmailAPI メールプロバイダー
  * @see https://developers.google.com/gmail/api/reference/rest/v1/users.messages/send
  */
 
