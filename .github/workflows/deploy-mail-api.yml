@@ -1,0 +1,97 @@
+name: Deploy Mail API
+
+on:
+  workflow_dispatch:
+    inputs:
+      production:
+        description: "Deploy as production"
+        required: false
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+    paths:
+      - "mail-api/**"
+      - ".github/workflows/deploy-mail-api.yml"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+          cache-dependency-path: mail-api/pnpm-lock.yaml
+
+      - name: Install dependencies
+        working-directory: mail-api
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        working-directory: mail-api
+        run: pnpm build
+
+      - name: Ensure Pages project exists
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npm install -g wrangler
+          project_name="techdoc-mail-api"
+          exists=false
+
+          if projects_json=$(wrangler pages project list --format json 2>/dev/null); then
+            if node -e "const fs=require('fs');const name=process.argv[1];const data=JSON.parse(fs.readFileSync(0,'utf8'));process.exit(data.some((p)=>p.name===name)?0:1);" "$project_name" <<< "$projects_json"; then
+              exists=true
+            fi
+          fi
+
+          if [ "$exists" = "true" ]; then
+            echo "Cloudflare Pages project already exists: ${project_name}"
+            exit 0
+          fi
+
+          echo "Creating Cloudflare Pages project: ${project_name}"
+          set +e
+          create_output=$(wrangler pages project create "${project_name}" --production-branch main 2>&1)
+          status=$?
+          set -e
+          if [ $status -ne 0 ]; then
+            if echo "$create_output" | grep -qi "already exists"; then
+              echo "Cloudflare Pages project already exists: ${project_name}"
+            else
+              echo "$create_output"
+              exit $status
+            fi
+          fi
+
+      - name: Deploy to Cloudflare Pages
+        working-directory: mail-api
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          EVENT_NAME: ${{ github.event_name }}
+          REF_NAME: ${{ github.ref }}
+          PRODUCTION_INPUT: ${{ github.event.inputs.production }}
+        run: |
+          production=false
+          if [ "$EVENT_NAME" = "push" ] && [ "$REF_NAME" = "refs/heads/main" ]; then
+            production=true
+          fi
+          if [ "$EVENT_NAME" = "workflow_dispatch" ] && [ "$PRODUCTION_INPUT" = "true" ]; then
+            production=true
+          fi
+
+          if [ "$production" = "true" ]; then
+            pnpm deploy:production
+          else
+            pnpm deploy
+          fi

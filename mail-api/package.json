@@ -1,0 +1,21 @@
+{
+  "name": "mail-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler pages dev",
+    "build": "tsc",
+    "deploy": "wrangler pages deploy dist --project-name=techdoc-mail-api",
+    "deploy:production": "wrangler pages deploy dist --project-name=techdoc-mail-api --branch=main"
+  },
+  "dependencies": {
+    "hono": "^4.6.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241205.0",
+    "typescript": "^5.9.2",
+    "wrangler": "^4.0.0"
+  }
+}
