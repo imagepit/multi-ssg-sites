@@ -38,6 +38,7 @@ export type MailProviderType = 'resend' | 'sendgrid' | 'gmail';
 export interface Env {
   MAIL_PROVIDER: MailProviderType;
   MAIL_TO_EMAIL: string;
+  MAIL_FROM_EMAIL?: string;
   ALLOWED_ORIGINS: string;
   RESEND_API_KEY?: string;
   SENDGRID_API_KEY?: string;

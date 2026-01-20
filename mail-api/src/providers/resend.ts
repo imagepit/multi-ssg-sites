@@ -10,10 +10,12 @@ export class ResendProvider implements MailProvider {
   readonly name = 'resend';
   private apiKey: string;
   private toEmail: string;
+  private fromEmail: string;
 
-  constructor(apiKey: string, toEmail: string) {
+  constructor(apiKey: string, toEmail: string, fromEmail: string) {
     this.apiKey = apiKey;
     this.toEmail = toEmail;
+    this.fromEmail = fromEmail;
   }
 
   async send(params: SendMailParams): Promise<SendMailResult> {
@@ -25,7 +27,7 @@ export class ResendProvider implements MailProvider {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: `${params.fromName} <onboarding@resend.dev>`,
+          from: this.fromEmail,
           to: [this.toEmail],
           subject: formatSubject(params),
           text: formatPlainTextBody(params),

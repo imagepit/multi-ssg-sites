@@ -23,7 +23,10 @@ export function createMailProvider(env: Env): MailProvider {
       if (!env.RESEND_API_KEY) {
         throw new Error('RESEND_API_KEY environment variable is required for Resend provider');
       }
-      return new ResendProvider(env.RESEND_API_KEY, toEmail);
+      if (!env.MAIL_FROM_EMAIL) {
+        throw new Error('MAIL_FROM_EMAIL environment variable is required for Resend provider');
+      }
+      return new ResendProvider(env.RESEND_API_KEY, toEmail, env.MAIL_FROM_EMAIL);
     }
 
     case 'sendgrid': {
