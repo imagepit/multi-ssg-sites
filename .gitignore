@@ -124,4 +124,5 @@ Daily/
 feeds/
 
 # sketch
-*.sketchpost-commit
+*.sketch
+post-commit

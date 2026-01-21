@@ -71,6 +71,9 @@ function parseOpen(text: string): { type: string; title?: string } | null {
   const rest = s.slice(3).trim()
   if (!rest) return null
 
+  // Skip :::premium blocks (handled by remarkPremiumBlocks)
+  if (rest.startsWith('premium')) return null
+
   // :::type[Title]
   const m1 = /^([A-Za-z0-9_-]+)\[(.*)\]$/.exec(rest)
   if (m1) return { type: m1[1], title: m1[2] }

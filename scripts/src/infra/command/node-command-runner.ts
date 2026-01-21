@@ -4,12 +4,13 @@ import { CommandOptions, CommandResult, CommandRunner } from '../../application/
 export class NodeCommandRunner implements CommandRunner {
   async run(command: string, args: string[], options: CommandOptions = {}): Promise<CommandResult> {
     const env = { ...process.env, ...(options.env ?? {}) }
+    const hasInput = options.input !== undefined
 
     return new Promise((resolve, reject) => {
       const child = spawn(command, args, {
         cwd: options.cwd,
         env,
-        stdio: options.stdio ?? 'inherit'
+        stdio: hasInput ? ['pipe', options.stdio ?? 'inherit', options.stdio ?? 'inherit'] : (options.stdio ?? 'inherit'),
       })
 
       child.on('error', (error) => {
@@ -24,6 +25,12 @@ export class NodeCommandRunner implements CommandRunner {
         }
         resolve({ exitCode })
       })
+
+      // Write input to stdin if provided
+      if (hasInput && child.stdin) {
+        child.stdin.write(options.input)
+        child.stdin.end()
+      }
     })
   }
 }

@@ -12,11 +12,11 @@ importers:
         specifier: ^3.1.14
         version: 3.1.18
       '@techdoc/contact-form':
-        specifier: file:../../shared/contact-form
-        version: file:../../shared/contact-form(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+        specifier: link:../../shared/contact-form
+        version: link:../../shared/contact-form
       '@techdoc/fumadocs-engine':
         specifier: file:../../shared/fumadocs-engine
-        version: file:../../shared/fumadocs-engine(fumadocs-core@16.3.2(@types/react@19.2.7)(lucide-react@0.544.0(react@19.2.3))(next@16.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@3.25.76))(fumadocs-mdx@14.2.2(@types/react@19.2.7)(fumadocs-core@16.3.2(@types/react@19.2.7)(lucide-react@0.544.0(react@19.2.3))(next@16.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@3.25.76))(next@16.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3))(zod@3.25.76)
+        version: file:../../shared/fumadocs-engine(fumadocs-core@16.3.2(@types/react@19.2.7)(lucide-react@0.544.0(react@19.2.3))(next@16.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@3.25.76))(fumadocs-mdx@14.2.2(@types/react@19.2.7)(fumadocs-core@16.3.2(@types/react@19.2.7)(lucide-react@0.544.0(react@19.2.3))(next@16.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@3.25.76))(next@16.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3))(react@19.2.3)(zod@3.25.76)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -1237,17 +1237,12 @@ packages:
   '@tailwindcss/postcss@4.1.18':
     resolution: {integrity: sha512-Ce0GFnzAOuPyfV5SxjXGn0CubwGcuDB0zcdaPuCSzAa/2vII24JTkH+I6jcbXLb1ctjZMZZI6OjDaLPJQL1S0g==}
 
-  '@techdoc/contact-form@file:../../shared/contact-form':
-    resolution: {directory: ../../shared/contact-form, type: directory}
-    peerDependencies:
-      react: ^18.0.0 || ^19.0.0
-      react-dom: ^18.0.0 || ^19.0.0
-
   '@techdoc/fumadocs-engine@file:../../shared/fumadocs-engine':
     resolution: {directory: ../../shared/fumadocs-engine, type: directory}
     peerDependencies:
       fumadocs-core: 16.3.2
       fumadocs-mdx: 14.2.2
+      react: ^18.0.0 || ^19.0.0
       zod: ^3.23.8
 
   '@tybys/wasm-util@0.10.1':
@@ -4690,15 +4685,11 @@ snapshots:
       postcss: 8.5.6
       tailwindcss: 4.1.18
 
-  '@techdoc/contact-form@file:../../shared/contact-form(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
-    dependencies:
-      react: 19.2.3
-      react-dom: 19.2.3(react@19.2.3)
-
-  '@techdoc/fumadocs-engine@file:../../shared/fumadocs-engine(fumadocs-core@16.3.2(@types/react@19.2.7)(lucide-react@0.544.0(react@19.2.3))(next@16.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@3.25.76))(fumadocs-mdx@14.2.2(@types/react@19.2.7)(fumadocs-core@16.3.2(@types/react@19.2.7)(lucide-react@0.544.0(react@19.2.3))(next@16.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@3.25.76))(next@16.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3))(zod@3.25.76)':
+  '@techdoc/fumadocs-engine@file:../../shared/fumadocs-engine(fumadocs-core@16.3.2(@types/react@19.2.7)(lucide-react@0.544.0(react@19.2.3))(next@16.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@3.25.76))(fumadocs-mdx@14.2.2(@types/react@19.2.7)(fumadocs-core@16.3.2(@types/react@19.2.7)(lucide-react@0.544.0(react@19.2.3))(next@16.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@3.25.76))(next@16.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3))(react@19.2.3)(zod@3.25.76)':
     dependencies:
       fumadocs-core: 16.3.2(@types/react@19.2.7)(lucide-react@0.544.0(react@19.2.3))(next@16.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@3.25.76)
       fumadocs-mdx: 14.2.2(@types/react@19.2.7)(fumadocs-core@16.3.2(@types/react@19.2.7)(lucide-react@0.544.0(react@19.2.3))(next@16.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@3.25.76))(next@16.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3)
+      react: 19.2.3
       sharp: 0.33.5
       unist-util-visit: 5.0.0
       zod: 3.25.76

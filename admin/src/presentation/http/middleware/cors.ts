@@ -4,7 +4,8 @@ export function applyCors(response: Response, origin?: string): Response {
     headers.set('Access-Control-Allow-Origin', origin)
   }
   headers.set('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS')
-  headers.set('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+  headers.set('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Site-Id')
+  headers.set('Access-Control-Allow-Credentials', 'true')
   headers.set('Vary', 'Origin')
 
   return new Response(response.body, {

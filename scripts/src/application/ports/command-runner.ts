@@ -2,6 +2,8 @@ export type CommandOptions = {
   cwd?: string
   env?: Record<string, string>
   stdio?: 'inherit' | 'pipe'
+  /** Standard input to pass to the command */
+  input?: string
 }
 
 export type CommandResult = {

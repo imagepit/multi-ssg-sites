@@ -5,6 +5,7 @@ import { remarkFilesToMdx } from './plugins/remark-files-to-mdx.js'
 import { remarkStepBlocks } from './plugins/remark-steps.js'
 import { remarkCodeTitleBeforeBlocks } from './plugins/remark-code-title.js'
 import { remarkAdmonitionBlocks } from './plugins/remark-admonition-blocks.js'
+import { remarkPremiumBlocks } from './plugins/remark-premium-blocks.js'
 import { rehypeResolveImages } from './plugins/rehype-resolve-images.js'
 import { rehypeNextImage } from './plugins/rehype-next-image.js'
 import { rehypeBashClass } from './plugins/rehype-bash-class.js'
@@ -16,6 +17,16 @@ const dateSchema = z.preprocess((value) => {
   return value
 }, z.string().optional())
 
+/**
+ * Product schema for paid content
+ */
+export const productSchema = z.object({
+  /** Product identifier (e.g., "product:course-dx-intro") */
+  id: z.string(),
+  /** Optional price in JPY */
+  price: z.number().optional(),
+})
+
 export const baseFrontmatterSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
@@ -24,6 +35,10 @@ export const baseFrontmatterSchema = z.object({
   category: z.string().optional(),
   cover: z.string().optional(),
   full: z.boolean().optional(),
+  /** Whether this content has paid sections */
+  paid: z.boolean().optional(),
+  /** Products associated with paid content in this document */
+  products: z.array(productSchema).optional(),
 })
 
 export type FrontmatterSchemaBuilder = (base: typeof baseFrontmatterSchema) => ReturnType<typeof baseFrontmatterSchema.extend> | typeof baseFrontmatterSchema
@@ -42,6 +57,9 @@ export function buildMdxOptions() {
       remarkFilesToMdx,
       remarkStepBlocks,
       remarkCodeTitleBeforeBlocks,
+      // remarkPremiumBlocks must run BEFORE remarkAdmonitionBlocks
+      // to prevent :::premium from being treated as a Callout
+      remarkPremiumBlocks,
       remarkAdmonitionBlocks,
       remarkMdxMermaid,
       ...v,

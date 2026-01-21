@@ -1,0 +1,35 @@
+---
+title: テストページ
+slug: paid-test
+date: "2026-01-21"
+categories: ["AI"]
+tags: ["AI", "テスト"]
+status: "publish"
+description: "テストページ"
+paid: true
+products:
+  - id: product:test-course
+    price: 980
+---
+
+## 無料コンテンツ
+
+ここは誰でも見られる部分です。
+
+:::premium productId="product:test-course" sectionId="section-1"
+
+## 有料セクション
+
+このセクションは有料コンテンツです。
+SSG出力には含まれず、R2にアップロードされます（本番時）。
+
+```typescript
+// 有料コードサンプル
+const secret = "premium content"
+```
+
+:::
+
+## まとめ（無料）
+
+無料部分の続きです。

@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "redmine": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@duongkhuong/mcp-redmine"
+      ],
+      "env": {
+          "REDMINE_URL": "https://redmine.dx-pit.net",
+          "REDMINE_API_KEY": "fe327b88484dfae1fee44d34c30dbe8f357f58a6",
+          "REDMINE_USERNAME": "r-takahashi",
+          "REDMINE_PASSWORD": "19795448rt"
+        }
+    }
+  }
+}

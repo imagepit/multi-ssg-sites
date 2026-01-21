@@ -2,6 +2,9 @@
 @import 'fumadocs-ui/css/black.css';
 @import 'fumadocs-ui/css/preset.css';
 
+/* shared/contact-form パッケージをTailwindのスキャン対象に追加 */
+@source "../../../../shared/contact-form/src/**/*.tsx";
+
 #nd-page .prose {
   font-size: 1.1rem;
   line-height: 2rem;

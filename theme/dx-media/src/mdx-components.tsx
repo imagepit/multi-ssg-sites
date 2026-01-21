@@ -10,6 +10,7 @@ import { Folder as FdFolder } from 'fumadocs-ui/components/files'
 import { ImageZoom } from 'fumadocs-ui/components/image-zoom'
 import { Mermaid } from '@/components/Mermaid'
 import ExportedImage from '@/components/ExportedImage'
+import { PremiumPlaceholder } from '@techdoc/fumadocs-engine/components'
 
 // use this function to get MDX components, you will need it for rendering MDX
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
@@ -36,6 +37,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
       return <BaseCallout {...props} />
     },
     Mermaid: Mermaid as any,
+    PremiumPlaceholder: PremiumPlaceholder as any,
     ...components,
   };
 }

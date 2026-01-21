@@ -15,5 +15,8 @@
     "typescript": "^5.9.2",
     "vitest": "^1.6.0",
     "wrangler": "^4.56.0"
+  },
+  "dependencies": {
+    "stripe": "^20.2.0"
   }
 }
