@@ -10,6 +10,11 @@ interface ProductPriceRow {
   label: string | null
   badge: string | null
   created_at: string
+  sale_price: number | null
+  sale_starts_at: number | null
+  sale_ends_at: number | null
+  sale_label: string | null
+  stripe_coupon_id: string | null
 }
 
 export class D1ProductPriceReader implements ProductPriceReadRepository {
@@ -18,7 +23,7 @@ export class D1ProductPriceReader implements ProductPriceReadRepository {
   async findByProductId(productId: string): Promise<ProductPrice[]> {
     const result = await this.db
       .prepare(
-        `SELECT id, product_id, billing_period, price, stripe_price_id, label, badge, created_at
+        `SELECT id, product_id, billing_period, price, stripe_price_id, label, badge, created_at, sale_price, sale_starts_at, sale_ends_at, sale_label, stripe_coupon_id
          FROM product_prices
          WHERE product_id = ?
          ORDER BY billing_period ASC`
@@ -35,7 +40,7 @@ export class D1ProductPriceReader implements ProductPriceReadRepository {
   ): Promise<ProductPrice | null> {
     const result = await this.db
       .prepare(
-        `SELECT id, product_id, billing_period, price, stripe_price_id, label, badge, created_at
+        `SELECT id, product_id, billing_period, price, stripe_price_id, label, badge, created_at, sale_price, sale_starts_at, sale_ends_at, sale_label, stripe_coupon_id
          FROM product_prices
          WHERE product_id = ? AND billing_period = ?`
       )
@@ -58,7 +63,12 @@ export class D1ProductPriceReader implements ProductPriceReadRepository {
       stripePriceId: row.stripe_price_id,
       label: row.label ?? undefined,
       badge: row.badge ?? undefined,
-      createdAt: row.created_at
+      createdAt: row.created_at,
+      salePrice: row.sale_price ?? undefined,
+      saleStartsAt: row.sale_starts_at ?? undefined,
+      saleEndsAt: row.sale_ends_at ?? undefined,
+      saleLabel: row.sale_label ?? undefined,
+      stripeCouponId: row.stripe_coupon_id ?? undefined
     }
   }
 }

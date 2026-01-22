@@ -1,17 +1,10 @@
 import type { Env } from '../../../env.js'
 import type { AuthClaims } from '../../../domain/auth/claims.js'
-import { createCheckoutSession } from '../../../application/checkout/create-checkout-session.js'
+import { createCheckoutSession, type SalePriceInfo } from '../../../application/checkout/create-checkout-session.js'
 import { D1ProductReader } from '../../../infrastructure/db/d1-product-reader.js'
 import { D1ProductPriceReader } from '../../../infrastructure/db/d1-product-price-reader.js'
 import { StripeCheckoutClient } from '../../../infrastructure/stripe/stripe-checkout-client.js'
-import type { BillingPeriod } from '../../../domain/entitlement/product.js'
-
-interface SalePriceRequest {
-  price: number
-  originalPrice: number
-  label?: string
-  stripeCouponId?: string
-}
+import type { BillingPeriod, Product, ProductPrice } from '../../../domain/entitlement/product.js'
 
 interface CheckoutRequestBody {
   productId: string
@@ -19,8 +12,56 @@ interface CheckoutRequestBody {
   cancelUrl: string
   mode?: 'payment' | 'subscription'
   billingPeriod?: BillingPeriod
-  /** Sale price info (for applying discounts) */
-  salePrice?: SalePriceRequest
+}
+
+/**
+ * Check if a sale is currently active based on Unix timestamps
+ */
+function isOnSale(
+  saleStartsAt: number | undefined,
+  saleEndsAt: number | undefined,
+  now: Date = new Date()
+): boolean {
+  if (saleStartsAt === undefined || saleEndsAt === undefined) {
+    return false
+  }
+  const nowTimestamp = Math.floor(now.getTime() / 1000)
+  return nowTimestamp >= saleStartsAt && nowTimestamp <= saleEndsAt
+}
+
+/**
+ * Build SalePriceInfo from product if sale is active (for single purchase)
+ */
+function buildSalePriceFromProduct(product: Product): SalePriceInfo | undefined {
+  if (!isOnSale(product.saleStartsAt, product.saleEndsAt)) {
+    return undefined
+  }
+  if (product.salePrice === undefined) {
+    return undefined
+  }
+  return {
+    price: product.salePrice,
+    originalPrice: product.price,
+    label: product.saleLabel
+  }
+}
+
+/**
+ * Build SalePriceInfo from product price if sale is active (for subscription)
+ */
+function buildSalePriceFromProductPrice(productPrice: ProductPrice): SalePriceInfo | undefined {
+  if (!isOnSale(productPrice.saleStartsAt, productPrice.saleEndsAt)) {
+    return undefined
+  }
+  if (productPrice.salePrice === undefined) {
+    return undefined
+  }
+  return {
+    price: productPrice.salePrice,
+    originalPrice: productPrice.price,
+    label: productPrice.saleLabel,
+    stripeCouponId: productPrice.stripeCouponId
+  }
 }
 
 export async function handleCheckoutCreate(
@@ -66,9 +107,12 @@ export async function handleCheckoutCreate(
   const productPriceReader = new D1ProductPriceReader(env.DB)
   const stripeClient = new StripeCheckoutClient(env.STRIPE_SECRET_KEY)
 
-  // サブスクリプションの場合、billingPeriodからstripePriceIdを取得
+  // サーバー側でセール情報を検証（クライアントから渡されたsalePriceは信用しない）
+  let salePrice: SalePriceInfo | undefined
   let overrideStripePriceId: string | undefined
+
   if (body.mode === 'subscription' && body.billingPeriod) {
+    // サブスクリプションの場合、billingPeriodからstripePriceIdとセール情報を取得
     const productPrice = await productPriceReader.findByProductAndBillingPeriod(
       body.productId,
       body.billingPeriod
@@ -83,6 +127,13 @@ export async function handleCheckoutCreate(
       )
     }
     overrideStripePriceId = productPrice.stripePriceId
+    salePrice = buildSalePriceFromProductPrice(productPrice)
+  } else {
+    // 単体購入の場合、商品からセール情報を取得
+    const product = await productReader.findById(body.productId)
+    if (product) {
+      salePrice = buildSalePriceFromProduct(product)
+    }
   }
 
   const result = await createCheckoutSession(
@@ -94,7 +145,7 @@ export async function handleCheckoutCreate(
       mode: body.mode,
       customerEmail: auth.email,
       overrideStripePriceId,
-      salePrice: body.salePrice
+      salePrice
     },
     { productReader, stripeClient }
   )

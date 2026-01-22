@@ -13,6 +13,10 @@ interface ProductRow {
   description: string | null
   created_at: string
   updated_at: string
+  sale_price: number | null
+  sale_starts_at: number | null
+  sale_ends_at: number | null
+  sale_label: string | null
 }
 
 export class D1ProductReader implements ProductReadRepository {
@@ -21,7 +25,7 @@ export class D1ProductReader implements ProductReadRepository {
   async findById(id: string): Promise<Product | null> {
     const result = await this.db
       .prepare(
-        'SELECT id, name, site_id, price, currency, status, stripe_price_id, product_type, description, created_at, updated_at FROM products WHERE id = ?'
+        'SELECT id, name, site_id, price, currency, status, stripe_price_id, product_type, description, created_at, updated_at, sale_price, sale_starts_at, sale_ends_at, sale_label FROM products WHERE id = ?'
       )
       .bind(id)
       .first<ProductRow>()
@@ -36,7 +40,7 @@ export class D1ProductReader implements ProductReadRepository {
   async findBySiteId(siteId: string): Promise<Product[]> {
     const result = await this.db
       .prepare(
-        'SELECT id, name, site_id, price, currency, status, stripe_price_id, product_type, description, created_at, updated_at FROM products WHERE site_id = ?'
+        'SELECT id, name, site_id, price, currency, status, stripe_price_id, product_type, description, created_at, updated_at, sale_price, sale_starts_at, sale_ends_at, sale_label FROM products WHERE site_id = ?'
       )
       .bind(siteId)
       .all<ProductRow>()
@@ -47,7 +51,7 @@ export class D1ProductReader implements ProductReadRepository {
   async findSubscriptionBySiteId(siteId: string): Promise<Product | null> {
     const result = await this.db
       .prepare(
-        `SELECT id, name, site_id, price, currency, status, stripe_price_id, product_type, description, created_at, updated_at
+        `SELECT id, name, site_id, price, currency, status, stripe_price_id, product_type, description, created_at, updated_at, sale_price, sale_starts_at, sale_ends_at, sale_label
          FROM products
          WHERE site_id = ? AND product_type = 'subscription' AND status = 'active'
          LIMIT 1`
@@ -74,7 +78,11 @@ export class D1ProductReader implements ProductReadRepository {
       productType: (row.product_type as 'single' | 'subscription') ?? 'single',
       description: row.description ?? undefined,
       createdAt: row.created_at,
-      updatedAt: row.updated_at
+      updatedAt: row.updated_at,
+      salePrice: row.sale_price ?? undefined,
+      saleStartsAt: row.sale_starts_at ?? undefined,
+      saleEndsAt: row.sale_ends_at ?? undefined,
+      saleLabel: row.sale_label ?? undefined
     }
   }
 }
