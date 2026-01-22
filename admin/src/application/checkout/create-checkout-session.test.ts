@@ -18,6 +18,10 @@ class FakeProductReader implements ProductReadRepository {
   async findBySiteId(_siteId: string): Promise<Product[]> {
     return []
   }
+
+  async findSubscriptionBySiteId(_siteId: string): Promise<Product | null> {
+    return null
+  }
 }
 
 class FakeStripeClient implements StripeClient {
@@ -50,6 +54,7 @@ describe('createCheckoutSession', () => {
       currency: 'JPY',
       status: 'active',
       stripePriceId: 'price_123',
+      productType: 'single',
       createdAt: '2025-01-01T00:00:00Z',
       updatedAt: '2025-01-01T00:00:00Z'
     })
@@ -103,6 +108,7 @@ describe('createCheckoutSession', () => {
       currency: 'JPY',
       status: 'archived',
       stripePriceId: 'price_123',
+      productType: 'single',
       createdAt: '2025-01-01T00:00:00Z',
       updatedAt: '2025-01-01T00:00:00Z'
     })
@@ -132,6 +138,7 @@ describe('createCheckoutSession', () => {
       currency: 'JPY',
       status: 'active',
       stripePriceId: null,
+      productType: 'single',
       createdAt: '2025-01-01T00:00:00Z',
       updatedAt: '2025-01-01T00:00:00Z'
     })
@@ -178,6 +185,7 @@ describe('createCheckoutSession', () => {
       currency: 'JPY',
       status: 'active',
       stripePriceId: 'price_sub_123',
+      productType: 'subscription',
       createdAt: '2025-01-01T00:00:00Z',
       updatedAt: '2025-01-01T00:00:00Z'
     })

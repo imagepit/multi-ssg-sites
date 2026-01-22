@@ -33,6 +33,10 @@ class FakeEntitlementReader implements EntitlementReadRepository {
   async listByUserAndSite(_userId: string, _siteId: string): Promise<Entitlement[]> {
     return []
   }
+
+  async findActiveSubscription(_userId: string, _siteId: string): Promise<Entitlement | null> {
+    return null
+  }
 }
 
 describe('handleSubscriptionDeleted', () => {

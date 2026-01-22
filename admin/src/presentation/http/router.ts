@@ -14,6 +14,7 @@ import { handleAuthRefresh } from './handlers/auth-refresh.js'
 import { handlePaidContent } from './handlers/paid-content.js'
 import { handleCheckoutCreate } from './handlers/checkout.js'
 import { handleStripeWebhook } from './handlers/stripe-webhook.js'
+import { handleGetPaywallOptions } from './handlers/paywall.js'
 import { applyCors } from './middleware/cors.js'
 import { requireAuth } from './middleware/authentication.js'
 import { requireRole } from './middleware/authorization.js'
@@ -59,6 +60,11 @@ export async function handleHttpRequest(
   // Stripe webhook endpoint (no authentication, uses signature verification)
   if (url.pathname === '/api/stripe/webhook' && request.method === 'POST') {
     return applyCors(await handleStripeWebhook(request, env), origin)
+  }
+
+  // Paywall options endpoint (public, no authentication required)
+  if (url.pathname === '/api/paywall' && request.method === 'GET') {
+    return applyCors(await handleGetPaywallOptions(request, env), origin)
   }
 
   // Paid content endpoint (uses magic link JWT, no admin role check)

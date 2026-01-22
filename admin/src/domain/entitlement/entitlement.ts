@@ -81,3 +81,47 @@ export function hasActiveEntitlement(
     (e) => e.productId === productId && isEntitlementActive(e)
   )
 }
+
+export interface AccessCheckResult {
+  hasAccess: boolean
+  via: 'single' | 'subscription' | null
+}
+
+/**
+ * サブスクリプションを考慮したアクセス判定
+ * 1. 単体購入の権限をチェック
+ * 2. 同一サイトのサブスクリプション権限をチェック
+ * どちらか一方でも有効ならアクセス許可
+ */
+export function hasAnyActiveAccess(
+  entitlements: Entitlement[],
+  products: import('./product.js').Product[],
+  targetProductId: string,
+  siteId: string
+): AccessCheckResult {
+  // 1. 単体購入の権限チェック
+  const singleEntitlement = entitlements.find(
+    (e) => e.productId === targetProductId && isEntitlementActive(e)
+  )
+  if (singleEntitlement) {
+    return { hasAccess: true, via: 'single' }
+  }
+
+  // 2. 同一サイトのサブスクリプション権限チェック
+  const subscriptionProducts = products.filter(
+    (p) => p.productType === 'subscription' && p.siteId === siteId
+  )
+  const subscriptionProductIds = new Set(subscriptionProducts.map((p) => p.id))
+
+  const subscriptionEntitlement = entitlements.find(
+    (e) =>
+      subscriptionProductIds.has(e.productId) &&
+      e.siteId === siteId &&
+      isEntitlementActive(e)
+  )
+  if (subscriptionEntitlement) {
+    return { hasAccess: true, via: 'subscription' }
+  }
+
+  return { hasAccess: false, via: null }
+}

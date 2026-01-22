@@ -3,8 +3,10 @@ import {
   createEntitlement,
   isEntitlementActive,
   hasActiveEntitlement,
+  hasAnyActiveAccess,
   type Entitlement
 } from './entitlement.js'
+import { createProduct, type Product } from './product.js'
 
 describe('createEntitlement', () => {
   it('creates an entitlement with valid input', () => {
@@ -245,5 +247,203 @@ describe('hasActiveEntitlement', () => {
 
   it('returns false when entitlements array is empty', () => {
     expect(hasActiveEntitlement([], 'product-A')).toBe(false)
+  })
+})
+
+describe('hasAnyActiveAccess', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-01-21T00:00:00Z'))
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  const singleProduct: Product = createProduct({
+    id: 'product-single',
+    name: 'DX入門コース',
+    siteId: 'dx-media',
+    productType: 'single',
+    price: 980
+  })
+
+  const subscriptionProduct: Product = createProduct({
+    id: 'subscription-all-access',
+    name: '読み放題プラン',
+    siteId: 'dx-media',
+    productType: 'subscription',
+    price: 2980
+  })
+
+  it('returns true when user has active single purchase entitlement', () => {
+    const entitlements = [
+      createEntitlement({
+        id: 'ent-1',
+        userId: 'user-123',
+        productId: 'product-single',
+        siteId: 'dx-media',
+        grantedBy: 'stripe'
+      })
+    ]
+    const products = [singleProduct, subscriptionProduct]
+
+    const result = hasAnyActiveAccess(
+      entitlements,
+      products,
+      'product-single',
+      'dx-media'
+    )
+
+    expect(result.hasAccess).toBe(true)
+    expect(result.via).toBe('single')
+  })
+
+  it('returns true when user has active subscription entitlement for site', () => {
+    const entitlements = [
+      createEntitlement({
+        id: 'ent-1',
+        userId: 'user-123',
+        productId: 'subscription-all-access',
+        siteId: 'dx-media',
+        grantedBy: 'stripe',
+        expiresAt: '2026-12-31T23:59:59Z'
+      })
+    ]
+    const products = [singleProduct, subscriptionProduct]
+
+    const result = hasAnyActiveAccess(
+      entitlements,
+      products,
+      'product-single',
+      'dx-media'
+    )
+
+    expect(result.hasAccess).toBe(true)
+    expect(result.via).toBe('subscription')
+  })
+
+  it('returns true when user has both single and subscription entitlements (single takes priority)', () => {
+    const entitlements = [
+      createEntitlement({
+        id: 'ent-1',
+        userId: 'user-123',
+        productId: 'product-single',
+        siteId: 'dx-media',
+        grantedBy: 'stripe'
+      }),
+      createEntitlement({
+        id: 'ent-2',
+        userId: 'user-123',
+        productId: 'subscription-all-access',
+        siteId: 'dx-media',
+        grantedBy: 'stripe',
+        expiresAt: '2026-12-31T23:59:59Z'
+      })
+    ]
+    const products = [singleProduct, subscriptionProduct]
+
+    const result = hasAnyActiveAccess(
+      entitlements,
+      products,
+      'product-single',
+      'dx-media'
+    )
+
+    expect(result.hasAccess).toBe(true)
+    expect(result.via).toBe('single')
+  })
+
+  it('returns false when user has no entitlements', () => {
+    const products = [singleProduct, subscriptionProduct]
+
+    const result = hasAnyActiveAccess([], products, 'product-single', 'dx-media')
+
+    expect(result.hasAccess).toBe(false)
+    expect(result.via).toBeNull()
+  })
+
+  it('returns false when subscription has expired', () => {
+    const entitlements: Entitlement[] = [
+      {
+        id: 'ent-1',
+        userId: 'user-123',
+        productId: 'subscription-all-access',
+        siteId: 'dx-media',
+        status: 'active',
+        grantedBy: 'stripe',
+        grantedAt: '2025-01-01T00:00:00Z',
+        expiresAt: '2026-01-01T00:00:00Z', // 期限切れ
+        createdAt: '2025-01-01T00:00:00Z',
+        updatedAt: '2025-01-01T00:00:00Z'
+      }
+    ]
+    const products = [singleProduct, subscriptionProduct]
+
+    const result = hasAnyActiveAccess(
+      entitlements,
+      products,
+      'product-single',
+      'dx-media'
+    )
+
+    expect(result.hasAccess).toBe(false)
+    expect(result.via).toBeNull()
+  })
+
+  it('returns false when subscription is for different site', () => {
+    const otherSiteSubscription = createProduct({
+      id: 'subscription-other-site',
+      name: '他サイト読み放題',
+      siteId: 'other-site',
+      productType: 'subscription',
+      price: 2980
+    })
+
+    const entitlements = [
+      createEntitlement({
+        id: 'ent-1',
+        userId: 'user-123',
+        productId: 'subscription-other-site',
+        siteId: 'other-site',
+        grantedBy: 'stripe',
+        expiresAt: '2026-12-31T23:59:59Z'
+      })
+    ]
+    const products = [singleProduct, subscriptionProduct, otherSiteSubscription]
+
+    const result = hasAnyActiveAccess(
+      entitlements,
+      products,
+      'product-single',
+      'dx-media'
+    )
+
+    expect(result.hasAccess).toBe(false)
+    expect(result.via).toBeNull()
+  })
+
+  it('returns false when entitlement is revoked', () => {
+    const entitlements = [
+      createEntitlement({
+        id: 'ent-1',
+        userId: 'user-123',
+        productId: 'product-single',
+        siteId: 'dx-media',
+        grantedBy: 'stripe',
+        status: 'revoked'
+      })
+    ]
+    const products = [singleProduct, subscriptionProduct]
+
+    const result = hasAnyActiveAccess(
+      entitlements,
+      products,
+      'product-single',
+      'dx-media'
+    )
+
+    expect(result.hasAccess).toBe(false)
+    expect(result.via).toBeNull()
   })
 })

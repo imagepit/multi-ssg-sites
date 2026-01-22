@@ -18,6 +18,20 @@ const dateSchema = z.preprocess((value) => {
 }, z.string().optional())
 
 /**
+ * Sale schema for time-limited discounts
+ */
+export const saleSchema = z.object({
+  /** Sale price in JPY */
+  price: z.number(),
+  /** Sale start time (ISO 8601) */
+  starts_at: z.string(),
+  /** Sale end time (ISO 8601) */
+  ends_at: z.string(),
+  /** Sale label (default: "セール中") */
+  label: z.string().optional(),
+})
+
+/**
  * Product schema for paid content
  */
 export const productSchema = z.object({
@@ -25,6 +39,10 @@ export const productSchema = z.object({
   id: z.string(),
   /** Optional price in JPY */
   price: z.number().optional(),
+  /** Optional description */
+  description: z.string().optional(),
+  /** Optional sale configuration */
+  sale: saleSchema.optional(),
 })
 
 export const baseFrontmatterSchema = z.object({

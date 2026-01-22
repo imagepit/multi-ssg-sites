@@ -24,6 +24,7 @@ describe('checkEntitlement', () => {
       currency: 'JPY',
       status: 'active',
       stripePriceId: null,
+      productType: 'single',
       createdAt: '2025-01-01T00:00:00Z',
       updatedAt: '2025-01-01T00:00:00Z'
     }
@@ -44,12 +45,14 @@ describe('checkEntitlement', () => {
     const entitlementRepo: EntitlementReadRepository = {
       findByUserAndProduct: vi.fn().mockResolvedValue(activeEntitlement),
       listByUserId: vi.fn(),
-      listByUserAndSite: vi.fn()
+      listByUserAndSite: vi.fn(),
+      findActiveSubscription: vi.fn().mockResolvedValue(null)
     }
 
     const productRepo: ProductReadRepository = {
       findById: vi.fn().mockResolvedValue(activeProduct),
-      findBySiteId: vi.fn()
+      findBySiteId: vi.fn(),
+      findSubscriptionBySiteId: vi.fn().mockResolvedValue(null)
     }
 
     return { entitlementRepo, productRepo, activeProduct, activeEntitlement }

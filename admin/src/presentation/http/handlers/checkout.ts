@@ -2,13 +2,25 @@ import type { Env } from '../../../env.js'
 import type { AuthClaims } from '../../../domain/auth/claims.js'
 import { createCheckoutSession } from '../../../application/checkout/create-checkout-session.js'
 import { D1ProductReader } from '../../../infrastructure/db/d1-product-reader.js'
+import { D1ProductPriceReader } from '../../../infrastructure/db/d1-product-price-reader.js'
 import { StripeCheckoutClient } from '../../../infrastructure/stripe/stripe-checkout-client.js'
+import type { BillingPeriod } from '../../../domain/entitlement/product.js'
+
+interface SalePriceRequest {
+  price: number
+  originalPrice: number
+  label?: string
+  stripeCouponId?: string
+}
 
 interface CheckoutRequestBody {
   productId: string
   successUrl: string
   cancelUrl: string
   mode?: 'payment' | 'subscription'
+  billingPeriod?: BillingPeriod
+  /** Sale price info (for applying discounts) */
+  salePrice?: SalePriceRequest
 }
 
 export async function handleCheckoutCreate(
@@ -51,7 +63,27 @@ export async function handleCheckoutCreate(
   }
 
   const productReader = new D1ProductReader(env.DB)
+  const productPriceReader = new D1ProductPriceReader(env.DB)
   const stripeClient = new StripeCheckoutClient(env.STRIPE_SECRET_KEY)
+
+  // サブスクリプションの場合、billingPeriodからstripePriceIdを取得
+  let overrideStripePriceId: string | undefined
+  if (body.mode === 'subscription' && body.billingPeriod) {
+    const productPrice = await productPriceReader.findByProductAndBillingPeriod(
+      body.productId,
+      body.billingPeriod
+    )
+    if (!productPrice) {
+      return new Response(
+        JSON.stringify({ error: `Price not found for billing period: ${body.billingPeriod}` }),
+        {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        }
+      )
+    }
+    overrideStripePriceId = productPrice.stripePriceId
+  }
 
   const result = await createCheckoutSession(
     {
@@ -60,7 +92,9 @@ export async function handleCheckoutCreate(
       successUrl: body.successUrl,
       cancelUrl: body.cancelUrl,
       mode: body.mode,
-      customerEmail: auth.email
+      customerEmail: auth.email,
+      overrideStripePriceId,
+      salePrice: body.salePrice
     },
     { productReader, stripeClient }
   )

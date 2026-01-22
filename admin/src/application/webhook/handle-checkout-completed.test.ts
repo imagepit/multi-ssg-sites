@@ -19,6 +19,10 @@ class FakeProductReader implements ProductReadRepository {
   async findBySiteId(_siteId: string): Promise<Product[]> {
     return []
   }
+
+  async findSubscriptionBySiteId(_siteId: string): Promise<Product | null> {
+    return null
+  }
 }
 
 class FakeEntitlementWriter implements EntitlementWriteRepository {
@@ -51,6 +55,10 @@ class FakeEntitlementReader implements EntitlementReadRepository {
   async listByUserAndSite(_userId: string, _siteId: string): Promise<Entitlement[]> {
     return []
   }
+
+  async findActiveSubscription(_userId: string, _siteId: string): Promise<Entitlement | null> {
+    return null
+  }
 }
 
 describe('handleCheckoutCompleted', () => {
@@ -73,6 +81,7 @@ describe('handleCheckoutCompleted', () => {
       currency: 'JPY',
       status: 'active',
       stripePriceId: 'price_123',
+      productType: 'single',
       createdAt: '2025-01-01T00:00:00Z',
       updatedAt: '2025-01-01T00:00:00Z'
     })
@@ -201,6 +210,7 @@ describe('handleCheckoutCompleted', () => {
       currency: 'JPY',
       status: 'active',
       stripePriceId: 'price_123',
+      productType: 'single',
       createdAt: '2025-01-01T00:00:00Z',
       updatedAt: '2025-01-01T00:00:00Z'
     })

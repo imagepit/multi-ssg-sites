@@ -9,6 +9,8 @@ interface ProductRow {
   currency: string
   status: string
   stripe_price_id: string | null
+  product_type: string
+  description: string | null
   created_at: string
   updated_at: string
 }
@@ -19,7 +21,7 @@ export class D1ProductReader implements ProductReadRepository {
   async findById(id: string): Promise<Product | null> {
     const result = await this.db
       .prepare(
-        'SELECT id, name, site_id, price, currency, status, stripe_price_id, created_at, updated_at FROM products WHERE id = ?'
+        'SELECT id, name, site_id, price, currency, status, stripe_price_id, product_type, description, created_at, updated_at FROM products WHERE id = ?'
       )
       .bind(id)
       .first<ProductRow>()
@@ -34,12 +36,30 @@ export class D1ProductReader implements ProductReadRepository {
   async findBySiteId(siteId: string): Promise<Product[]> {
     const result = await this.db
       .prepare(
-        'SELECT id, name, site_id, price, currency, status, stripe_price_id, created_at, updated_at FROM products WHERE site_id = ?'
+        'SELECT id, name, site_id, price, currency, status, stripe_price_id, product_type, description, created_at, updated_at FROM products WHERE site_id = ?'
       )
       .bind(siteId)
       .all<ProductRow>()
 
     return (result.results ?? []).map((row) => this.mapRowToProduct(row))
+  }
+
+  async findSubscriptionBySiteId(siteId: string): Promise<Product | null> {
+    const result = await this.db
+      .prepare(
+        `SELECT id, name, site_id, price, currency, status, stripe_price_id, product_type, description, created_at, updated_at
+         FROM products
+         WHERE site_id = ? AND product_type = 'subscription' AND status = 'active'
+         LIMIT 1`
+      )
+      .bind(siteId)
+      .first<ProductRow>()
+
+    if (!result) {
+      return null
+    }
+
+    return this.mapRowToProduct(result)
   }
 
   private mapRowToProduct(row: ProductRow): Product {
@@ -51,6 +71,8 @@ export class D1ProductReader implements ProductReadRepository {
       currency: row.currency,
       status: row.status as 'active' | 'archived',
       stripePriceId: row.stripe_price_id,
+      productType: (row.product_type as 'single' | 'subscription') ?? 'single',
+      description: row.description ?? undefined,
       createdAt: row.created_at,
       updatedAt: row.updated_at
     }

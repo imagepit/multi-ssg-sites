@@ -4,6 +4,7 @@ export interface EntitlementReadRepository {
   findByUserAndProduct(userId: string, productId: string): Promise<Entitlement | null>
   listByUserId(userId: string): Promise<Entitlement[]>
   listByUserAndSite(userId: string, siteId: string): Promise<Entitlement[]>
+  findActiveSubscription(userId: string, siteId: string): Promise<Entitlement | null>
 }
 
 export interface EntitlementWriteRepository {

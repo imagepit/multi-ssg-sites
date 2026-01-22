@@ -63,6 +63,32 @@ export class D1EntitlementReader implements EntitlementReadRepository {
     return (result.results ?? []).map((row) => this.mapRowToEntitlement(row))
   }
 
+  async findActiveSubscription(
+    userId: string,
+    siteId: string
+  ): Promise<Entitlement | null> {
+    const now = new Date().toISOString()
+    const result = await this.db
+      .prepare(
+        `SELECT e.id, e.user_id, e.product_id, e.site_id, e.status, e.granted_by, e.granted_at, e.expires_at, e.created_at, e.updated_at
+         FROM entitlements e
+         JOIN products p ON e.product_id = p.id
+         WHERE e.user_id = ?
+           AND e.site_id = ?
+           AND p.product_type = 'subscription'
+           AND e.status = 'active'
+           AND (e.expires_at IS NULL OR e.expires_at > ?)`
+      )
+      .bind(userId, siteId, now)
+      .first<EntitlementRow>()
+
+    if (!result) {
+      return null
+    }
+
+    return this.mapRowToEntitlement(result)
+  }
+
   private mapRowToEntitlement(row: EntitlementRow): Entitlement {
     return {
       id: row.id,
