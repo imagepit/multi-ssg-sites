@@ -33,10 +33,12 @@ export async function refreshToken(
     throw new Error('user is not active')
   }
 
+  // TODO: ロールはユーザーエンティティから取得すべき
+  // 既存トークンにロールがない場合はデフォルトで viewer を付与
   const accessToken = await deps.tokenIssuer.issueAccessToken({
     sub: user.id,
     email: user.email,
-    roles: payload.roles,
+    roles: payload.roles ?? ['viewer'],
     siteIds: payload.siteIds
   })
 

@@ -126,8 +126,9 @@ export function AuthProvider({ children, apiBaseUrl }: AuthProviderProps) {
         setUser(userInfo)
         scheduleRefresh(accessToken)
       }
-    } catch {
+    } catch (error) {
       // 復元失敗時はトークンをクリア
+      console.error('[Auth] Failed to restore auth state:', error)
       clearTokens()
     } finally {
       setIsLoading(false)
