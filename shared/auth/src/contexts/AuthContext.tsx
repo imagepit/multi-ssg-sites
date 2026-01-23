@@ -45,14 +45,12 @@ export interface AuthProviderProps {
 }
 
 export function AuthProvider({ children, apiBaseUrl }: AuthProviderProps) {
+  // API ベース URL を同期的に設定（useEffect ではなく初期化時に設定）
+  setApiBaseUrl(apiBaseUrl)
+
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const refreshTimerRef = useRef<NodeJS.Timeout | null>(null)
-
-  // API ベース URL を設定
-  useEffect(() => {
-    setApiBaseUrl(apiBaseUrl)
-  }, [apiBaseUrl])
 
   /**
    * 自動リフレッシュのスケジュール
