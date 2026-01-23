@@ -17,6 +17,23 @@ interface EntitlementRow {
 export class D1EntitlementReader implements EntitlementReadRepository {
   constructor(private readonly db: D1Database) {}
 
+  async findById(id: string): Promise<Entitlement | null> {
+    const result = await this.db
+      .prepare(
+        `SELECT id, user_id, product_id, site_id, status, granted_by, granted_at, expires_at, created_at, updated_at
+         FROM entitlements
+         WHERE id = ?`
+      )
+      .bind(id)
+      .first<EntitlementRow>()
+
+    if (!result) {
+      return null
+    }
+
+    return this.mapRowToEntitlement(result)
+  }
+
   async findByUserAndProduct(
     userId: string,
     productId: string

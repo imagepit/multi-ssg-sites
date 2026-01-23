@@ -57,13 +57,18 @@ export async function completeXOAuth(
   // Calculate token expiration
   const tokenExpiresAt = Math.floor(Date.now() / 1000) + tokenResult.expiresIn
 
-  // Check if connection already exists for this user
-  const existingConnection = await deps.connectionReader.findByUserId(stateData.userId)
+  // Check if connection already exists for this user or X user
+  const existingByUserId = await deps.connectionReader.findByUserId(stateData.userId)
+  const existingByXUserId = await deps.connectionReader.findByXUserId(userInfo.id)
+
+  // Prefer existing connection by X user ID (handles re-connection with same X account)
+  const existingConnection = existingByXUserId ?? existingByUserId
 
   if (existingConnection) {
-    // Update existing connection
+    // Update existing connection with new tokens and potentially new userId
     const updatedConnection = {
       ...existingConnection,
+      userId: stateData.userId, // Update userId in case it changed (e.g., anonymous -> authenticated)
       xUserId: userInfo.id,
       xUsername: userInfo.username,
       accessToken: tokenResult.accessToken,

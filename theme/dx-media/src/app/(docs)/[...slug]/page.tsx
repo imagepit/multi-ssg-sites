@@ -21,6 +21,7 @@ import {
   getRelatedPages,
   resolvePageCover,
 } from '@/lib/content-utils';
+import { PremiumContentWrapper } from '@/components/PremiumContentWrapper';
 
 export default async function Page(props: { params: Promise<{ slug?: string[] }> }) {
   const params = await props.params;
@@ -37,9 +38,38 @@ export default async function Page(props: { params: Promise<{ slug?: string[] }>
     })),
   );
 
+  // Get products from frontmatter for PageProductsProvider
+  const pageData = page.data as Record<string, unknown>;
+  const products = (pageData.products as Array<{
+    id: string;
+    price?: number;
+    description?: string;
+    x_promotion?: {
+      tweet_id: string;
+      tweet_url?: string;
+      label?: string;
+      starts_at?: string;
+      ends_at?: string;
+    };
+  }>) || [];
+
+  const mdxContent = (
+    <>
+      <Suspense fallback={null}>
+        <SearchHighlighter />
+      </Suspense>
+      <MDX
+        components={getMDXComponents({
+          // this allows you to link to other pages with relative file paths
+          a: createRelativeLink(source, page),
+        })}
+      />
+    </>
+  );
+
   return (
-    <DocsPage 
-    toc={page.data.toc} 
+    <DocsPage
+    toc={page.data.toc}
     full={page.data.full}
     breadcrumb={{
       component: (
@@ -54,15 +84,17 @@ export default async function Page(props: { params: Promise<{ slug?: string[] }>
       <DocsTitle className="mt-4 text-bold text-4xl">{page.data.title}</DocsTitle>
       <DocsDescription className="page-description mb-0 mt-4 text-md text-fd-muted-foreground">{page.data.description}</DocsDescription>
       <DocsBody>
-        <Suspense fallback={null}>
-          <SearchHighlighter />
-        </Suspense>
-        <MDX
-          components={getMDXComponents({
-            // this allows you to link to other pages with relative file paths
-            a: createRelativeLink(source, page),
-          })}
-        />
+        {products.length > 0 ? (
+          <PremiumContentWrapper
+            siteId={process.env.SITE_ID || 'dx-media'}
+            products={products}
+            apiBaseUrl={process.env.NEXT_PUBLIC_ADMIN_API_URL || 'http://localhost:8787'}
+          >
+            {mdxContent}
+          </PremiumContentWrapper>
+        ) : (
+          mdxContent
+        )}
       </DocsBody>
       {relatedWithCovers.length > 0 ? (
         <section className="mt-10 border-t border-fd-border/70 pt-6">

@@ -1,6 +1,7 @@
 import type { Entitlement } from '../../domain/entitlement/entitlement.js'
 
 export interface EntitlementReadRepository {
+  findById(id: string): Promise<Entitlement | null>
   findByUserAndProduct(userId: string, productId: string): Promise<Entitlement | null>
   listByUserId(userId: string): Promise<Entitlement[]>
   listByUserAndSite(userId: string, siteId: string): Promise<Entitlement[]>

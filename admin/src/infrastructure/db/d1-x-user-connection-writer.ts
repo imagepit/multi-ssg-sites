@@ -28,10 +28,11 @@ export class D1XUserConnectionWriter implements XUserConnectionWriteRepository {
     await this.db
       .prepare(
         `UPDATE x_user_connections
-         SET x_user_id = ?, x_username = ?, access_token_encrypted = ?, refresh_token_encrypted = ?, token_expires_at = ?
+         SET user_id = ?, x_user_id = ?, x_username = ?, access_token_encrypted = ?, refresh_token_encrypted = ?, token_expires_at = ?
          WHERE id = ?`
       )
       .bind(
+        connection.userId,
         connection.xUserId,
         connection.xUsername,
         connection.accessToken,

@@ -7,7 +7,7 @@ import { KVOAuthStateStore } from '../../../infrastructure/kv/kv-oauth-state-sto
 export async function handleXAuthStart(
   request: Request,
   env: Env,
-  auth: AuthClaims
+  auth: AuthClaims | null
 ): Promise<Response> {
   if (request.method !== 'GET') {
     return new Response('Method Not Allowed', { status: 405 })
@@ -42,7 +42,7 @@ export async function handleXAuthStart(
 
     const result = await startXOAuthFlow(
       {
-        userId: auth.sub,
+        userId: auth?.sub ?? 'anonymous',
         callbackUrl,
         campaignId,
       },

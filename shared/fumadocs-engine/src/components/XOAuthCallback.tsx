@@ -72,12 +72,41 @@ export function XOAuthCallback({
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const handleCallback = async () => {
+    const handleCallback = () => {
       const params = new URLSearchParams(window.location.search)
-      const code = params.get('code')
-      const state = params.get('state')
+
+      // Check for success response from API redirect
+      const success = params.get('success')
+      const xUserId = params.get('xUserId')
+      const xUsername = params.get('xUsername')
+
+      // Check for error response
       const errorParam = params.get('error')
       const errorDescription = params.get('error_description')
+
+      // Handle success (redirected from API with success params)
+      if (success === 'true' && xUserId && xUsername) {
+        setStatus('success')
+
+        // Notify parent window of success
+        if (window.opener) {
+          window.opener.postMessage(
+            {
+              type: 'x-oauth-callback',
+              success: true,
+              xUserId,
+              xUsername,
+            },
+            window.location.origin
+          )
+
+          // Close this window after a short delay
+          setTimeout(() => {
+            window.close()
+          }, 2000)
+        }
+        return
+      }
 
       // Handle OAuth error
       if (errorParam) {
@@ -99,76 +128,34 @@ export function XOAuthCallback({
         return
       }
 
-      // Validate required parameters
-      if (!code || !state) {
-        const message = '必要なパラメータが不足しています'
-        setError(message)
-        setStatus('error')
+      // If we have code and state, we're in the middle of OAuth flow
+      // This shouldn't happen normally since API handles the callback
+      const code = params.get('code')
+      const state = params.get('state')
 
-        if (window.opener) {
-          window.opener.postMessage(
-            {
-              type: 'x-oauth-callback',
-              success: false,
-              error: message,
-            },
-            window.location.origin
-          )
-        }
+      if (code && state) {
+        // Redirect to API callback endpoint (should not normally reach here)
+        const apiCallbackUrl = new URL(`${apiBaseUrl}/api/x/auth/callback`)
+        apiCallbackUrl.searchParams.set('code', code)
+        apiCallbackUrl.searchParams.set('state', state)
+        window.location.href = apiCallbackUrl.toString()
         return
       }
 
-      try {
-        // Exchange code for tokens via API
-        const response = await fetch(`${apiBaseUrl}/api/x/auth/callback`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
+      // No valid parameters - show error
+      const message = '必要なパラメータが不足しています'
+      setError(message)
+      setStatus('error')
+
+      if (window.opener) {
+        window.opener.postMessage(
+          {
+            type: 'x-oauth-callback',
+            success: false,
+            error: message,
           },
-          credentials: 'include',
-          body: JSON.stringify({ code, state }),
-        })
-
-        const data = await response.json()
-
-        if (!response.ok) {
-          throw new Error(data.error || 'X連携に失敗しました')
-        }
-
-        setStatus('success')
-
-        // Notify parent window of success
-        if (window.opener) {
-          window.opener.postMessage(
-            {
-              type: 'x-oauth-callback',
-              success: true,
-              xUserId: data.xUserId,
-              xUsername: data.xUsername,
-            },
-            window.location.origin
-          )
-
-          // Close this window after a short delay
-          setTimeout(() => {
-            window.close()
-          }, 2000)
-        }
-      } catch (err) {
-        const message = err instanceof Error ? err.message : 'X連携に失敗しました'
-        setError(message)
-        setStatus('error')
-
-        if (window.opener) {
-          window.opener.postMessage(
-            {
-              type: 'x-oauth-callback',
-              success: false,
-              error: message,
-            },
-            window.location.origin
-          )
-        }
+          window.location.origin
+        )
       }
     }
 

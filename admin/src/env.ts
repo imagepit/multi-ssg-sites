@@ -11,6 +11,7 @@ export interface Env {
   X_CLIENT_ID?: string;
   X_CLIENT_SECRET?: string;
   X_CALLBACK_URL?: string;
+  X_API_MOCK_MODE?: string;
   DB?: D1Database;
   PAID_CONTENT?: R2Bucket;
   EVENTS_QUEUE?: Queue;

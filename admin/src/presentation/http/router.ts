@@ -19,10 +19,11 @@ import { handleGetPaywallOptions } from './handlers/paywall.js'
 import { handleXAuthStart } from './handlers/x-auth-start.js'
 import { handleXAuthCallback } from './handlers/x-auth-callback.js'
 import { handleXVerifyRepost } from './handlers/x-verify-repost.js'
+import { handlePaidContentByEntitlement } from './handlers/paid-content-by-entitlement.js'
 import { applyCors } from './middleware/cors.js'
 import { requireAuth } from './middleware/authentication.js'
 import { requireRole } from './middleware/authorization.js'
-import { requirePaidContentAuth } from './middleware/paid-content-auth.js'
+import { requirePaidContentAuth, optionalPaidContentAuth } from './middleware/paid-content-auth.js'
 import { logAudit } from '../../application/audit/log-audit.js'
 
 export async function handleHttpRequest(
@@ -99,22 +100,21 @@ export async function handleHttpRequest(
     return applyCors(await handleXAuthCallback(request, env), origin)
   }
 
-  // X OAuth start endpoint (requires paid content auth)
+  // X OAuth start endpoint (optional auth - works both authenticated and anonymously)
   if (url.pathname === '/api/x/auth/start' && request.method === 'GET') {
-    const xAuthStartAuth = await requirePaidContentAuth(request, env)
-    if (xAuthStartAuth instanceof Response) {
-      return applyCors(xAuthStartAuth, origin)
-    }
+    const xAuthStartAuth = await optionalPaidContentAuth(request, env)
     return applyCors(await handleXAuthStart(request, env, xAuthStartAuth), origin)
   }
 
-  // X verify repost endpoint (requires paid content auth)
+  // X verify repost endpoint (optional auth - works both authenticated and anonymously)
   if (url.pathname === '/api/x/verify-repost' && request.method === 'POST') {
-    const xVerifyAuth = await requirePaidContentAuth(request, env)
-    if (xVerifyAuth instanceof Response) {
-      return applyCors(xVerifyAuth, origin)
-    }
+    const xVerifyAuth = await optionalPaidContentAuth(request, env)
     return applyCors(await handleXVerifyRepost(request, env, xVerifyAuth), origin)
+  }
+
+  // Paid content by entitlement endpoint (public, for X promotion users)
+  if (url.pathname === '/api/paid-content/by-entitlement' && request.method === 'GET') {
+    return applyCors(await handlePaidContentByEntitlement(request, env), origin)
   }
 
   const auth = await requireAuth(request, deps)

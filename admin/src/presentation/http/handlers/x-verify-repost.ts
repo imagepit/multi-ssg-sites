@@ -1,17 +1,33 @@
 import type { Env } from '../../../env.js'
 import type { AuthClaims } from '../../../domain/auth/claims.js'
+import type { XApiClient } from '../../../application/x-promotion/x-api-client.js'
 import { verifyRepostAndGrantAccess } from '../../../application/x-promotion/verify-repost-and-grant-access.js'
 import { XApiClientImpl } from '../../../infrastructure/x/x-api-client-impl.js'
+import { XApiClientMock } from '../../../infrastructure/x/x-api-client-mock.js'
 import { D1XUserConnectionReader } from '../../../infrastructure/db/d1-x-user-connection-reader.js'
 import { D1XPromotionCampaignReader } from '../../../infrastructure/db/d1-x-promotion-campaign-reader.js'
 import { D1XPromotionRedemptionReader } from '../../../infrastructure/db/d1-x-promotion-redemption-reader.js'
 import { D1XPromotionRedemptionWriter } from '../../../infrastructure/db/d1-x-promotion-redemption-writer.js'
 import { D1EntitlementWriter } from '../../../infrastructure/db/d1-entitlement-writer.js'
 
+function createXApiClient(env: Env): XApiClient {
+  // Use mock client if X_API_MOCK_MODE is enabled
+  if (env.X_API_MOCK_MODE === 'true') {
+    console.log('[X API] Using mock client')
+    return new XApiClientMock()
+  }
+
+  return new XApiClientImpl({
+    clientId: env.X_CLIENT_ID!,
+    clientSecret: env.X_CLIENT_SECRET!,
+    callbackUrl: env.X_CALLBACK_URL!,
+  })
+}
+
 export async function handleXVerifyRepost(
   request: Request,
   env: Env,
-  auth: AuthClaims
+  auth: AuthClaims | null
 ): Promise<Response> {
   if (request.method !== 'POST') {
     return new Response('Method Not Allowed', { status: 405 })
@@ -49,15 +65,11 @@ export async function handleXVerifyRepost(
   }
 
   try {
-    const xApiClient = new XApiClientImpl({
-      clientId: env.X_CLIENT_ID,
-      clientSecret: env.X_CLIENT_SECRET,
-      callbackUrl: env.X_CALLBACK_URL,
-    })
+    const xApiClient = createXApiClient(env)
 
     const result = await verifyRepostAndGrantAccess(
       {
-        userId: auth.sub,
+        userId: auth?.sub ?? 'anonymous',
         campaignId: body.campaignId,
       },
       {

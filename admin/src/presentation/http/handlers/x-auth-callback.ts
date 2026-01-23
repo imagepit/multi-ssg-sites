@@ -66,6 +66,10 @@ export async function handleXAuthCallback(
     const connectionReader = new D1XUserConnectionReader(env.DB)
     const connectionWriter = new D1XUserConnectionWriter(env.DB)
 
+    // Get state data to retrieve the frontend callback URL before it's deleted
+    const stateData = await stateStore.get(state)
+    const frontendCallbackUrl = stateData?.callbackUrl
+
     const result = await completeXOAuth(
       { code, state },
       {
@@ -77,12 +81,24 @@ export async function handleXAuthCallback(
       }
     )
 
-    // Redirect back to the original callback URL with success parameters
-    // In production, this would typically be a frontend URL
+    // If frontend callback URL is provided, redirect with success parameters
+    if (frontendCallbackUrl) {
+      const redirectUrl = new URL(frontendCallbackUrl)
+      redirectUrl.searchParams.set('success', 'true')
+      redirectUrl.searchParams.set('xUserId', result.xUserId)
+      redirectUrl.searchParams.set('xUsername', result.xUsername)
+      if (result.campaignId) {
+        redirectUrl.searchParams.set('campaignId', result.campaignId)
+      }
+      return Response.redirect(redirectUrl.toString(), 302)
+    }
+
+    // Fallback to JSON response if no callback URL
     return new Response(
       JSON.stringify({
         success: true,
         userId: result.userId,
+        xUserId: result.xUserId,
         xUsername: result.xUsername,
         campaignId: result.campaignId,
       }),

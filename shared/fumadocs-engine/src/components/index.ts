@@ -20,3 +20,19 @@ export {
   XOAuthCallback,
   type XOAuthCallbackProps,
 } from './XOAuthCallback.js'
+
+export {
+  PageProductsProvider,
+  usePageProducts,
+  useXPromotionOption,
+  type PageProduct,
+  type PageProductsContextValue,
+  type PageProductsProviderProps,
+} from '../context/PageProductsContext.js'
+
+export {
+  XConnectionProvider,
+  useXConnection,
+  type XConnectionContextValue,
+  type XConnectionProviderProps,
+} from '../context/XConnectionContext.js'

@@ -11,10 +11,10 @@ products:
   - id: "product:example"
     name: "サンプル商品"
     x_promotion:
-      tweet_id: "1234567890123456789"
+      tweet_id: "839788827665313792"
       label: "拡散で応援して無料で読む"
       starts_at: "2025-01-01T00:00:00Z"
-      ends_at: "2025-12-31T23:59:59Z"
+      ends_at: "2026-12-31T23:59:59Z"
 ---
 
 # 記事タイトル

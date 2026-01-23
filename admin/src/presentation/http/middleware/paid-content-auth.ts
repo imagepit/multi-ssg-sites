@@ -31,6 +31,36 @@ export async function requirePaidContentAuth(
   }
 }
 
+/**
+ * Optional authentication middleware for paid content API
+ * Returns AuthClaims if valid token is provided, null otherwise
+ * Use this for endpoints that work both authenticated and anonymously
+ */
+export async function optionalPaidContentAuth(
+  request: Request,
+  env: Env
+): Promise<AuthClaims | null> {
+  const header = request.headers.get('Authorization')
+  if (!header || !header.startsWith('Bearer ')) {
+    return null
+  }
+
+  const secret = env.JWT_SECRET
+  if (!secret) {
+    return null
+  }
+
+  const token = header.slice('Bearer '.length)
+
+  try {
+    const claims = await verifyAccessToken(token, secret)
+    return claims
+  } catch (error) {
+    void error
+    return null
+  }
+}
+
 async function verifyAccessToken(token: string, secret: string): Promise<AuthClaims> {
   const parts = token.split('.')
   if (parts.length !== 3) {

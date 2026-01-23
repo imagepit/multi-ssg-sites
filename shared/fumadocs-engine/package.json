@@ -8,8 +8,8 @@
   "exports": {
     ".": "./dist/index.js",
     "./components": {
-      "import": "./src/components/PremiumPlaceholder.tsx",
-      "types": "./src/components/PremiumPlaceholder.tsx"
+      "import": "./dist/components/index.js",
+      "types": "./dist/components/index.d.ts"
     }
   },
   "files": [

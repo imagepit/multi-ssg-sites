@@ -1,6 +1,8 @@
 'use client'
 
 import type { ReactNode } from 'react'
+import { useXPromotionOption } from '../context/PageProductsContext.js'
+import { useXConnection } from '../context/XConnectionContext.js'
 
 /** Unlock method type */
 export type UnlockBy = 'purchase' | 'x_promotion' | 'both'
@@ -274,7 +276,7 @@ export function PremiumPlaceholder({
   isAuthenticated = false,
   hasPurchased = false,
   hasUnlockedViaXPromotion = false,
-  xPromotionOption,
+  xPromotionOption: xPromotionOptionProp,
   xConnectionStatus,
   onPurchaseClick,
   className = '',
@@ -287,6 +289,18 @@ export function PremiumPlaceholder({
   xVerificationError,
   children,
 }: PremiumPlaceholderProps) {
+  // Get xPromotionOption from Context if not provided via props
+  const xPromotionOptionFromContext = useXPromotionOption(productId)
+  const xPromotionOption = xPromotionOptionProp ?? xPromotionOptionFromContext
+
+  // Get X connection context for callbacks (optional)
+  const xConnection = useXConnection()
+
+  // Use context values if props not provided
+  const effectiveXConnectionStatus = xConnectionStatus ?? xConnection?.connectionStatus
+  const effectiveIsVerifyingRepost = isVerifyingRepost || (xConnection?.isVerifyingRepost ?? false)
+  const effectiveXVerificationError = xVerificationError ?? xConnection?.xVerificationError
+
   // If render prop is provided, use it
   if (children) {
     return (
@@ -337,12 +351,18 @@ export function PremiumPlaceholder({
   const handleXConnect = () => {
     if (onXConnectClick) {
       onXConnectClick()
+    } else if (xConnection) {
+      // Use context if prop not provided
+      xConnection.openXConnect(xPromotionOption?.campaignId)
     }
   }
 
   const handleVerifyRepost = () => {
     if (xPromotionOption && onVerifyRepostClick) {
       onVerifyRepostClick(xPromotionOption.campaignId)
+    } else if (xPromotionOption && xConnection) {
+      // Use context if prop not provided
+      xConnection.verifyRepost(xPromotionOption.campaignId)
     }
   }
 
@@ -425,7 +445,7 @@ export function PremiumPlaceholder({
               )}
 
               {/* X Connection Status */}
-              {!xConnectionStatus?.isConnected ? (
+              {!effectiveXConnectionStatus?.isConnected ? (
                 <button
                   type="button"
                   onClick={handleXConnect}
@@ -438,14 +458,14 @@ export function PremiumPlaceholder({
                 <div className="space-y-3">
                   {/* Connected user info */}
                   <div className="flex items-center gap-2 text-sm text-fd-muted-foreground">
-                    {xConnectionStatus.xProfileImage && (
+                    {effectiveXConnectionStatus.xProfileImage && (
                       <img
-                        src={xConnectionStatus.xProfileImage}
+                        src={effectiveXConnectionStatus.xProfileImage}
                         alt=""
                         className="w-6 h-6 rounded-full"
                       />
                     )}
-                    <span>@{xConnectionStatus.xUsername} で連携中</span>
+                    <span>@{effectiveXConnectionStatus.xUsername} で連携中</span>
                   </div>
 
                   {/* Repost link */}
@@ -463,10 +483,10 @@ export function PremiumPlaceholder({
                   <button
                     type="button"
                     onClick={handleVerifyRepost}
-                    disabled={isVerifyingRepost}
+                    disabled={effectiveIsVerifyingRepost}
                     className="w-full rounded-lg bg-sky-500 text-white px-4 py-2 text-sm font-semibold hover:bg-sky-600 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
-                    {isVerifyingRepost ? (
+                    {effectiveIsVerifyingRepost ? (
                       <>
                         <LoadingSpinner className="w-4 h-4" />
                         確認中...
@@ -479,9 +499,9 @@ export function PremiumPlaceholder({
                   </button>
 
                   {/* Error message */}
-                  {xVerificationError && (
+                  {effectiveXVerificationError && (
                     <p className="text-xs text-red-500">
-                      {xVerificationError}
+                      {effectiveXVerificationError}
                     </p>
                   )}
                 </div>

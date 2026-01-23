@@ -22,6 +22,10 @@ class FakeEntitlementReader implements EntitlementReadRepository {
     this.entitlements.push(entitlement)
   }
 
+  async findById(id: string): Promise<Entitlement | null> {
+    return this.entitlements.find((e) => e.id === id) ?? null
+  }
+
   async findByUserAndProduct(userId: string, productId: string): Promise<Entitlement | null> {
     return this.entitlements.find((e) => e.userId === userId && e.productId === productId) ?? null
   }

@@ -13,6 +13,8 @@ export interface XConnectionModalProps {
   onError?: (error: string) => void
   /** API base URL for X auth endpoints */
   apiBaseUrl: string
+  /** Auth token for API requests (magic link JWT) */
+  authToken?: string
   /** Campaign ID (optional, for tracking) */
   campaignId?: string
   /** Custom title */
@@ -78,6 +80,7 @@ export function XConnectionModal({
   onSuccess,
   onError,
   apiBaseUrl,
+  authToken,
   campaignId,
   title = 'X（Twitter）連携',
   description,
@@ -137,8 +140,13 @@ export function XConnectionModal({
       url.searchParams.set('callbackUrl', `${window.location.origin}/x/callback`)
 
       // Fetch authorization URL from API
+      const headers: HeadersInit = {}
+      if (authToken) {
+        headers['Authorization'] = `Bearer ${authToken}`
+      }
       const response = await fetch(url.toString(), {
         credentials: 'include',
+        headers,
       })
 
       if (!response.ok) {

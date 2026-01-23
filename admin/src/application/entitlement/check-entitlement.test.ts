@@ -43,6 +43,7 @@ describe('checkEntitlement', () => {
     }
 
     const entitlementRepo: EntitlementReadRepository = {
+      findById: vi.fn(),
       findByUserAndProduct: vi.fn().mockResolvedValue(activeEntitlement),
       listByUserId: vi.fn(),
       listByUserAndSite: vi.fn(),
