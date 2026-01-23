@@ -6,6 +6,8 @@ import { hashToken, generateSecureToken, generateId } from '../../../infrastruct
 
 interface RequestLinkBody {
   email: string
+  callbackUrl?: string
+  next?: string
 }
 
 export async function handleAuthRequestLink(
@@ -38,14 +40,31 @@ export async function handleAuthRequestLink(
   }
 
   // Determine base URL for magic link
+  // callbackUrl が指定されていればそれを使用、なければAPIのURLを使用
   const url = new URL(request.url)
-  const baseUrl = `${url.protocol}//${url.host}`
+  const apiBaseUrl = `${url.protocol}//${url.host}`
+
+  // コールバックURLの構築
+  let verifyUrl: string
+  if (body.callbackUrl) {
+    // フロントエンドのコールバックURLを使用
+    const callbackUrl = new URL(body.callbackUrl)
+    // next パラメータがあれば追加
+    if (body.next) {
+      callbackUrl.searchParams.set('next', body.next)
+    }
+    verifyUrl = callbackUrl.toString()
+  } else {
+    // 後方互換: APIのverifyエンドポイントを直接使用
+    verifyUrl = `${apiBaseUrl}/auth/verify`
+  }
 
   try {
     const result = await requestMagicLink(
       {
         email: body.email,
-        baseUrl
+        baseUrl: verifyUrl.replace(/\?.*$/, ''), // クエリパラメータを除いたベースURL
+        callbackUrl: body.callbackUrl ? verifyUrl : undefined
       },
       {
         magicLinkRepo: new D1MagicLinkRepository(env.DB),

@@ -7,6 +7,7 @@ import { useSearchContext } from 'fumadocs-ui/contexts/search'
 import { useI18n } from 'fumadocs-ui/contexts/i18n'
 import { useTheme } from 'next-themes'
 import { usePathname } from 'next/navigation'
+import { LoginButton } from '@/components/auth/LoginButton'
 
 type NavRightControlsProps = {
   variant?: 'lg' | 'sm'
@@ -179,6 +180,7 @@ export function NavRightControls({ variant = 'lg' }: NavRightControlsProps) {
           <SidebarToggleButton hidden={sidebarHidden} onToggle={toggleSidebar} />
         )}
         <ThemeToggleControl />
+        <LoginButton variant="icon" />
       </div>
     )
   }
@@ -190,6 +192,7 @@ export function NavRightControls({ variant = 'lg' }: NavRightControlsProps) {
         <SidebarToggleButton hidden={sidebarHidden} onToggle={toggleSidebar} />
       )}
       <ThemeToggleControl />
+      <LoginButton />
     </div>
   )
 }

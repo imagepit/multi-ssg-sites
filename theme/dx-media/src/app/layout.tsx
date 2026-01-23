@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import type { Metadata } from 'next';
 import { getBranding, getSiteLanguage, getSiteName, getThemePrimary } from '@/lib/site-config';
 import { buildThemeCssFromPrimary } from '@/lib/theme-derive';
+import { AuthProviderWrapper } from '@/contexts/AuthProviderWrapper';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -31,7 +32,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           // Inject derived theme variables for both light and dark
           dangerouslySetInnerHTML={{ __html: buildThemeCssFromPrimary(primary) }}
         />
-        {children}
+        <AuthProviderWrapper>
+          {children}
+        </AuthProviderWrapper>
       </body>
     </html>
   );
