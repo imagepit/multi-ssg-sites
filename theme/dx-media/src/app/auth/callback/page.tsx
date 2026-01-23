@@ -1,25 +1,32 @@
 'use client'
 
-import { useEffect, useState, Suspense } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
+import { useEffect, useState, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { validateRedirectUrl } from '@/lib/auth/redirect'
 
 function AuthCallbackContent() {
-  const searchParams = useSearchParams()
   const router = useRouter()
   const { verifyToken } = useAuth()
   const [error, setError] = useState<string | null>(null)
   const [isProcessing, setIsProcessing] = useState(true)
+  const hasProcessed = useRef(false)
 
   useEffect(() => {
-    const token = searchParams.get('token')
-    const next = searchParams.get('next')
-
-    // 1. URLからtokenを即座に除去（Referrer/ログ/スクショ漏えい防止）
-    if (typeof window !== 'undefined') {
-      window.history.replaceState({}, '', '/auth/callback')
+    // 既に処理済みなら何もしない（Strict Modeの二重実行対策）
+    if (hasProcessed.current) {
+      return
     }
+    hasProcessed.current = true
+
+    // 1. window.location.searchから直接パラメータを取得
+    //    useSearchParamsはreplaceState後に再レンダリングで空になる可能性があるため
+    const urlParams = new URLSearchParams(window.location.search)
+    const token = urlParams.get('token')
+    const next = urlParams.get('next')
+
+    // 2. URLからtokenを即座に除去（Referrer/ログ/スクショ漏えい防止）
+    window.history.replaceState({}, '', '/auth/callback')
 
     if (!token) {
       setError('トークンが見つかりません')
@@ -27,14 +34,14 @@ function AuthCallbackContent() {
       return
     }
 
-    // 2. トークン検証
+    // 3. トークン検証
     verifyAndRedirect(token, next)
 
     async function verifyAndRedirect(token: string, next: string | null) {
       try {
         await verifyToken(token)
 
-        // 3. リダイレクト先のバリデーション（オープンリダイレクト防止）
+        // 4. リダイレクト先のバリデーション（オープンリダイレクト防止）
         const redirectTo = validateRedirectUrl(next) || '/'
         router.push(redirectTo)
       } catch (err) {
@@ -42,7 +49,7 @@ function AuthCallbackContent() {
         setIsProcessing(false)
       }
     }
-  }, [searchParams, router, verifyToken])
+  }, [router, verifyToken])
 
   if (error) {
     return (
@@ -84,15 +91,5 @@ function AuthCallbackContent() {
 }
 
 export default function AuthCallbackPage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="flex min-h-screen items-center justify-center">
-          <div className="text-fd-muted-foreground">読み込み中...</div>
-        </div>
-      }
-    >
-      <AuthCallbackContent />
-    </Suspense>
-  )
+  return <AuthCallbackContent />
 }
