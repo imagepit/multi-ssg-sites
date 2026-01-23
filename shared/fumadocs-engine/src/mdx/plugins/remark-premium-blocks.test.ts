@@ -109,6 +109,103 @@ Content.
       expect(sections[0].productId).toBe('product:single')
       expect(sections[0].sectionId).toBe('section-single')
     })
+
+    it('defaults unlockBy to purchase when not specified', async () => {
+      const markdown = `
+:::premium productId="product:test" sectionId="sec-1"
+
+Content.
+
+:::
+`.trim()
+
+      const { sections, tree } = await processMarkdown(markdown)
+
+      expect(sections).toHaveLength(1)
+      expect(sections[0].unlockBy).toBe('purchase')
+
+      // Placeholder should NOT have unlockBy attribute when it's the default
+      const placeholders = findNodes(tree, 'mdxJsxFlowElement')
+      const attrs = placeholders[0].attributes
+      expect(attrs.find((a: any) => a.name === 'unlockBy')).toBeUndefined()
+    })
+
+    it('handles unlockBy="x_promotion" attribute', async () => {
+      const markdown = `
+:::premium productId="product:promo" sectionId="promo-section" unlockBy="x_promotion"
+
+Content unlockable by reposting.
+
+:::
+`.trim()
+
+      const { sections, tree } = await processMarkdown(markdown)
+
+      expect(sections).toHaveLength(1)
+      expect(sections[0].unlockBy).toBe('x_promotion')
+
+      const placeholders = findNodes(tree, 'mdxJsxFlowElement')
+      const attrs = placeholders[0].attributes
+      expect(attrs).toContainEqual(
+        expect.objectContaining({ name: 'unlockBy', value: 'x_promotion' })
+      )
+    })
+
+    it('handles unlockBy="both" attribute', async () => {
+      const markdown = `
+:::premium productId="product:both" sectionId="both-section" unlockBy="both"
+
+Content unlockable by purchase or repost.
+
+:::
+`.trim()
+
+      const { sections, tree } = await processMarkdown(markdown)
+
+      expect(sections).toHaveLength(1)
+      expect(sections[0].unlockBy).toBe('both')
+
+      const placeholders = findNodes(tree, 'mdxJsxFlowElement')
+      const attrs = placeholders[0].attributes
+      expect(attrs).toContainEqual(
+        expect.objectContaining({ name: 'unlockBy', value: 'both' })
+      )
+    })
+
+    it('defaults invalid unlockBy values to purchase', async () => {
+      const markdown = `
+:::premium productId="product:invalid" sectionId="invalid-section" unlockBy="invalid_value"
+
+Content.
+
+:::
+`.trim()
+
+      const { sections, tree } = await processMarkdown(markdown)
+
+      expect(sections).toHaveLength(1)
+      expect(sections[0].unlockBy).toBe('purchase')
+
+      // Placeholder should NOT have unlockBy attribute for invalid/default values
+      const placeholders = findNodes(tree, 'mdxJsxFlowElement')
+      const attrs = placeholders[0].attributes
+      expect(attrs.find((a: any) => a.name === 'unlockBy')).toBeUndefined()
+    })
+
+    it('handles unlockBy with single quotes', async () => {
+      const markdown = `
+:::premium productId="product:quote" sectionId="quote-section" unlockBy='x_promotion'
+
+Content.
+
+:::
+`.trim()
+
+      const { sections } = await processMarkdown(markdown)
+
+      expect(sections).toHaveLength(1)
+      expect(sections[0].unlockBy).toBe('x_promotion')
+    })
   })
 
   describe('multiple premium blocks', () => {

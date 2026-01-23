@@ -1,5 +1,6 @@
 import type { ProductReadRepository } from '../entitlement/product-repository.js'
 import type { ProductPriceReadRepository } from '../entitlement/product-price-repository.js'
+import type { XPromotionCampaignReadRepository } from '../x-promotion/x-promotion-campaign-repository.js'
 import type { BillingPeriod } from '../../domain/entitlement/product.js'
 
 export interface GetPaywallOptionsInput {
@@ -49,14 +50,26 @@ export interface SubscriptionOption {
   prices: SubscriptionPriceOption[]
 }
 
+/** X Promotion option for content unlock via repost */
+export interface XPromotionOption {
+  campaignId: string
+  tweetId: string
+  tweetUrl: string
+  label: string
+  /** Campaign end time (ISO 8601) */
+  endsAt?: string
+}
+
 export interface PaywallOptions {
   singlePurchase?: SinglePurchaseOption
   subscription?: SubscriptionOption
+  xPromotion?: XPromotionOption
 }
 
 export interface GetPaywallOptionsDeps {
   productRepo: ProductReadRepository
   productPriceRepo: ProductPriceReadRepository
+  campaignRepo?: XPromotionCampaignReadRepository
 }
 
 /** Default sale label */
@@ -181,6 +194,24 @@ export async function getPaywallOptions(
             sale,
           }
         })
+      }
+    }
+  }
+
+  // X Promotionオプション（キャンペーンがある場合）
+  if (deps.campaignRepo) {
+    const campaign = await deps.campaignRepo.findActiveByProductAndSite(
+      input.productId,
+      input.siteId
+    )
+
+    if (campaign) {
+      result.xPromotion = {
+        campaignId: campaign.id,
+        tweetId: campaign.tweetId,
+        tweetUrl: campaign.tweetUrl,
+        label: campaign.label,
+        endsAt: campaign.endsAt ? timestampToIso(campaign.endsAt) : undefined,
       }
     }
   }

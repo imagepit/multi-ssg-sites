@@ -1,4 +1,5 @@
 import path from 'node:path'
+import { SiteId } from '../domain/value-objects/site-id.js'
 import { ThemeId } from '../domain/value-objects/theme-id.js'
 
 export class WorkspacePaths {
@@ -18,5 +19,9 @@ export class WorkspacePaths {
 
   searchIndexesDir(themeId: ThemeId): string {
     return path.join(this.themeOutputDir(themeId), 'search-indexes')
+  }
+
+  contentsDir(siteId: SiteId): string {
+    return path.join(this.rootDir, 'contents', siteId.toString(), 'contents')
   }
 }

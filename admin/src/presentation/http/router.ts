@@ -3,6 +3,7 @@ import type { AuthDependencies } from './middleware/authentication.js'
 import type { AuditLogger } from '../../application/audit/audit-logger.js'
 import { healthHandler } from './handlers/health.js'
 import { handleSync } from './handlers/sync.js'
+import { handleSyncProducts } from './handlers/sync-products.js'
 import { handleSites } from './handlers/sites.js'
 import { handlePages } from './handlers/pages.js'
 import { handleSitesWrite } from './handlers/sites-write.js'
@@ -15,6 +16,9 @@ import { handlePaidContent } from './handlers/paid-content.js'
 import { handleCheckoutCreate } from './handlers/checkout.js'
 import { handleStripeWebhook } from './handlers/stripe-webhook.js'
 import { handleGetPaywallOptions } from './handlers/paywall.js'
+import { handleXAuthStart } from './handlers/x-auth-start.js'
+import { handleXAuthCallback } from './handlers/x-auth-callback.js'
+import { handleXVerifyRepost } from './handlers/x-verify-repost.js'
 import { applyCors } from './middleware/cors.js'
 import { requireAuth } from './middleware/authentication.js'
 import { requireRole } from './middleware/authorization.js'
@@ -42,6 +46,11 @@ export async function handleHttpRequest(
 
   if (url.pathname === '/admin/sync') {
     return applyCors(await handleSync(request, env, deps.auditLogger), origin)
+  }
+
+  // Products sync endpoint (uses API key authentication)
+  if (url.pathname === '/api/products/sync' && request.method === 'POST') {
+    return applyCors(await handleSyncProducts(request, env), origin)
   }
 
   // Auth endpoints (no authentication required)
@@ -83,6 +92,29 @@ export async function handleHttpRequest(
       return applyCors(checkoutAuth, origin)
     }
     return applyCors(await handleCheckoutCreate(request, env, checkoutAuth), origin)
+  }
+
+  // X OAuth callback endpoint (public, receives redirect from X)
+  if (url.pathname === '/api/x/auth/callback' && request.method === 'GET') {
+    return applyCors(await handleXAuthCallback(request, env), origin)
+  }
+
+  // X OAuth start endpoint (requires paid content auth)
+  if (url.pathname === '/api/x/auth/start' && request.method === 'GET') {
+    const xAuthStartAuth = await requirePaidContentAuth(request, env)
+    if (xAuthStartAuth instanceof Response) {
+      return applyCors(xAuthStartAuth, origin)
+    }
+    return applyCors(await handleXAuthStart(request, env, xAuthStartAuth), origin)
+  }
+
+  // X verify repost endpoint (requires paid content auth)
+  if (url.pathname === '/api/x/verify-repost' && request.method === 'POST') {
+    const xVerifyAuth = await requirePaidContentAuth(request, env)
+    if (xVerifyAuth instanceof Response) {
+      return applyCors(xVerifyAuth, origin)
+    }
+    return applyCors(await handleXVerifyRepost(request, env, xVerifyAuth), origin)
   }
 
   const auth = await requireAuth(request, deps)

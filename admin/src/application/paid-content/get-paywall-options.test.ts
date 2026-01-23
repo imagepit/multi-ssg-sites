@@ -2,7 +2,9 @@ import { describe, it, expect, vi } from 'vitest'
 import { getPaywallOptions } from './get-paywall-options.js'
 import type { ProductReadRepository } from '../entitlement/product-repository.js'
 import type { ProductPriceReadRepository } from '../entitlement/product-price-repository.js'
+import type { XPromotionCampaignReadRepository } from '../x-promotion/x-promotion-campaign-repository.js'
 import type { Product, ProductPrice } from '../../domain/entitlement/product.js'
+import type { XPromotionCampaign } from '../../domain/x-promotion/x-promotion-campaign.js'
 
 describe('getPaywallOptions', () => {
   const createMockDeps = () => {
@@ -163,5 +165,121 @@ describe('getPaywallOptions', () => {
     await expect(
       getPaywallOptions({ siteId: 'dx-media', productId: '' }, deps)
     ).rejects.toThrow('productId is required')
+  })
+
+  describe('X Promotion support', () => {
+    const createMockDepsWithXPromotion = () => {
+      const singleProduct: Product = {
+        id: 'product-remotion',
+        name: 'Remotion入門',
+        siteId: 'dx-media',
+        price: 0,
+        currency: 'JPY',
+        status: 'active',
+        stripePriceId: null,
+        productType: 'single',
+        description: 'テキスト3,052字 / 12画像',
+        createdAt: '2025-01-01T00:00:00Z',
+        updatedAt: '2025-01-01T00:00:00Z'
+      }
+
+      const activeCampaign: XPromotionCampaign = {
+        id: 'xpc:dx-media:remotion',
+        productId: 'product-remotion',
+        siteId: 'dx-media',
+        slug: 'remotion',
+        tweetId: '1881632785927586250',
+        tweetUrl: 'https://x.com/i/status/1881632785927586250',
+        label: '拡散で応援して無料で読む',
+        status: 'active',
+        startsAt: null,
+        endsAt: null,
+        createdAt: '2025-01-01T00:00:00Z',
+        updatedAt: '2025-01-01T00:00:00Z'
+      }
+
+      const productRepo: ProductReadRepository = {
+        findById: vi.fn().mockResolvedValue(singleProduct),
+        findBySiteId: vi.fn().mockResolvedValue([singleProduct]),
+        findSubscriptionBySiteId: vi.fn().mockResolvedValue(null)
+      }
+
+      const productPriceRepo: ProductPriceReadRepository = {
+        findByProductId: vi.fn().mockResolvedValue([]),
+        findByProductAndBillingPeriod: vi.fn()
+      }
+
+      const campaignRepo: XPromotionCampaignReadRepository = {
+        findById: vi.fn(),
+        findByProductId: vi.fn(),
+        findByProductAndSite: vi.fn(),
+        findActiveByProductAndSite: vi.fn().mockResolvedValue(activeCampaign),
+        listBySiteId: vi.fn()
+      }
+
+      return {
+        productRepo,
+        productPriceRepo,
+        campaignRepo,
+        singleProduct,
+        activeCampaign
+      }
+    }
+
+    it('returns xPromotion option when active campaign exists', async () => {
+      const deps = createMockDepsWithXPromotion()
+
+      const result = await getPaywallOptions(
+        { siteId: 'dx-media', productId: 'product-remotion' },
+        deps
+      )
+
+      expect(result.xPromotion).toEqual({
+        campaignId: 'xpc:dx-media:remotion',
+        tweetId: '1881632785927586250',
+        tweetUrl: 'https://x.com/i/status/1881632785927586250',
+        label: '拡散で応援して無料で読む'
+      })
+    })
+
+    it('returns xPromotion with endsAt when campaign has end date', async () => {
+      const deps = createMockDepsWithXPromotion()
+      const endsAt = Math.floor(new Date('2026-01-25T23:59:59Z').getTime() / 1000)
+      vi.mocked(deps.campaignRepo.findActiveByProductAndSite).mockResolvedValue({
+        ...deps.activeCampaign,
+        endsAt
+      })
+
+      const result = await getPaywallOptions(
+        { siteId: 'dx-media', productId: 'product-remotion' },
+        deps
+      )
+
+      expect(result.xPromotion?.endsAt).toBe('2026-01-25T23:59:59.000Z')
+    })
+
+    it('does not return xPromotion when no active campaign exists', async () => {
+      const deps = createMockDepsWithXPromotion()
+      vi.mocked(deps.campaignRepo.findActiveByProductAndSite).mockResolvedValue(null)
+
+      const result = await getPaywallOptions(
+        { siteId: 'dx-media', productId: 'product-remotion' },
+        deps
+      )
+
+      expect(result.xPromotion).toBeUndefined()
+    })
+
+    it('works without campaignRepo (backward compatibility)', async () => {
+      const deps = createMockDepsWithXPromotion()
+      const { campaignRepo, ...depsWithoutCampaign } = deps
+
+      const result = await getPaywallOptions(
+        { siteId: 'dx-media', productId: 'product-remotion' },
+        depsWithoutCampaign
+      )
+
+      expect(result.xPromotion).toBeUndefined()
+    })
   })
 })

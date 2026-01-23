@@ -32,6 +32,22 @@ export const saleSchema = z.object({
 })
 
 /**
+ * X promotion schema for content unlock via X repost
+ */
+export const xPromotionSchema = z.object({
+  /** Tweet ID to repost (required) */
+  tweet_id: z.string(),
+  /** Display URL (auto-generated if not provided) */
+  tweet_url: z.string().url().optional(),
+  /** Button label (default: "拡散で応援して無料で読む") */
+  label: z.string().optional(),
+  /** Campaign start time (ISO 8601) */
+  starts_at: z.string().optional(),
+  /** Campaign end time (ISO 8601) */
+  ends_at: z.string().optional(),
+})
+
+/**
  * Product schema for paid content
  */
 export const productSchema = z.object({
@@ -43,6 +59,8 @@ export const productSchema = z.object({
   description: z.string().optional(),
   /** Optional sale configuration */
   sale: saleSchema.optional(),
+  /** Optional X promotion configuration for content unlock via repost */
+  x_promotion: xPromotionSchema.optional(),
 })
 
 export const baseFrontmatterSchema = z.object({

@@ -8,7 +8,11 @@ export interface Env {
   JWT_SECRET?: string;
   STRIPE_SECRET_KEY?: string;
   STRIPE_WEBHOOK_SECRET?: string;
+  X_CLIENT_ID?: string;
+  X_CLIENT_SECRET?: string;
+  X_CALLBACK_URL?: string;
   DB?: D1Database;
   PAID_CONTENT?: R2Bucket;
   EVENTS_QUEUE?: Queue;
+  X_OAUTH_STATE?: KVNamespace;
 }

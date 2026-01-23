@@ -1,6 +1,13 @@
 import type { Root, Content, Paragraph } from 'mdast'
 import { visit } from 'unist-util-visit'
-import type { PremiumSection, PremiumPlaceholder } from '../../domain/premium-section.js'
+
+/**
+ * How the content can be unlocked
+ * - 'purchase': Traditional purchase/subscription
+ * - 'x_promotion': Unlock by reposting on X
+ * - 'both': Both options available
+ */
+export type UnlockBy = 'purchase' | 'x_promotion' | 'both'
 
 /**
  * Metadata stored in vfile.data for extracted premium sections
@@ -9,6 +16,8 @@ export interface PremiumBlocksData {
   premiumSections: Array<{
     sectionId: string
     productId: string
+    /** How the content can be unlocked (default: 'purchase') */
+    unlockBy: UnlockBy
     /** Original mdast nodes of the premium content (before HTML conversion) */
     nodes: Content[]
   }>
@@ -22,6 +31,15 @@ export interface PremiumBlocksData {
  * :::premium productId="product:course-xxx" sectionId="section-1"
  *
  * Premium content here...
+ *
+ * :::
+ * ```
+ *
+ * With unlockBy option:
+ * ```mdx
+ * :::premium productId="product:course-xxx" sectionId="section-1" unlockBy="x_promotion"
+ *
+ * Content unlockable by reposting on X...
  *
  * :::
  * ```
@@ -81,17 +99,25 @@ export function remarkPremiumBlocks() {
       vfile.data.premiumSections.push({
         sectionId: open.sectionId,
         productId: open.productId,
+        unlockBy: open.unlockBy,
         nodes: inner,
       })
 
-      // Create placeholder element
+      // Create placeholder element with unlockBy attribute
+      const attributes: any[] = [
+        { type: 'mdxJsxAttribute', name: 'sectionId', value: open.sectionId },
+        { type: 'mdxJsxAttribute', name: 'productId', value: open.productId },
+      ]
+
+      // Add unlockBy attribute if not default
+      if (open.unlockBy !== 'purchase') {
+        attributes.push({ type: 'mdxJsxAttribute', name: 'unlockBy', value: open.unlockBy })
+      }
+
       const placeholder: Content = {
         type: 'mdxJsxFlowElement' as any,
         name: 'PremiumPlaceholder',
-        attributes: [
-          { type: 'mdxJsxAttribute', name: 'sectionId', value: open.sectionId },
-          { type: 'mdxJsxAttribute', name: 'productId', value: open.productId },
-        ] as any,
+        attributes,
         children: [],
       }
 
@@ -110,23 +136,37 @@ export function remarkPremiumBlocks() {
  * Supported formats:
  * - :::premium productId="xxx" sectionId="yyy"
  * - :::premium sectionId="yyy" productId="xxx"
+ * - :::premium productId="xxx" sectionId="yyy" unlockBy="x_promotion"
+ * - :::premium productId="xxx" sectionId="yyy" unlockBy="both"
  */
-function parsePremiumOpen(text: string): { productId: string; sectionId: string } | null {
+function parsePremiumOpen(text: string): { productId: string; sectionId: string; unlockBy: UnlockBy } | null {
   const s = text.trim()
   if (!s.startsWith(':::premium')) return null
 
   const rest = s.slice(':::premium'.length).trim()
   if (!rest) return null
 
-  // Parse attributes: productId="xxx" sectionId="yyy"
+  // Parse attributes: productId="xxx" sectionId="yyy" unlockBy="zzz"
   const productIdMatch = /productId=["']([^"']+)["']/.exec(rest)
   const sectionIdMatch = /sectionId=["']([^"']+)["']/.exec(rest)
+  const unlockByMatch = /unlockBy=["']([^"']+)["']/.exec(rest)
 
   if (!productIdMatch || !sectionIdMatch) return null
+
+  // Validate unlockBy value
+  let unlockBy: UnlockBy = 'purchase' // default
+  if (unlockByMatch) {
+    const value = unlockByMatch[1]
+    if (value === 'x_promotion' || value === 'both') {
+      unlockBy = value
+    }
+    // Invalid values default to 'purchase'
+  }
 
   return {
     productId: productIdMatch[1],
     sectionId: sectionIdMatch[1],
+    unlockBy,
   }
 }
 

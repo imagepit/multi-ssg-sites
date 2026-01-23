@@ -8,6 +8,8 @@ import { ThemeId } from '../../domain/value-objects/theme-id.js'
 import { BuildSiteUseCase } from './build-site.js'
 import { SyncAssetsUseCase } from './sync-assets.js'
 import { SyncSearchIndexesUseCase } from './sync-search-indexes.js'
+import { CollectProductsUseCase } from './collect-products.js'
+import { SyncProductsUseCase } from './sync-products.js'
 
 export type DeploySiteInput = {
   siteId: SiteId
@@ -17,6 +19,7 @@ export type DeploySiteInput = {
   projectName?: string
   syncAssets: boolean
   syncSearchIndexes: boolean
+  syncProducts: boolean
   searchIndexBaseUrl?: string
   r2Config?: {
     bucket: string
@@ -34,9 +37,16 @@ export type DeploySiteInput = {
     prefix: string
     diffOnly: boolean
   }
+  adminApiConfig?: {
+    baseUrl: string
+    apiKey: string
+  }
 }
 
 export class DeploySiteUseCase {
+  private readonly collectProducts: CollectProductsUseCase
+  private readonly syncProducts: SyncProductsUseCase
+
   constructor(
     private readonly runner: CommandRunner,
     private readonly logger: Logger,
@@ -45,7 +55,10 @@ export class DeploySiteUseCase {
     private readonly buildSite: BuildSiteUseCase,
     private readonly syncAssetsUseCase: SyncAssetsUseCase,
     private readonly syncSearchIndexesUseCase: SyncSearchIndexesUseCase
-  ) {}
+  ) {
+    this.collectProducts = new CollectProductsUseCase(fileSystem, logger)
+    this.syncProducts = new SyncProductsUseCase(logger)
+  }
 
   async execute(input: DeploySiteInput): Promise<void> {
     await this.buildSite.execute({
@@ -89,6 +102,23 @@ export class DeploySiteUseCase {
         diffOnly: input.searchIndexConfig.diffOnly
       })
       await this.fileSystem.remove(searchIndexesDir)
+    }
+
+    // Sync products with X promotion to admin API
+    if (input.syncProducts && input.adminApiConfig) {
+      const contentsDir = this.paths.contentsDir(input.siteId)
+      const collectResult = await this.collectProducts.execute({
+        siteId: input.siteId.toString(),
+        contentsDir,
+      })
+
+      if (collectResult.products.length > 0) {
+        await this.syncProducts.execute({
+          siteId: input.siteId.toString(),
+          products: collectResult.products,
+          adminApi: input.adminApiConfig,
+        })
+      }
     }
 
     const outputDir = this.paths.themeOutputDir(input.themeId)

@@ -1,6 +1,7 @@
 import type { Env } from '../../../env.js'
 import { D1ProductReader } from '../../../infrastructure/db/d1-product-reader.js'
 import { D1ProductPriceReader } from '../../../infrastructure/db/d1-product-price-reader.js'
+import { D1XPromotionCampaignReader } from '../../../infrastructure/db/d1-x-promotion-campaign-reader.js'
 import { getPaywallOptions } from '../../../application/paid-content/get-paywall-options.js'
 
 export async function handleGetPaywallOptions(
@@ -31,11 +32,12 @@ export async function handleGetPaywallOptions(
 
   const productRepo = new D1ProductReader(env.DB)
   const productPriceRepo = new D1ProductPriceReader(env.DB)
+  const campaignRepo = new D1XPromotionCampaignReader(env.DB)
 
   try {
     const options = await getPaywallOptions(
       { siteId, productId },
-      { productRepo, productPriceRepo }
+      { productRepo, productPriceRepo, campaignRepo }
     )
 
     return new Response(
