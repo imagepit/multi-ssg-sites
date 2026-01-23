@@ -10,7 +10,7 @@ import { Folder as FdFolder } from 'fumadocs-ui/components/files'
 import { ImageZoom } from 'fumadocs-ui/components/image-zoom'
 import { Mermaid } from '@/components/Mermaid'
 import ExportedImage from '@/components/ExportedImage'
-import { PremiumPlaceholder } from '@techdoc/fumadocs-engine/components'
+import { PaidSection } from '@/components/paid'
 
 // use this function to get MDX components, you will need it for rendering MDX
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
@@ -37,7 +37,12 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
       return <BaseCallout {...props} />
     },
     Mermaid: Mermaid as any,
-    PremiumPlaceholder: PremiumPlaceholder as any,
+    // PremiumPlaceholder を PaidSection でラップ
+    // remarkPremiumBlocks プラグインが生成する <PremiumPlaceholder sectionId="..." productId="..." />
+    // を PaidSection に置き換えて、認証状態に応じた表示を行う
+    PremiumPlaceholder: (props: { sectionId: string; productId: string }) => (
+      <PaidSection sectionId={props.sectionId} productId={props.productId} />
+    ),
     ...components,
   };
 }
