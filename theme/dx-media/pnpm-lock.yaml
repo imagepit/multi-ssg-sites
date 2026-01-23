@@ -11,6 +11,9 @@ importers:
       '@orama/orama':
         specifier: ^3.1.14
         version: 3.1.18
+      '@techdoc/auth':
+        specifier: link:../../shared/auth
+        version: link:../../shared/auth
       '@techdoc/contact-form':
         specifier: link:../../shared/contact-form
         version: link:../../shared/contact-form
