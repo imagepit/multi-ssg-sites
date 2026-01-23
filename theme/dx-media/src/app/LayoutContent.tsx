@@ -9,7 +9,6 @@ import type { PageTree } from 'fumadocs-core/server'
 import { CustomStaticSearchDialog } from '@/components/CustomStaticSearchDialog'
 import { SharedNavbar } from '@/components/SharedNavbar'
 import { ProfileSidebar } from '@/components/ProfileSidebar'
-import { AuthProvider } from '@/contexts/AuthContext'
 import type { ProfileConfig } from '@/lib/site-config'
 
 interface LayoutContentProps {
@@ -101,21 +100,19 @@ export function LayoutContent({
   }
 
   return (
-    <AuthProvider>
-      <RootProvider search={searchConfig}>
-        <SharedNavbar title={nav.title} links={baseOptions.links} />
-        <DocsLayout
-          {...baseOptions}
-          nav={docsNav}
-          tree={tree}
-          sidebar={docsSidebar}
-          containerProps={layoutContainerProps}
-          searchToggle={{ enabled: false }}
-          themeSwitch={{ enabled: false }}
-        >
-          {children}
-        </DocsLayout>
-      </RootProvider>
-    </AuthProvider>
+    <RootProvider search={searchConfig}>
+      <SharedNavbar title={nav.title} links={baseOptions.links} />
+      <DocsLayout
+        {...baseOptions}
+        nav={docsNav}
+        tree={tree}
+        sidebar={docsSidebar}
+        containerProps={layoutContainerProps}
+        searchToggle={{ enabled: false }}
+        themeSwitch={{ enabled: false }}
+      >
+        {children}
+      </DocsLayout>
+    </RootProvider>
   )
 }
