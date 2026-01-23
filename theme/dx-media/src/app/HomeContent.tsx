@@ -2,7 +2,6 @@
 
 import { RootProvider } from 'fumadocs-ui/provider/next'
 import DefaultSearchDialog from 'fumadocs-ui/components/dialog/search-default'
-import { HomeLayout } from '@/components/ClientHomeLayout'
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared'
 import { CustomStaticSearchDialog } from '@/components/CustomStaticSearchDialog'
 import { SharedNavbar } from '@/components/SharedNavbar'
@@ -36,12 +35,11 @@ export function HomeContent({ children, baseOptions, isStaticSearch, siteId }: H
         },
       }
 
+  // PostIndexLayout は独自のルートラッパーを持つため、HomeLayout は不要
   return (
     <RootProvider search={searchConfig}>
       <SharedNavbar title={baseOptions.nav?.title} links={baseOptions.links} />
-      <HomeLayout {...baseOptions} nav={{ ...baseOptions.nav, enabled: false }}>
-        {children}
-      </HomeLayout>
+      {children}
     </RootProvider>
   )
 }
