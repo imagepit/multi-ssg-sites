@@ -20,6 +20,11 @@ database_id = "f21f0c13-5956-4c04-93c4-684431d62b83"
 binding = "PAID_CONTENT"
 bucket_name = "techdoc-paid-content-dev"
 
+[[kv_namespaces]]
+binding = "X_OAUTH_STATE"
+id = "placeholder-dev"
+preview_id = "placeholder-dev-preview"
+
 [[queues.producers]]
 binding = "EVENTS_QUEUE"
 queue = "events-dev"
@@ -43,6 +48,10 @@ database_id = "ebe846f5-7caf-4a2c-a626-ece30a100dcd"
 binding = "PAID_CONTENT"
 bucket_name = "techdoc-paid-content-stg"
 
+[[env.stg.kv_namespaces]]
+binding = "X_OAUTH_STATE"
+id = "x-oauth-state-stg"
+
 [[env.stg.queues.producers]]
 binding = "EVENTS_QUEUE"
 queue = "events-stg"
@@ -65,6 +74,10 @@ database_id = "eaed2b51-57b1-4e09-8723-23b4881c2f1b"
 [env.prod.r2_buckets]
 binding = "PAID_CONTENT"
 bucket_name = "techdoc-paid-content-prod"
+
+[[env.prod.kv_namespaces]]
+binding = "X_OAUTH_STATE"
+id = "x-oauth-state-prod"
 
 [[env.prod.queues.producers]]
 binding = "EVENTS_QUEUE"

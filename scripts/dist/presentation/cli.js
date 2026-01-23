@@ -111,6 +111,7 @@ program
     .option('--skip-search-index', 'skip R2 search index sync', false)
     .option('--search-index-prefix <prefix>', 'search index prefix override')
     .option('--search-index-base-url <url>', 'search index base url')
+    .option('--sync-products', 'sync products with X promotion to admin API', false)
     .option('--root <rootDir>', 'workspace root', process.cwd())
     .action(async (siteIdRaw, options) => {
     try {
@@ -120,6 +121,7 @@ program
         const { deploySite } = buildDependencies(options.root);
         const syncAssets = !options.skipAssets;
         const syncSearchIndexes = !options.skipSearchIndex;
+        const syncProducts = Boolean(options.syncProducts);
         const searchIndexBaseUrl = resolveSearchIndexBaseUrl(siteId, options.searchIndexBaseUrl);
         if (syncSearchIndexes && !searchIndexBaseUrl) {
             throw new Error('missing environment variable: NEXT_PUBLIC_SEARCH_INDEX_BASE_URL or R2_PUBLIC_BASE_URL');
@@ -144,6 +146,12 @@ program
                 diffOnly: true
             }
             : undefined;
+        const adminApiConfig = syncProducts
+            ? {
+                baseUrl: requireEnv('ADMIN_API_BASE_URL'),
+                apiKey: requireEnv('ADMIN_API_KEY'),
+            }
+            : undefined;
         await deploySite.execute({
             siteId,
             themeId,
@@ -152,9 +160,11 @@ program
             projectName: options.project,
             syncAssets,
             syncSearchIndexes,
+            syncProducts,
             searchIndexBaseUrl,
             r2Config,
-            searchIndexConfig
+            searchIndexConfig,
+            adminApiConfig
         });
     }
     catch (error) {

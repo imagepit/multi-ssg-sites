@@ -1,4 +1,6 @@
 import { UseCaseError } from '../errors.js';
+import { CollectProductsUseCase } from './collect-products.js';
+import { SyncProductsUseCase } from './sync-products.js';
 export class DeploySiteUseCase {
     runner;
     logger;
@@ -7,6 +9,8 @@ export class DeploySiteUseCase {
     buildSite;
     syncAssetsUseCase;
     syncSearchIndexesUseCase;
+    collectProducts;
+    syncProducts;
     constructor(runner, logger, fileSystem, paths, buildSite, syncAssetsUseCase, syncSearchIndexesUseCase) {
         this.runner = runner;
         this.logger = logger;
@@ -15,6 +19,8 @@ export class DeploySiteUseCase {
         this.buildSite = buildSite;
         this.syncAssetsUseCase = syncAssetsUseCase;
         this.syncSearchIndexesUseCase = syncSearchIndexesUseCase;
+        this.collectProducts = new CollectProductsUseCase(fileSystem, logger);
+        this.syncProducts = new SyncProductsUseCase(logger);
     }
     async execute(input) {
         await this.buildSite.execute({
@@ -54,6 +60,21 @@ export class DeploySiteUseCase {
                 diffOnly: input.searchIndexConfig.diffOnly
             });
             await this.fileSystem.remove(searchIndexesDir);
+        }
+        // Sync products with X promotion to admin API
+        if (input.syncProducts && input.adminApiConfig) {
+            const contentsDir = this.paths.contentsDir(input.siteId);
+            const collectResult = await this.collectProducts.execute({
+                siteId: input.siteId.toString(),
+                contentsDir,
+            });
+            if (collectResult.products.length > 0) {
+                await this.syncProducts.execute({
+                    siteId: input.siteId.toString(),
+                    products: collectResult.products,
+                    adminApi: input.adminApiConfig,
+                });
+            }
         }
         const outputDir = this.paths.themeOutputDir(input.themeId);
         const projectName = input.projectName ?? input.siteId.toString();

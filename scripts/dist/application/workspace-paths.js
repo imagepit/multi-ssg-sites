@@ -16,4 +16,7 @@ export class WorkspacePaths {
     searchIndexesDir(themeId) {
         return path.join(this.themeOutputDir(themeId), 'search-indexes');
     }
+    contentsDir(siteId) {
+        return path.join(this.rootDir, 'contents', siteId.toString(), 'contents');
+    }
 }
