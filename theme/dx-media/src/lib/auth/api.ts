@@ -21,20 +21,23 @@ export async function requestMagicLink(
   email: string,
   next?: string
 ): Promise<RequestLinkResponse> {
-  const baseUrl = getApiBaseUrl()
-  const url = new URL(`${baseUrl}/auth/request_link`)
+  const apiBaseUrl = getApiBaseUrl()
 
-  // next パラメータをメール内リンクに含めるためにクエリパラメータとして送信
-  if (next) {
-    url.searchParams.set('next', next)
-  }
+  // フロントエンドのコールバックURLを構築
+  const callbackUrl = typeof window !== 'undefined'
+    ? `${window.location.origin}/auth/callback`
+    : undefined
 
-  const response = await fetch(url.toString(), {
+  const response = await fetch(`${apiBaseUrl}/auth/request_link`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ email }),
+    body: JSON.stringify({
+      email,
+      callbackUrl,
+      next,
+    }),
   })
 
   if (!response.ok) {

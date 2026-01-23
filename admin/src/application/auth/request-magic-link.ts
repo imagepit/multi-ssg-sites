@@ -5,6 +5,7 @@ import type { MailSender } from './mail-sender.js'
 export interface RequestMagicLinkInput {
   email: string
   baseUrl: string
+  callbackUrl?: string
 }
 
 export interface RequestMagicLinkDeps {
@@ -41,7 +42,15 @@ export async function requestMagicLink(
 
   await deps.magicLinkRepo.create(magicLinkToken)
 
-  const verifyUrl = `${input.baseUrl}/auth/verify?token=${encodeURIComponent(token)}`
+  // callbackUrl が指定されていればそれにtokenを追加、なければ従来のAPI直接URLを使用
+  let verifyUrl: string
+  if (input.callbackUrl) {
+    const url = new URL(input.callbackUrl)
+    url.searchParams.set('token', token)
+    verifyUrl = url.toString()
+  } else {
+    verifyUrl = `${input.baseUrl}/auth/verify?token=${encodeURIComponent(token)}`
+  }
 
   await deps.mailSender.send({
     to: email,
