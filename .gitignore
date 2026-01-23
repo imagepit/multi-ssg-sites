@@ -17,6 +17,7 @@
 .smtcmp_json_db/
 .smtcmp_vector_db.tar.gz
 .wrangler/
+.dev.vars
 docs/
 
 # dependencies
