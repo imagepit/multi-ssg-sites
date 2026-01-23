@@ -57,9 +57,12 @@ export async function verifyMagicLink(
   }
 
   // Issue tokens
+  // TODO: ロールはユーザーエンティティから取得すべき
+  // 現状は全ユーザーにデフォルトで viewer ロールを付与
   const tokenPair: TokenPair = await deps.tokenIssuer.issueTokenPair({
     sub: user.id,
-    email: user.email
+    email: user.email,
+    roles: ['viewer']
   })
 
   return {

@@ -98,6 +98,7 @@ export class JwtTokenVerifier implements TokenVerifier {
     const payload = await verifyJwt(token, this.secret)
     return {
       sub: payload.sub,
+      email: payload.email,
       roles: payload.roles,
       siteIds: payload.siteIds
     }
