@@ -58,20 +58,28 @@ cd admin && pnpm type-check && pnpm test
 | `@techdoc/fumadocs-engine` | MDXプラグイン・サイト設定読み込み |
 
 ### theme/ - テーマ実装
-各テーマは独立したNext.jsプロジェクト。`SITE_ID`環境変数でビルド対象サイトを指定。
-
-```bash
-# 開発
-cd theme/dx-media && SITE_ID=dx-media pnpm dev
-
-# ビルド
-SITE_ID=dx-media pnpm build
-```
+各テーマは独立したNext.jsプロジェクト。統合CLIツール（`techdoc`コマンド）で操作。
 
 ### contents/ - サイトコンテンツ
 各サイトは `specs/spec.json` で設定（テーマ、色、フォント）と `contents/` にMDXファイルを配置。
 
-## 5. 開発原則
+## 5. サイトの開発・デプロイ
+
+### 開発サーバー起動
+サイト毎の開発サーバーを起動し、ローカルでWebサイトの動作確認を行う。
+
+```bash
+pnpm exec techdoc dev v0 --theme fumadocs --production
+```
+
+### Webサイトのデプロイ
+WebサイトをCloudflare環境（Pages、R2）にデプロイして公開する。
+
+```bash
+pnpm exec techdoc deploy v0 --theme fumadocs --production
+```
+
+## 6. 開発原則
 
 ### 1. テスト駆動開発 (TDD)
 **RED → GREEN → REFACTOR** のサイクルを厳守。
@@ -85,7 +93,7 @@ SITE_ID=dx-media pnpm build
 UIや機能を大幅に変更する場合は、既存コードを直接変更せず、
 新しい実装を追加して差し替える。
 
-## 6. 重要な実装ルール
+## 7. 重要な実装ルール
 
 ### shared パッケージの開発フロー
 共有UI・ロジックを開発する際は、**dx-media テーマで動作確認**を行う。
@@ -132,7 +140,7 @@ theme/*
   └── fumadocs-core, fumadocs-mdx（peer依存）
 ```
 
-## 7. チェックリスト
+## 8. チェックリスト
 
 - [ ] 既存コードを破壊せず、必要な拡張で差し替えているか
 - [ ] SRPが守られているか
@@ -141,7 +149,7 @@ theme/*
 - [ ] ビジネスロジックは Domain 層にあるか
 - [ ] sharedパッケージのインポートに`.js`拡張子を付けていないか
 
-## 8. 関連ドキュメント
+## 9. 関連ドキュメント
 
 - 設計書: `specs/new-architecture.md`
 - タスク: `specs/tasks.md`
