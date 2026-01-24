@@ -1,58 +1,15 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
-import { usePathname } from 'next/navigation'
-import { useAuth, getAccessToken } from '@techdoc/auth'
+import {
+  usePaidSection,
+  type PaywallOptions,
+  type SubscriptionPriceOption,
+} from '@techdoc/paid'
 import { PaidSkeleton } from './PaidSkeleton'
 
 // 環境変数から取得
 const SITE_ID = process.env.NEXT_PUBLIC_SITE_ID || ''
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || ''
-
-// 型定義（APIレスポンス形式に合わせた定義）
-interface SaleInfo {
-  price: number
-  originalPrice: number
-  label: string
-  startsAt: string
-  endsAt: string
-  stripeCouponId?: string
-}
-
-interface SinglePurchaseOption {
-  productId: string
-  price: number
-  description?: string
-  stripePriceId: string
-  sale?: SaleInfo
-}
-
-interface SubscriptionPriceOption {
-  billingPeriod: 'monthly' | 'yearly'
-  price: number
-  stripePriceId: string
-  label?: string
-  badge?: string
-  sale?: SaleInfo
-}
-
-interface SubscriptionOption {
-  productId: string
-  name: string
-  description?: string
-  prices: SubscriptionPriceOption[]
-}
-
-// APIレスポンス形式
-interface PaywallOptions {
-  singlePurchase?: SinglePurchaseOption
-  subscription?: SubscriptionOption
-}
-
-interface PaidContentError {
-  type: 'unauthorized' | 'forbidden' | 'not_found' | 'network'
-  message: string
-}
 
 export interface PaidSectionProps {
   sectionId: string
@@ -60,107 +17,9 @@ export interface PaidSectionProps {
 }
 
 /**
- * Paywall情報を取得
- */
-async function fetchPaywallInfo(siteId: string, productId: string): Promise<PaywallOptions> {
-  const params = new URLSearchParams({ siteId, productId })
-  const response = await fetch(`${API_BASE_URL}/api/paywall?${params}`, {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
-  })
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}))
-    throw new Error(errorData.error || `HTTP error! status: ${response.status}`)
-  }
-  return response.json()
-}
-
-/**
- * 有料コンテンツを取得
- */
-async function fetchPaidContent(
-  params: { siteId: string; slug: string; sectionId: string; productId: string },
-  accessToken: string
-): Promise<string> {
-  const searchParams = new URLSearchParams(params)
-  const response = await fetch(`${API_BASE_URL}/api/paid-content?${searchParams}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
-    },
-  })
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}))
-    const error: PaidContentError = {
-      type: response.status === 401 ? 'unauthorized' :
-            response.status === 403 ? 'forbidden' :
-            response.status === 404 ? 'not_found' : 'network',
-      message: errorData.error || `HTTP error! status: ${response.status}`,
-    }
-    throw error
-  }
-
-  const { html } = await response.json()
-  return html
-}
-
-/**
- * Checkoutセッションを作成
- */
-async function createCheckoutSession(
-  params: {
-    productId: string
-    stripePriceId: string
-    mode: 'payment' | 'subscription'
-    billingPeriod?: 'monthly' | 'yearly'
-    returnContext: { siteId: string; slug: string; sectionId: string }
-  },
-  accessToken: string
-): Promise<string> {
-  const origin = typeof window !== 'undefined' ? window.location.origin : ''
-  // URLSearchParamsを使うと{CHECKOUT_SESSION_ID}がエンコードされてしまうため、
-  // 手動で構築してプレースホルダーはそのまま残す
-  const otherParams = new URLSearchParams({
-    siteId: params.returnContext.siteId,
-    slug: params.returnContext.slug,
-    sectionId: params.returnContext.sectionId,
-    productId: params.productId,
-  })
-  // {CHECKOUT_SESSION_ID}はStripeが置換するプレースホルダーなのでエンコードしない
-  const successUrl = `${origin}/purchase-complete?session_id={CHECKOUT_SESSION_ID}&${otherParams}`
-  const cancelUrl = `${origin}/${params.returnContext.slug}#${params.returnContext.sectionId}`
-
-  const response = await fetch(`${API_BASE_URL}/api/checkout/create`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify({
-      productId: params.productId,
-      stripePriceId: params.stripePriceId,
-      mode: params.mode,
-      billingPeriod: params.billingPeriod,
-      successUrl,
-      cancelUrl,
-    }),
-  })
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}))
-    throw new Error(errorData.error || `Checkout creation failed (${response.status})`)
-  }
-
-  const { checkoutUrl } = await response.json()
-  return checkoutUrl
-}
-
-/**
  * 有料コンテンツセクションコンポーネント
  *
- * PremiumPlaceholderの代わりに使用し、以下の状態を管理:
+ * 以下の状態を管理:
  * - Paywall読み込み中: Skeleton UI
  * - 未ログイン: ログインボタン付きPaywall
  * - ログイン済み・未購入: 購入ボタン付きPaywall
@@ -169,111 +28,28 @@ async function createCheckoutSession(
  * - エラー: エラーメッセージ + リトライボタン
  */
 export function PaidSection({ sectionId, productId }: PaidSectionProps) {
-  const pathname = usePathname()
-  const { user, isLoading: authLoading } = useAuth()
-
-  // アクセストークンを状態として管理
-  const [accessToken, setAccessToken] = useState<string | null>(null)
-  useEffect(() => {
-    setAccessToken(getAccessToken())
-  }, [user])
-
-  // パスからslugを生成（/docs/ai/premium-content → ai/premium-content）
-  const slug = pathname.replace(/^\/docs\//, '').replace(/^\//, '')
-
-  // Paywall情報の状態
-  const [paywallInfo, setPaywallInfo] = useState<PaywallOptions | null>(null)
-  const [paywallLoading, setPaywallLoading] = useState(true)
-  const [paywallError, setPaywallError] = useState<Error | null>(null)
-
-  // 有料コンテンツの状態
-  const [content, setContent] = useState<string | null>(null)
-  const [contentLoading, setContentLoading] = useState(false)
-  const [contentError, setContentError] = useState<PaidContentError | null>(null)
-
-  // Checkoutの状態
-  const [checkoutLoading, setCheckoutLoading] = useState(false)
-  const [checkoutError, setCheckoutError] = useState<Error | null>(null)
-
-  // Paywall情報取得
-  const loadPaywallInfo = useCallback(async () => {
-    setPaywallLoading(true)
-    setPaywallError(null)
-    try {
-      const info = await fetchPaywallInfo(SITE_ID, productId)
-      setPaywallInfo(info)
-    } catch (err) {
-      setPaywallError(err instanceof Error ? err : new Error('Unknown error'))
-    } finally {
-      setPaywallLoading(false)
-    }
-  }, [productId])
-
-  // 有料コンテンツ取得
-  const loadContent = useCallback(async () => {
-    if (!accessToken) return
-    setContentLoading(true)
-    setContentError(null)
-    try {
-      const html = await fetchPaidContent(
-        { siteId: SITE_ID, slug, sectionId, productId },
-        accessToken
-      )
-      setContent(html)
-    } catch (err) {
-      const paidError = err as PaidContentError
-      if (paidError.type) {
-        setContentError(paidError)
-      } else {
-        setContentError({ type: 'network', message: String(err) })
-      }
-    } finally {
-      setContentLoading(false)
-    }
-  }, [accessToken, slug, sectionId, productId])
-
-  // Checkoutセッション作成
-  const handlePurchase = useCallback(async (
-    stripePriceId: string,
-    mode: 'payment' | 'subscription',
-    billingPeriod?: 'monthly' | 'yearly'
-  ) => {
-    if (!accessToken) return
-    setCheckoutLoading(true)
-    setCheckoutError(null)
-    try {
-      const checkoutUrl = await createCheckoutSession(
-        {
-          productId,
-          stripePriceId,
-          mode,
-          billingPeriod,
-          returnContext: { siteId: SITE_ID, slug, sectionId },
-        },
-        accessToken
-      )
-      // Stripe Checkoutへリダイレクト
-      window.location.href = checkoutUrl
-    } catch (err) {
-      setCheckoutError(err instanceof Error ? err : new Error('Unknown error'))
-      setCheckoutLoading(false)
-    }
-  }, [accessToken, productId, slug, sectionId])
-
-  // 初回読み込み
-  useEffect(() => {
-    loadPaywallInfo()
-  }, [loadPaywallInfo])
-
-  // ログイン状態が変わったらコンテンツ取得
-  useEffect(() => {
-    if (accessToken) {
-      loadContent()
-    }
-  }, [accessToken, loadContent])
+  const {
+    paywallInfo,
+    paywallLoading,
+    paywallError,
+    loadPaywallInfo,
+    content,
+    contentLoading,
+    contentError,
+    loadContent,
+    checkoutLoading,
+    checkoutError,
+    handlePurchase,
+    isAuthenticated,
+  } = usePaidSection({
+    siteId: SITE_ID,
+    apiBaseUrl: API_BASE_URL,
+    sectionId,
+    productId,
+  })
 
   // ローディング状態
-  if (authLoading || paywallLoading) {
+  if (paywallLoading) {
     return <PaidSkeleton />
   }
 
@@ -300,7 +76,7 @@ export function PaidSection({ sectionId, productId }: PaidSectionProps) {
   }
 
   // コンテンツ読み込み中（ログイン済み・購入済みの可能性あり）
-  if (accessToken && contentLoading) {
+  if (isAuthenticated && contentLoading) {
     return <PaidSkeleton />
   }
 
@@ -323,7 +99,7 @@ export function PaidSection({ sectionId, productId }: PaidSectionProps) {
       sectionId={sectionId}
       productId={productId}
       paywallInfo={paywallInfo}
-      isAuthenticated={!!user}
+      isAuthenticated={isAuthenticated}
       onLogin={handleLogin}
       onPurchase={handlePurchase}
       isCheckoutLoading={checkoutLoading}
@@ -337,7 +113,6 @@ export function PaidSection({ sectionId, productId }: PaidSectionProps) {
  */
 function handleLogin() {
   if (typeof window !== 'undefined') {
-    // 現在のURLを保存してログインページへ
     const returnUrl = window.location.href
     window.location.href = `/login?next=${encodeURIComponent(returnUrl)}`
   }
@@ -612,7 +387,7 @@ function SalePriceDisplay({
   originalPrice: number
   salePrice: number
   saleLabel?: string
-  saleEndsAt?: string  // ISO 8601形式
+  saleEndsAt?: string
 }) {
   const formatEndDate = (isoString: string) => {
     const date = new Date(isoString)

@@ -1,236 +1,28 @@
 'use client'
 
-import { useEffect, useState, useCallback, Suspense, useRef } from 'react'
+import { Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { useAuth, getAccessToken } from '@techdoc/auth'
+import { usePurchaseComplete } from '@techdoc/paid'
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || ''
 
-// ポーリング設定
-const POLLING_INTERVAL = 2000 // 2秒
-const WEBHOOK_WAIT_TIME = 10000 // Webhook待機時間: 10秒
-const FALLBACK_RETRY_COUNT = 3 // フォールバック時のリトライ回数
-const FALLBACK_RETRY_INTERVAL = 2000 // フォールバック時のリトライ間隔: 2秒
-
-type PurchaseStatus = 'checking' | 'verifying' | 'completed' | 'pending' | 'error'
-
-/**
- * 有料コンテンツ取得（購入確認用）
- */
-async function checkPaidContentAccess(
-  params: { siteId: string; slug: string; sectionId: string; productId: string },
-  accessToken: string
-): Promise<boolean> {
-  const searchParams = new URLSearchParams(params)
-  const response = await fetch(`${API_BASE_URL}/api/paid-content?${searchParams}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
-    },
-  })
-  return response.ok
-}
-
-/**
- * Stripe Checkout セッション状態を確認（フォールバック）
- * Webhookが届かなかった場合に、直接Stripeからセッション状態を取得し、
- * 支払い完了であればentitlementを作成する
- */
-async function verifyCheckoutSession(
-  sessionId: string,
-  accessToken: string
-): Promise<{ verified: boolean; error?: string }> {
-  const params = new URLSearchParams({ sessionId })
-  const response = await fetch(`${API_BASE_URL}/api/checkout/status?${params}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`,
-    },
-  })
-
-  if (!response.ok) {
-    const data = await response.json().catch(() => ({}))
-    return { verified: false, error: data.error || 'Verification failed' }
-  }
-
-  const data = await response.json()
-  return { verified: data.verified }
-}
-
 function PurchaseCompleteContent() {
   const searchParams = useSearchParams()
-  const { user, isLoading: authLoading } = useAuth()
 
-  // アクセストークンを状態として管理
-  const [accessToken, setAccessToken] = useState<string | null>(null)
-  useEffect(() => {
-    if (!authLoading) {
-      setAccessToken(getAccessToken())
-    }
-  }, [user, authLoading])
-
-  const sessionId = searchParams.get('session_id')
-  const siteId = searchParams.get('siteId')
-  const slug = searchParams.get('slug')
-  const sectionId = searchParams.get('sectionId')
-  const productId = searchParams.get('productId')
-
-  const [status, setStatus] = useState<PurchaseStatus>('checking')
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const [elapsedTime, setElapsedTime] = useState(0)
-
-  // フォールバック処理が実行されたかどうか
-  const fallbackExecuted = useRef(false)
-
-  // コンテンツページへのURL
-  const contentUrl = slug ? `/${slug}${sectionId ? `#${sectionId}` : ''}` : null
-
-  // 購入完了確認（/api/paid-contentポーリング）
-  const checkPurchaseStatus = useCallback(async () => {
-    if (!accessToken || !siteId || !slug || !sectionId || !productId) {
-      return false
-    }
-
-    try {
-      // /api/paid-contentを呼んで200が返れば購入完了
-      const hasAccess = await checkPaidContentAccess(
-        {
-          siteId,
-          slug,
-          sectionId,
-          productId,
-        },
-        accessToken
-      )
-      return hasAccess
-    } catch {
-      // エラーは無視してポーリング継続
-      return false
-    }
-  }, [accessToken, siteId, slug, sectionId, productId])
-
-  // Stripeセッション状態確認（フォールバック）
-  const verifyWithStripe = useCallback(async (): Promise<boolean> => {
-    if (!accessToken || !sessionId) {
-      return false
-    }
-
-    // リトライロジック
-    for (let i = 0; i < FALLBACK_RETRY_COUNT; i++) {
-      try {
-        const result = await verifyCheckoutSession(sessionId, accessToken)
-        if (result.verified) {
-          return true
-        }
-        // 最後のリトライでなければ待機
-        if (i < FALLBACK_RETRY_COUNT - 1) {
-          await new Promise(resolve => setTimeout(resolve, FALLBACK_RETRY_INTERVAL))
-        }
-      } catch {
-        // エラーは無視してリトライ
-        if (i < FALLBACK_RETRY_COUNT - 1) {
-          await new Promise(resolve => setTimeout(resolve, FALLBACK_RETRY_INTERVAL))
-        }
-      }
-    }
-    return false
-  }, [accessToken, sessionId])
-
-  // ポーリング処理
-  useEffect(() => {
-    if (!sessionId) {
-      setStatus('error')
-      setErrorMessage('セッション情報が見つかりません')
-      return
-    }
-
-    if (!accessToken) {
-      // 認証待ち
-      return
-    }
-
-    let isMounted = true
-    let pollingInterval: NodeJS.Timeout | null = null
-    let webhookTimer: NodeJS.Timeout | null = null
-    let elapsedTimer: NodeJS.Timeout | null = null
-
-    const cleanup = () => {
-      if (pollingInterval) clearInterval(pollingInterval)
-      if (webhookTimer) clearTimeout(webhookTimer)
-      if (elapsedTimer) clearInterval(elapsedTimer)
-    }
-
-    const startPolling = async () => {
-      // 経過時間カウンター
-      elapsedTimer = setInterval(() => {
-        if (isMounted) {
-          setElapsedTime((prev) => prev + 1)
-        }
-      }, 1000)
-
-      // ポーリング開始
-      const poll = async (): Promise<boolean> => {
-        const isCompleted = await checkPurchaseStatus()
-        if (isMounted && isCompleted) {
-          setStatus('completed')
-          cleanup()
-          return true
-        }
-        return false
-      }
-
-      // 初回チェック
-      const initialComplete = await poll()
-      if (initialComplete) return
-
-      // 定期ポーリング
-      pollingInterval = setInterval(poll, POLLING_INTERVAL)
-
-      // Webhook待機後のフォールバック処理
-      webhookTimer = setTimeout(async () => {
-        if (!isMounted || fallbackExecuted.current) return
-        fallbackExecuted.current = true
-
-        // ポーリングを停止
-        if (pollingInterval) {
-          clearInterval(pollingInterval)
-          pollingInterval = null
-        }
-
-        // フォールバック: Stripe APIで直接確認
-        if (isMounted) {
-          setStatus('verifying')
-        }
-
-        const verified = await verifyWithStripe()
-
-        if (!isMounted) return
-
-        if (verified) {
-          // Stripe確認成功 → 完了
-          setStatus('completed')
-        } else {
-          // Stripe確認も失敗
-          setStatus('pending')
-        }
-
-        if (elapsedTimer) clearInterval(elapsedTimer)
-      }, WEBHOOK_WAIT_TIME)
-    }
-
-    startPolling()
-
-    return () => {
-      isMounted = false
-      cleanup()
-    }
-  }, [sessionId, accessToken, checkPurchaseStatus, verifyWithStripe])
+  const { status, errorMessage, elapsedTime, contentUrl, hasValidParams } = usePurchaseComplete({
+    apiBaseUrl: API_BASE_URL,
+    params: {
+      sessionId: searchParams.get('session_id'),
+      siteId: searchParams.get('siteId'),
+      slug: searchParams.get('slug'),
+      sectionId: searchParams.get('sectionId'),
+      productId: searchParams.get('productId'),
+    },
+  })
 
   // パラメータ不足エラー
-  if (!sessionId || !siteId || !slug || !sectionId || !productId) {
+  if (!hasValidParams) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-fd-background">
         <div className="max-w-md mx-auto p-8 text-center">

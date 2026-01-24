@@ -20,6 +20,9 @@ importers:
       '@techdoc/fumadocs-engine':
         specifier: file:../../shared/fumadocs-engine
         version: file:../../shared/fumadocs-engine(fumadocs-core@16.3.2(@types/react@19.2.7)(lucide-react@0.544.0(react@19.2.3))(next@16.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@3.25.76))(fumadocs-mdx@14.2.2(@types/react@19.2.7)(fumadocs-core@16.3.2(@types/react@19.2.7)(lucide-react@0.544.0(react@19.2.3))(next@16.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@3.25.76))(next@16.1.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3))(react@19.2.3)(zod@3.25.76)
+      '@techdoc/paid':
+        specifier: link:../../shared/paid
+        version: link:../../shared/paid
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
