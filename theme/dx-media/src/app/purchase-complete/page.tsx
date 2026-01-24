@@ -157,6 +157,12 @@ function PurchaseCompleteContent() {
     let webhookTimer: NodeJS.Timeout | null = null
     let elapsedTimer: NodeJS.Timeout | null = null
 
+    const cleanup = () => {
+      if (pollingInterval) clearInterval(pollingInterval)
+      if (webhookTimer) clearTimeout(webhookTimer)
+      if (elapsedTimer) clearInterval(elapsedTimer)
+    }
+
     const startPolling = async () => {
       // 経過時間カウンター
       elapsedTimer = setInterval(() => {
@@ -165,10 +171,34 @@ function PurchaseCompleteContent() {
         }
       }, 1000)
 
+      // ポーリング開始
+      const poll = async (): Promise<boolean> => {
+        const isCompleted = await checkPurchaseStatus()
+        if (isMounted && isCompleted) {
+          setStatus('completed')
+          cleanup()
+          return true
+        }
+        return false
+      }
+
+      // 初回チェック
+      const initialComplete = await poll()
+      if (initialComplete) return
+
+      // 定期ポーリング
+      pollingInterval = setInterval(poll, POLLING_INTERVAL)
+
       // Webhook待機後のフォールバック処理
       webhookTimer = setTimeout(async () => {
         if (!isMounted || fallbackExecuted.current) return
         fallbackExecuted.current = true
+
+        // ポーリングを停止
+        if (pollingInterval) {
+          clearInterval(pollingInterval)
+          pollingInterval = null
+        }
 
         // フォールバック: Stripe APIで直接確認
         if (isMounted) {
@@ -180,53 +210,24 @@ function PurchaseCompleteContent() {
         if (!isMounted) return
 
         if (verified) {
-          // Stripe確認成功、もう一度コンテンツアクセスを試行
-          const hasAccess = await checkPurchaseStatus()
-          if (hasAccess) {
-            setStatus('completed')
-          } else {
-            // entitlementは作成されたがコンテンツアクセスは失敗
-            // それでも購入は完了している可能性が高いので完了扱い
-            setStatus('completed')
-          }
+          // Stripe確認成功 → 完了
+          setStatus('completed')
         } else {
           // Stripe確認も失敗
           setStatus('pending')
         }
 
-        if (pollingInterval) clearInterval(pollingInterval)
         if (elapsedTimer) clearInterval(elapsedTimer)
       }, WEBHOOK_WAIT_TIME)
-
-      // ポーリング開始
-      const poll = async () => {
-        const isCompleted = await checkPurchaseStatus()
-        if (isMounted && isCompleted) {
-          setStatus('completed')
-          if (pollingInterval) clearInterval(pollingInterval)
-          if (webhookTimer) clearTimeout(webhookTimer)
-          if (elapsedTimer) clearInterval(elapsedTimer)
-        }
-      }
-
-      // 初回チェック
-      await poll()
-
-      // 定期ポーリング（Webhook待機中のみ）
-      if (status === 'checking') {
-        pollingInterval = setInterval(poll, POLLING_INTERVAL)
-      }
     }
 
     startPolling()
 
     return () => {
       isMounted = false
-      if (pollingInterval) clearInterval(pollingInterval)
-      if (webhookTimer) clearTimeout(webhookTimer)
-      if (elapsedTimer) clearInterval(elapsedTimer)
+      cleanup()
     }
-  }, [sessionId, accessToken, checkPurchaseStatus, verifyWithStripe, status])
+  }, [sessionId, accessToken, checkPurchaseStatus, verifyWithStripe])
 
   // パラメータ不足エラー
   if (!sessionId || !siteId || !slug || !sectionId || !productId) {
