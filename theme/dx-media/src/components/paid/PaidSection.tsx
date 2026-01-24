@@ -125,14 +125,16 @@ async function createCheckoutSession(
   accessToken: string
 ): Promise<string> {
   const origin = typeof window !== 'undefined' ? window.location.origin : ''
-  const successParams = new URLSearchParams({
-    session_id: '{CHECKOUT_SESSION_ID}',
+  // URLSearchParamsを使うと{CHECKOUT_SESSION_ID}がエンコードされてしまうため、
+  // 手動で構築してプレースホルダーはそのまま残す
+  const otherParams = new URLSearchParams({
     siteId: params.returnContext.siteId,
     slug: params.returnContext.slug,
     sectionId: params.returnContext.sectionId,
     productId: params.productId,
   })
-  const successUrl = `${origin}/purchase-complete?${successParams}`
+  // {CHECKOUT_SESSION_ID}はStripeが置換するプレースホルダーなのでエンコードしない
+  const successUrl = `${origin}/purchase-complete?session_id={CHECKOUT_SESSION_ID}&${otherParams}`
   const cancelUrl = `${origin}/${params.returnContext.slug}#${params.returnContext.sectionId}`
 
   const response = await fetch(`${API_BASE_URL}/api/checkout/create`, {
