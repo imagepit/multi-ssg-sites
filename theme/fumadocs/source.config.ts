@@ -12,6 +12,7 @@ import { rehypeNextImage } from '@/lib/rehype-next-image'
 import { rehypeBashClass } from '@/lib/rehype-bash-class'
 import { transformerRawNotationDiff } from '@/lib/shiki-raw-notation'
 import { transformerBashClass } from '@/lib/shiki-bash-transformer'
+import { remarkLinkCard } from '@techdoc/fumadocs-engine'
 
 // SITE_ID が指定されている場合は、ワークスペース直下の contents/[site]/contents を参照する
 // 未指定時は、このプロジェクト直下のサンプル content/ を参照
@@ -46,6 +47,8 @@ export default defineConfig({
   mdxOptions: {
     preset: 'fumadocs',
     remarkPlugins: (v) => [
+      // remarkLinkCard runs early before other plugins affect the tree
+      remarkLinkCard,
       // before default plugins
       remarkFilesToMdx,
       remarkStepBlocks,
