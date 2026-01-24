@@ -47,6 +47,7 @@ function PurchaseCompleteContent() {
   const siteId = searchParams.get('siteId')
   const slug = searchParams.get('slug')
   const sectionId = searchParams.get('sectionId')
+  const productId = searchParams.get('productId')
 
   const [status, setStatus] = useState<PurchaseStatus>('checking')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -57,19 +58,18 @@ function PurchaseCompleteContent() {
 
   // 購入完了確認（/api/paid-contentポーリング）
   const checkPurchaseStatus = useCallback(async () => {
-    if (!accessToken || !siteId || !slug || !sectionId) {
+    if (!accessToken || !siteId || !slug || !sectionId || !productId) {
       return false
     }
 
     try {
-      // productIdは不明だが、sectionIdで特定できるはず
       // /api/paid-contentを呼んで200が返れば購入完了
       const hasAccess = await checkPaidContentAccess(
         {
           siteId,
           slug,
           sectionId,
-          productId: '', // 空でも良い（サーバー側でsectionIdから特定）
+          productId,
         },
         accessToken
       )
@@ -78,7 +78,7 @@ function PurchaseCompleteContent() {
       // エラーは無視してポーリング継続
       return false
     }
-  }, [accessToken, siteId, slug, sectionId])
+  }, [accessToken, siteId, slug, sectionId, productId])
 
   // ポーリング処理
   useEffect(() => {
@@ -145,7 +145,7 @@ function PurchaseCompleteContent() {
   }, [sessionId, accessToken, checkPurchaseStatus, status])
 
   // パラメータ不足エラー
-  if (!sessionId || !siteId || !slug || !sectionId) {
+  if (!sessionId || !siteId || !slug || !sectionId || !productId) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-fd-background">
         <div className="max-w-md mx-auto p-8 text-center">

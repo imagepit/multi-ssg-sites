@@ -9,13 +9,31 @@ import { PaidSkeleton } from './PaidSkeleton'
 const SITE_ID = process.env.NEXT_PUBLIC_SITE_ID || ''
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || ''
 
-// 型定義（hooks パッケージから直接インポートできない場合のためのローカル定義）
+// 型定義（APIレスポンス形式に合わせた定義）
+interface SaleInfo {
+  price: number
+  originalPrice: number
+  label: string
+  startsAt: string
+  endsAt: string
+  stripeCouponId?: string
+}
+
+interface SinglePurchaseOption {
+  productId: string
+  price: number
+  description?: string
+  stripePriceId: string
+  sale?: SaleInfo
+}
+
 interface SubscriptionPriceOption {
   billingPeriod: 'monthly' | 'yearly'
   price: number
   stripePriceId: string
   label?: string
   badge?: string
+  sale?: SaleInfo
 }
 
 interface SubscriptionOption {
@@ -25,17 +43,10 @@ interface SubscriptionOption {
   prices: SubscriptionPriceOption[]
 }
 
-interface PaywallInfo {
-  productId: string
-  productName: string
-  price: number
-  currency: string
-  stripePriceId: string
-  description?: string
-  salePrice?: number
-  saleEndsAt?: number
-  saleLabel?: string
-  subscriptionOptions?: SubscriptionOption[]
+// APIレスポンス形式
+interface PaywallOptions {
+  singlePurchase?: SinglePurchaseOption
+  subscription?: SubscriptionOption
 }
 
 interface PaidContentError {
@@ -51,7 +62,7 @@ export interface PaidSectionProps {
 /**
  * Paywall情報を取得
  */
-async function fetchPaywallInfo(siteId: string, productId: string): Promise<PaywallInfo> {
+async function fetchPaywallInfo(siteId: string, productId: string): Promise<PaywallOptions> {
   const params = new URLSearchParams({ siteId, productId })
   const response = await fetch(`${API_BASE_URL}/api/paywall?${params}`, {
     method: 'GET',
@@ -119,6 +130,7 @@ async function createCheckoutSession(
     siteId: params.returnContext.siteId,
     slug: params.returnContext.slug,
     sectionId: params.returnContext.sectionId,
+    productId: params.productId,
   })
   const successUrl = `${origin}/purchase-complete?${successParams}`
   const cancelUrl = `${origin}/${params.returnContext.slug}#${params.returnContext.sectionId}`
@@ -173,7 +185,7 @@ export function PaidSection({ sectionId, productId }: PaidSectionProps) {
   const slug = pathname.replace(/^\/docs\//, '').replace(/^\//, '')
 
   // Paywall情報の状態
-  const [paywallInfo, setPaywallInfo] = useState<PaywallInfo | null>(null)
+  const [paywallInfo, setPaywallInfo] = useState<PaywallOptions | null>(null)
   const [paywallLoading, setPaywallLoading] = useState(true)
   const [paywallError, setPaywallError] = useState<Error | null>(null)
 
@@ -405,7 +417,7 @@ function PaywallDisplay({
 }: {
   sectionId: string
   productId: string
-  paywallInfo: PaywallInfo | null
+  paywallInfo: PaywallOptions | null
   isAuthenticated: boolean
   onLogin: () => void
   onPurchase: (
@@ -419,6 +431,9 @@ function PaywallDisplay({
   const defaultMessage = isAuthenticated
     ? 'このセクションは有料コンテンツです。購入するとアクセスできるようになります。'
     : 'このセクションは有料コンテンツです。ログインして購入状況を確認するか、新規購入してください。'
+
+  const singlePurchase = paywallInfo?.singlePurchase
+  const subscription = paywallInfo?.subscription
 
   return (
     <div
@@ -445,7 +460,7 @@ function PaywallDisplay({
         </div>
         <div>
           <h3 className="text-lg font-semibold text-fd-foreground">
-            {paywallInfo?.productName || '有料コンテンツ'}
+            {subscription?.name || '有料コンテンツ'}
           </h3>
           <p className="text-fd-muted-foreground text-sm">{defaultMessage}</p>
         </div>
@@ -488,51 +503,52 @@ function PaywallDisplay({
       {isAuthenticated && paywallInfo && (
         <div className="grid gap-4 md:grid-cols-2">
           {/* 単体購入 */}
-          <div
-            className={`rounded-lg border ${
-              paywallInfo.salePrice ? 'border-red-500 border-2' : 'border-fd-border'
-            } bg-fd-card p-4`}
-          >
-            <h4 className="font-semibold text-fd-foreground mb-1">この記事のみ</h4>
-            {paywallInfo.description && (
-              <p className="text-xs text-fd-muted-foreground mb-3">
-                {paywallInfo.description}
-              </p>
-            )}
-            <div className="mb-3">
-              {paywallInfo.salePrice ? (
-                <SalePriceDisplay
-                  originalPrice={paywallInfo.price}
-                  salePrice={paywallInfo.salePrice}
-                  saleLabel={paywallInfo.saleLabel}
-                  saleEndsAt={paywallInfo.saleEndsAt}
-                />
-              ) : (
-                <div className="flex items-baseline gap-1">
-                  <span className="text-2xl font-bold text-fd-foreground">
-                    ¥{paywallInfo.price.toLocaleString()}
-                  </span>
-                </div>
-              )}
-            </div>
-            <button
-              type="button"
-              onClick={() => onPurchase(paywallInfo.stripePriceId, 'payment')}
-              disabled={isCheckoutLoading}
-              className={`w-full rounded-lg px-4 py-2 text-sm font-semibold transition ${
-                paywallInfo.salePrice
-                  ? 'bg-red-500 text-white hover:bg-red-600'
-                  : 'bg-fd-primary text-fd-primary-foreground hover:opacity-90'
-              } disabled:opacity-50`}
+          {singlePurchase && (
+            <div
+              className={`rounded-lg border ${
+                singlePurchase.sale ? 'border-red-500 border-2' : 'border-fd-border'
+              } bg-fd-card p-4`}
             >
-              {isCheckoutLoading ? '処理中...' : '購入する'}
-            </button>
-          </div>
+              <h4 className="font-semibold text-fd-foreground mb-1">この記事のみ</h4>
+              {singlePurchase.description && (
+                <p className="text-xs text-fd-muted-foreground mb-3">
+                  {singlePurchase.description}
+                </p>
+              )}
+              <div className="mb-3">
+                {singlePurchase.sale ? (
+                  <SalePriceDisplay
+                    originalPrice={singlePurchase.sale.originalPrice}
+                    salePrice={singlePurchase.sale.price}
+                    saleLabel={singlePurchase.sale.label}
+                    saleEndsAt={singlePurchase.sale.endsAt}
+                  />
+                ) : (
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-2xl font-bold text-fd-foreground">
+                      ¥{singlePurchase.price.toLocaleString()}
+                    </span>
+                  </div>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => onPurchase(singlePurchase.stripePriceId, 'payment')}
+                disabled={isCheckoutLoading}
+                className={`w-full rounded-lg px-4 py-2 text-sm font-semibold transition ${
+                  singlePurchase.sale
+                    ? 'bg-red-500 text-white hover:bg-red-600'
+                    : 'bg-fd-primary text-fd-primary-foreground hover:opacity-90'
+                } disabled:opacity-50`}
+              >
+                {isCheckoutLoading ? '処理中...' : '購入する'}
+              </button>
+            </div>
+          )}
 
           {/* サブスクリプション */}
-          {paywallInfo.subscriptionOptions?.map((subscription) => (
+          {subscription && (
             <div
-              key={subscription.productId}
               className="rounded-lg border-2 border-fd-primary bg-fd-card p-4"
             >
               <h4 className="font-semibold text-fd-foreground mb-1">
@@ -544,7 +560,7 @@ function PaywallDisplay({
                 </p>
               )}
               <div className="space-y-2">
-                {subscription.prices.map((price) => (
+                {subscription.prices.map((price: SubscriptionPriceOption) => (
                   <button
                     key={price.billingPeriod}
                     type="button"
@@ -577,7 +593,7 @@ function PaywallDisplay({
                 ))}
               </div>
             </div>
-          ))}
+          )}
         </div>
       )}
     </div>
@@ -596,10 +612,10 @@ function SalePriceDisplay({
   originalPrice: number
   salePrice: number
   saleLabel?: string
-  saleEndsAt?: number
+  saleEndsAt?: string  // ISO 8601形式
 }) {
-  const formatEndDate = (timestamp: number) => {
-    const date = new Date(timestamp)
+  const formatEndDate = (isoString: string) => {
+    const date = new Date(isoString)
     const month = date.getMonth() + 1
     const day = date.getDate()
     const hours = date.getHours().toString().padStart(2, '0')
