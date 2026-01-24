@@ -10,6 +10,10 @@
     "./components": {
       "import": "./src/components/PremiumPlaceholder.tsx",
       "types": "./src/components/PremiumPlaceholder.tsx"
+    },
+    "./hooks": {
+      "import": "./src/hooks/index.ts",
+      "types": "./src/hooks/index.ts"
     }
   },
   "files": [

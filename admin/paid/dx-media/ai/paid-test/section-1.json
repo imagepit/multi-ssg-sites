@@ -1,0 +1,4 @@
+{"html": "<h2>有料セクション</h2><p>このセクションは有料コンテンツです。決済が完了した方のみ閲覧できます。</p><pre><code class=\"language-typescript\">// 有料コードサンプル
+const secret = \"premium content\";
+console.log(secret);
+</code></pre>"}
