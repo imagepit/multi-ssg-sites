@@ -70,7 +70,7 @@ export function buildFrontmatterSchema(extend?: FrontmatterSchemaBuilder) {
 
 export function buildMdxOptions() {
   return {
-    preset: 'fumadocs',
+    preset: 'fumadocs' as const,
     remarkPlugins: (v: any) => [
       remarkFilesToMdx,
       remarkStepBlocks,
