@@ -6,6 +6,7 @@ import { remarkStepBlocks } from './plugins/remark-steps.js'
 import { remarkCodeTitleBeforeBlocks } from './plugins/remark-code-title.js'
 import { remarkAdmonitionBlocks } from './plugins/remark-admonition-blocks.js'
 import { remarkPremiumBlocks } from './plugins/remark-premium-blocks.js'
+import { remarkLinkCard, type RemarkLinkCardOptions } from './plugins/remark-link-card.js'
 import { rehypeResolveImages } from './plugins/rehype-resolve-images.js'
 import { rehypeNextImage } from './plugins/rehype-next-image.js'
 import { rehypeBashClass } from './plugins/rehype-bash-class.js'
@@ -68,10 +69,20 @@ export function buildFrontmatterSchema(extend?: FrontmatterSchemaBuilder) {
   return extended.passthrough()
 }
 
-export function buildMdxOptions() {
+export interface BuildMdxOptionsConfig {
+  /** リンクカードプラグインのオプション */
+  linkCard?: RemarkLinkCardOptions | false
+}
+
+export function buildMdxOptions(config: BuildMdxOptionsConfig = {}) {
+  const { linkCard = {} } = config
+
   return {
     preset: 'fumadocs' as const,
     remarkPlugins: (v: any) => [
+      // remarkLinkCard runs early before other plugins affect the tree
+      // Set linkCard: false to disable
+      ...(linkCard !== false ? [[remarkLinkCard, linkCard]] : []),
       remarkFilesToMdx,
       remarkStepBlocks,
       remarkCodeTitleBeforeBlocks,
