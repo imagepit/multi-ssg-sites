@@ -13,6 +13,7 @@ import { handleAuthVerify } from './handlers/auth-verify.js'
 import { handleAuthRefresh } from './handlers/auth-refresh.js'
 import { handlePaidContent } from './handlers/paid-content.js'
 import { handleCheckoutCreate } from './handlers/checkout.js'
+import { handleCheckoutStatus } from './handlers/checkout-status.js'
 import { handleStripeWebhook } from './handlers/stripe-webhook.js'
 import { handleGetPaywallOptions } from './handlers/paywall.js'
 import { applyCors } from './middleware/cors.js'
@@ -83,6 +84,15 @@ export async function handleHttpRequest(
       return applyCors(checkoutAuth, origin)
     }
     return applyCors(await handleCheckoutCreate(request, env, checkoutAuth), origin)
+  }
+
+  // Checkout status endpoint (verify session and create entitlement if needed)
+  if (url.pathname === '/api/checkout/status' && request.method === 'GET') {
+    const statusAuth = await requirePaidContentAuth(request, env)
+    if (statusAuth instanceof Response) {
+      return applyCors(statusAuth, origin)
+    }
+    return applyCors(await handleCheckoutStatus(request, env, statusAuth), origin)
   }
 
   const auth = await requireAuth(request, deps)

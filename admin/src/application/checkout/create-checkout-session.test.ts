@@ -34,6 +34,18 @@ class FakeStripeClient implements StripeClient {
       checkoutUrl: 'https://checkout.stripe.com/pay/cs_test_123'
     }
   }
+
+  async getCheckoutSession(_sessionId: string) {
+    return {
+      sessionId: 'cs_test_123',
+      status: 'complete' as const,
+      paymentStatus: 'paid' as const,
+      metadata: {
+        userId: 'user-456',
+        productId: 'product-123'
+      }
+    }
+  }
 }
 
 describe('createCheckoutSession', () => {

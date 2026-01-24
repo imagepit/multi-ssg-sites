@@ -2,7 +2,8 @@ import Stripe from 'stripe'
 import type {
   StripeClient,
   CreateStripeCheckoutInput,
-  StripeCheckoutResult
+  StripeCheckoutResult,
+  CheckoutSessionStatus
 } from '../../application/checkout/stripe-client.js'
 
 export class StripeCheckoutClient implements StripeClient {
@@ -82,6 +83,20 @@ export class StripeCheckoutClient implements StripeClient {
     return {
       sessionId: session.id,
       checkoutUrl: session.url
+    }
+  }
+
+  async getCheckoutSession(sessionId: string): Promise<CheckoutSessionStatus> {
+    const session = await this.stripe.checkout.sessions.retrieve(sessionId)
+
+    return {
+      sessionId: session.id,
+      status: session.status as 'complete' | 'expired' | 'open',
+      paymentStatus: session.payment_status as 'paid' | 'unpaid' | 'no_payment_required',
+      metadata: {
+        userId: session.metadata?.user_id,
+        productId: session.metadata?.product_id
+      }
     }
   }
 }

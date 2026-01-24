@@ -34,6 +34,17 @@ export interface StripeCheckoutResult {
   checkoutUrl: string
 }
 
+export interface CheckoutSessionStatus {
+  sessionId: string
+  status: 'complete' | 'expired' | 'open'
+  paymentStatus: 'paid' | 'unpaid' | 'no_payment_required'
+  metadata: {
+    userId?: string
+    productId?: string
+  }
+}
+
 export interface StripeClient {
   createCheckoutSession(input: CreateStripeCheckoutInput): Promise<StripeCheckoutResult>
+  getCheckoutSession(sessionId: string): Promise<CheckoutSessionStatus>
 }

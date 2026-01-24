@@ -1,6 +1,6 @@
 export type EntitlementStatus = 'active' | 'revoked' | 'expired'
 
-export type GrantedBy = 'stripe' | 'manual' | 'promotion'
+export type GrantedBy = 'stripe' | 'stripe_checkout_verify' | 'manual' | 'promotion'
 
 export interface Entitlement {
   id: string
