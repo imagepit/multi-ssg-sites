@@ -54,7 +54,7 @@ function PurchaseCompleteContent() {
   const [elapsedTime, setElapsedTime] = useState(0)
 
   // コンテンツページへのURL
-  const contentUrl = slug ? `/docs/${slug}${sectionId ? `#${sectionId}` : ''}` : null
+  const contentUrl = slug ? `/${slug}${sectionId ? `#${sectionId}` : ''}` : null
 
   // 購入完了確認（/api/paid-contentポーリング）
   const checkPurchaseStatus = useCallback(async () => {
