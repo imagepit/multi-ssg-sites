@@ -304,17 +304,20 @@ export function PaidSection({ sectionId, productId }: PaidSectionProps) {
     return <PaidSkeleton />
   }
 
-  // コンテンツエラー（未購入以外）
-  if (contentError && contentError.type === 'network') {
+  // コンテンツエラー（ネットワークエラーまたはコンテンツ未配置）
+  // forbidden以外のエラーはエラー表示（購入済みユーザーにPaywallを見せないため）
+  if (contentError && (contentError.type === 'network' || contentError.type === 'not_found')) {
     return (
       <ErrorDisplay
-        message={contentError.message}
+        message={contentError.type === 'not_found'
+          ? 'コンテンツが見つかりません。しばらく経ってから再度お試しください。'
+          : contentError.message}
         onRetry={loadContent}
       />
     )
   }
 
-  // 未ログインまたは未購入 → Paywall表示
+  // 未ログイン、未購入、またはアクセス拒否 → Paywall表示
   return (
     <PaywallDisplay
       sectionId={sectionId}

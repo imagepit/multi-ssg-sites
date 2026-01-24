@@ -1,5 +1,6 @@
 import type { Env } from '../../../env.js'
 import type { AuthClaims } from '../../../domain/auth/claims.js'
+// Updated: direct content fetch instead of signed URL
 import { getPaidContent } from '../../../application/paid-content/get-paid-content.js'
 import { D1EntitlementReader } from '../../../infrastructure/db/d1-entitlement-reader.js'
 import { D1ProductReader } from '../../../infrastructure/db/d1-product-reader.js'
