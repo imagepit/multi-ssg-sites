@@ -8,8 +8,8 @@
   "exports": {
     ".": "./dist/index.js",
     "./components": {
-      "import": "./src/components/PremiumPlaceholder.tsx",
-      "types": "./src/components/PremiumPlaceholder.tsx"
+      "import": "./src/components/index.ts",
+      "types": "./src/components/index.ts"
     },
     "./hooks": {
       "import": "./src/hooks/index.ts",
@@ -42,6 +42,8 @@
     "@types/mdast": "^4.0.4",
     "@types/node": "24.10.2",
     "@types/react": "^19.2.9",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
     "remark-mdx": "^3.0.0",
     "remark-parse": "^11.0.0",
     "shiki": "^3.20.0",

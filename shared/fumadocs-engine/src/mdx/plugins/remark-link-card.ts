@@ -62,8 +62,8 @@ export function remarkLinkCard(options: RemarkLinkCardOptions = {}) {
 /**
  * 段落からベタ貼りURLを抽出
  * - 段落の子要素が1つのみ
- * - 子要素がtextノード
- * - textの内容がURLのみ
+ * - 子要素がtextノード または linkノード（GFMのautolink literal）
+ * - URLのみ（[text](url) は除外）
  * - 元Markdownが [ で始まらない（[url](url)形式を除外）
  */
 function extractStandaloneUrl(paragraph: Paragraph, vfile: VFile): string | null {
@@ -72,13 +72,22 @@ function extractStandaloneUrl(paragraph: Paragraph, vfile: VFile): string | null
 
   const child = paragraph.children[0]
 
-  // textノードのみ対象
-  if (child.type !== 'text') return null
+  let url: string | null = null
 
-  const text = (child as Text).value.trim()
+  if (child.type === 'text') {
+    url = (child as Text).value.trim()
+  } else if (child.type === 'link') {
+    const link = child as any
+    const linkText = link.children?.[0]?.type === 'text' ? link.children[0].value.trim() : ''
+    // [text](url) のようにテキストとURLが異なる場合は除外
+    if (linkText !== link.url) return null
+    url = String(link.url || '').trim()
+  } else {
+    return null
+  }
 
   // URLパターンにマッチするか
-  if (!/^https?:\/\/\S+$/.test(text)) return null
+  if (!url || !/^https?:\/\/\S+$/.test(url)) return null
 
   // 保険: 元Markdownが [ で始まる場合は除外（[url](url)形式）
   if (paragraph.position && vfile.value) {
@@ -90,7 +99,7 @@ function extractStandaloneUrl(paragraph: Paragraph, vfile: VFile): string | null
     if (raw.trim().startsWith('[')) return null
   }
 
-  return text
+  return url
 }
 
 /**

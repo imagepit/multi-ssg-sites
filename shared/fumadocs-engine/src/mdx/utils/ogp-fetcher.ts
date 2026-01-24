@@ -364,37 +364,23 @@ export async function fetchOgpBatch(
   // 結果マップ
   const results = new Map<string, OgpData>()
 
-  // 並列数制限付きで取得
-  const queue = [...uniqueUrls]
-  const inProgress: Promise<void>[] = []
+  // 並列数制限付きで取得（ワーカー方式）
+  let cursor = 0
+  const workerCount = Math.min(opts.concurrency, uniqueUrls.length)
 
-  while (queue.length > 0 || inProgress.length > 0) {
-    // 並列数に空きがあればキューから取り出して実行
-    while (inProgress.length < opts.concurrency && queue.length > 0) {
-      const url = queue.shift()!
-      const promise = fetchOgp(url, opts)
-        .then((data) => {
-          results.set(url, data)
-        })
-        .catch(() => {
-          // 個別エラーは無視（fetchOgp内でフォールバック処理済み）
-        })
-
-      inProgress.push(
-        promise.then(() => {
-          const index = inProgress.indexOf(promise as unknown as Promise<void>)
-          if (index > -1) {
-            inProgress.splice(index, 1)
-          }
-        }) as Promise<void>
-      )
+  const workers = Array.from({ length: workerCount }, async () => {
+    while (cursor < uniqueUrls.length) {
+      const url = uniqueUrls[cursor++]
+      try {
+        const data = await fetchOgp(url, opts)
+        results.set(url, data)
+      } catch {
+        // 個別エラーは無視（fetchOgp内でフォールバック処理済み）
+      }
     }
+  })
 
-    // いずれかの完了を待つ
-    if (inProgress.length > 0) {
-      await Promise.race(inProgress)
-    }
-  }
+  await Promise.all(workers)
 
   return results
 }

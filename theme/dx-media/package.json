@@ -14,7 +14,7 @@
     "@techdoc/auth": "link:../../shared/auth",
     "@techdoc/contact-form": "link:../../shared/contact-form",
     "@techdoc/paid": "link:../../shared/paid",
-    "@techdoc/fumadocs-engine": "file:../../shared/fumadocs-engine",
+    "@techdoc/fumadocs-engine": "link:../../shared/fumadocs-engine",
     "@orama/orama": "^3.1.14",
     "clsx": "^2.1.1",
     "fast-glob": "^3.3.2",

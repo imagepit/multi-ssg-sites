@@ -16,6 +16,8 @@ products:
 
 ここは誰でも見られる部分です。
 
+https://zenn.dev/pipinosuke/articles/3f1a358698c8e4
+
 :::premium productId="product:test-course" sectionId="section-1"
 
 ## 有料セクション
