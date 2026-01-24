@@ -1,5 +1,5 @@
-export { usePaidSection } from './usePaidSection.js'
-export type { UsePaidSectionOptions } from './usePaidSection.js'
+export { usePaidSection } from './usePaidSection'
+export type { UsePaidSectionOptions } from './usePaidSection'
 
-export { usePurchaseComplete } from './usePurchaseComplete.js'
-export type { UsePurchaseCompleteOptions } from './usePurchaseComplete.js'
+export { usePurchaseComplete } from './usePurchaseComplete'
+export type { UsePurchaseCompleteOptions } from './usePurchaseComplete'

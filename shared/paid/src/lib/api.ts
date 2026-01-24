@@ -7,7 +7,7 @@ import type {
   PaidContentError,
   FetchPaidContentParams,
   CreateCheckoutParams,
-} from './types.js'
+} from './types'
 
 /**
  * Paywall情報を取得

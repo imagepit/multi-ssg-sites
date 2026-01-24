@@ -2,12 +2,12 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { useAuth, getAccessToken } from '@techdoc/auth'
-import { checkPaidContentAccess, verifyCheckoutSession } from '../lib/api.js'
+import { checkPaidContentAccess, verifyCheckoutSession } from '../lib/api'
 import type {
   PurchaseStatus,
   UsePurchaseCompleteResult,
   PurchaseCompleteParams,
-} from '../lib/types.js'
+} from '../lib/types'
 
 // ポーリング設定
 const POLLING_INTERVAL = 2000 // 2秒
@@ -107,9 +107,9 @@ export function usePurchaseComplete(
     }
 
     let isMounted = true
-    let pollingInterval: NodeJS.Timeout | null = null
-    let webhookTimer: NodeJS.Timeout | null = null
-    let elapsedTimer: NodeJS.Timeout | null = null
+    let pollingInterval: ReturnType<typeof setInterval> | null = null
+    let webhookTimer: ReturnType<typeof setTimeout> | null = null
+    let elapsedTimer: ReturnType<typeof setInterval> | null = null
 
     const cleanup = () => {
       if (pollingInterval) clearInterval(pollingInterval)

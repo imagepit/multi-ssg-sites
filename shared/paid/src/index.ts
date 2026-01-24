@@ -14,7 +14,7 @@ export type {
   UsePaidSectionResult,
   UsePurchaseCompleteResult,
   PurchaseCompleteParams,
-} from './lib/types.js'
+} from './lib/types'
 
 // API functions
 export {
@@ -23,11 +23,11 @@ export {
   checkPaidContentAccess,
   createCheckoutSession,
   verifyCheckoutSession,
-} from './lib/api.js'
+} from './lib/api'
 
 // Hooks
-export { usePaidSection } from './hooks/usePaidSection.js'
-export type { UsePaidSectionOptions } from './hooks/usePaidSection.js'
+export { usePaidSection } from './hooks/usePaidSection'
+export type { UsePaidSectionOptions } from './hooks/usePaidSection'
 
-export { usePurchaseComplete } from './hooks/usePurchaseComplete.js'
-export type { UsePurchaseCompleteOptions } from './hooks/usePurchaseComplete.js'
+export { usePurchaseComplete } from './hooks/usePurchaseComplete'
+export type { UsePurchaseCompleteOptions } from './hooks/usePurchaseComplete'

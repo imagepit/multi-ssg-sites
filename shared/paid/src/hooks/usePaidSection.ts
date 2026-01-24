@@ -7,12 +7,12 @@ import {
   fetchPaywallInfo,
   fetchPaidContent,
   createCheckoutSession,
-} from '../lib/api.js'
+} from '../lib/api'
 import type {
   PaywallOptions,
   PaidContentError,
   UsePaidSectionResult,
-} from '../lib/types.js'
+} from '../lib/types'
 
 export interface UsePaidSectionOptions {
   siteId: string
