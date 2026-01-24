@@ -102,12 +102,7 @@ async function fetchPaidContent(
     throw error
   }
 
-  const { signedUrl } = await response.json()
-  const contentResponse = await fetch(signedUrl)
-  if (!contentResponse.ok) {
-    throw { type: 'network', message: 'コンテンツの取得に失敗しました' } as PaidContentError
-  }
-  const { html } = await contentResponse.json()
+  const { html } = await response.json()
   return html
 }
 

@@ -1,12 +1,8 @@
 import type { Env } from '../../../env.js'
 import type { AuthClaims } from '../../../domain/auth/claims.js'
-import { getPaidContentUrl } from '../../../application/paid-content/get-paid-content-url.js'
+import { getPaidContent } from '../../../application/paid-content/get-paid-content.js'
 import { D1EntitlementReader } from '../../../infrastructure/db/d1-entitlement-reader.js'
 import { D1ProductReader } from '../../../infrastructure/db/d1-product-reader.js'
-import {
-  R2SignedUrlGenerator,
-  createContentExistsChecker
-} from '../../../infrastructure/r2/r2-signed-url-generator.js'
 
 export async function handlePaidContent(
   request: Request,
@@ -38,12 +34,15 @@ export async function handlePaidContent(
     )
   }
 
-  // Get public URL for R2 bucket
-  // In production, this should be configured via environment variable
-  const bucketPublicUrl = `https://${env.ENV ?? 'dev'}.r2.example.com`
+  // R2からコンテンツを取得するヘルパー関数
+  const getContent = async (key: string): Promise<string | null> => {
+    const object = await env.PAID_CONTENT!.get(key)
+    if (!object) return null
+    return object.text()
+  }
 
   try {
-    const result = await getPaidContentUrl(
+    const result = await getPaidContent(
       {
         userId: claims.sub,
         siteId,
@@ -54,8 +53,7 @@ export async function handlePaidContent(
       {
         entitlementRepo: new D1EntitlementReader(env.DB),
         productRepo: new D1ProductReader(env.DB),
-        signedUrlGenerator: new R2SignedUrlGenerator(env.PAID_CONTENT, bucketPublicUrl),
-        checkContentExists: createContentExistsChecker(env.PAID_CONTENT)
+        getContent
       }
     )
 
