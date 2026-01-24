@@ -32,3 +32,6 @@ public/nextImageExportOptimizer
 public/images
 public/next-image-export-optimizer-hashes.json
 public/search-indexes
+
+# auto-generated API route (managed by scripts/manage-api-route.mjs)
+src/app/api/search/route.ts
