@@ -3,6 +3,7 @@ import type { AuthDependencies } from './middleware/authentication.js'
 import type { AuditLogger } from '../../application/audit/audit-logger.js'
 import { healthHandler } from './handlers/health.js'
 import { handleSync } from './handlers/sync.js'
+import { handleSyncProducts } from './handlers/sync-products.js'
 import { handleSites } from './handlers/sites.js'
 import { handlePages } from './handlers/pages.js'
 import { handleSitesWrite } from './handlers/sites-write.js'
@@ -43,6 +44,10 @@ export async function handleHttpRequest(
 
   if (url.pathname === '/admin/sync') {
     return applyCors(await handleSync(request, env, deps.auditLogger), origin)
+  }
+
+  if (url.pathname === '/admin/sync/products') {
+    return applyCors(await handleSyncProducts(request, env, deps.auditLogger), origin)
   }
 
   // Auth endpoints (no authentication required)

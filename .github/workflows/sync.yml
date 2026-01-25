@@ -11,6 +11,7 @@ on:
     paths:
       - "contents/**"
       - "scripts/sync-pages.mjs"
+      - "scripts/sync-products.mjs"
       - ".github/workflows/sync.yml"
 
 jobs:
@@ -60,6 +61,9 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Install dependencies
+        run: npm install gray-matter
+
       - name: Sync pages
         env:
           ADMIN_APP_BASE_URL: ${{ secrets.ADMIN_APP_BASE_URL }}
@@ -67,6 +71,12 @@ jobs:
           SITE_DOMAIN: ${{ secrets.SITE_DOMAIN }}
           THEME_ID: ${{ secrets.THEME_ID }}
         run: node scripts/sync-pages.mjs --site-id ${{ matrix.site }}
+
+      - name: Sync products
+        env:
+          ADMIN_APP_BASE_URL: ${{ secrets.ADMIN_APP_BASE_URL }}
+          ADMIN_API_KEY: ${{ secrets.ADMIN_API_KEY }}
+        run: node scripts/sync-products.mjs --site-id ${{ matrix.site }}
 
   notify:
     needs: [detect, sync]

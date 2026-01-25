@@ -40,6 +40,8 @@ export const productSchema = z.object({
   id: z.string(),
   /** Optional price in JPY */
   price: z.number().optional(),
+  /** Stripe Price ID (required for checkout) */
+  stripe_price_id: z.string().optional(),
   /** Optional description */
   description: z.string().optional(),
   /** Optional sale configuration */
