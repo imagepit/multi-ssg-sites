@@ -11,7 +11,7 @@ import { ImageZoom } from 'fumadocs-ui/components/image-zoom'
 import { Mermaid } from '@/components/Mermaid'
 import ExportedImage from '@/components/ExportedImage'
 import { PaidSection } from '@/components/paid'
-import { LinkCard } from '@techdoc/fumadocs-engine/components'
+import { LinkCard, XTweetCard } from '@techdoc/fumadocs-engine/components'
 
 // use this function to get MDX components, you will need it for rendering MDX
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
@@ -45,6 +45,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
       <PaidSection sectionId={props.sectionId} productId={props.productId} />
     ),
     LinkCard: LinkCard as any,
+    XTweetCard: XTweetCard as any,
     ...components,
   };
 }

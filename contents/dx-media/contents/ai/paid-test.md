@@ -18,6 +18,10 @@ products:
 
 https://zenn.dev/pipinosuke/articles/3f1a358698c8e4
 
+## X（Twitter）埋め込みテスト
+
+https://x.com/hayatasu_ai/status/1939659400865845254
+
 :::premium productId="product:test-course" sectionId="section-1"
 
 ## 有料セクション

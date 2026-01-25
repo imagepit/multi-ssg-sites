@@ -33,6 +33,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "react-tweet": "^3.3.0",
     "sharp": "^0.33.5",
     "unist-util-visit": "^5.0.0"
   },

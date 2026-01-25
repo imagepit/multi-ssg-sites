@@ -5,6 +5,7 @@ import { Files as FdFiles } from 'fumadocs-ui/components/files'
 import { File as FdFile } from 'fumadocs-ui/components/files'
 import { Folder as FdFolder } from 'fumadocs-ui/components/files'
 import ExportedImage from 'next-image-export-optimizer'
+import { LinkCard, XTweetCard } from '@techdoc/fumadocs-engine/components'
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
@@ -22,6 +23,8 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     Files: FdFiles as any,
     File: FdFile as any,
     Folder: ((props: any) => <FdFolder defaultOpen {...props} />) as any,
+    LinkCard: LinkCard as any,
+    XTweetCard: XTweetCard as any,
     ...components,
   }
 }

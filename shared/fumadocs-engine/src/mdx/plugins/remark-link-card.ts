@@ -2,6 +2,7 @@ import type { Root, Paragraph, Text } from 'mdast'
 import type { VFile } from 'vfile'
 import { visit } from 'unist-util-visit'
 import { fetchOgpBatch, type OgpData, type OgpFetcherOptions } from '../utils/ogp-fetcher.js'
+import { isXTweetUrl, extractTweetId } from '../utils/twitter-utils.js'
 
 /**
  * リンクカードプラグインのオプション
@@ -9,6 +10,18 @@ import { fetchOgpBatch, type OgpData, type OgpFetcherOptions } from '../utils/og
 export interface RemarkLinkCardOptions extends OgpFetcherOptions {
   /** リンクカードコンポーネント名（デフォルト: LinkCard） */
   componentName?: string
+  /** X/Twitterカードコンポーネント名（デフォルト: XTweetCard） */
+  xTweetComponentName?: string
+}
+
+/**
+ * URL候補の型
+ */
+interface UrlCandidate {
+  node: Paragraph
+  index: number
+  parent: { children: any[] }
+  url: string
 }
 
 /**
@@ -16,6 +29,8 @@ export interface RemarkLinkCardOptions extends OgpFetcherOptions {
  *
  * 変換対象:
  * - 段落内に単独で存在するURL（textノードのみ）
+ * - X/TwitterのURLは<XTweetCard>に変換（OGP取得をスキップ）
+ * - それ以外のURLは<LinkCard>に変換（OGP情報付き）
  *
  * 変換しない:
  * - Markdownリンク形式: [text](url) や [url](url)
@@ -23,38 +38,68 @@ export interface RemarkLinkCardOptions extends OgpFetcherOptions {
  */
 export function remarkLinkCard(options: RemarkLinkCardOptions = {}) {
   const componentName = options.componentName ?? 'LinkCard'
+  const xTweetComponentName = options.xTweetComponentName ?? 'XTweetCard'
 
   return async (tree: Root, vfile: VFile) => {
-    // 1. 候補となる段落を収集
-    const candidates: Array<{
-      node: Paragraph
-      index: number
-      parent: { children: any[] }
-      url: string
-    }> = []
+    // 1. 候補となる段落を収集し、X/Twitterとそれ以外に分類
+    const xTweetCandidates: UrlCandidate[] = []
+    const genericCandidates: UrlCandidate[] = []
 
     visit(tree, 'paragraph', (node: Paragraph, index, parent) => {
       if (index === undefined || !parent) return
 
       const url = extractStandaloneUrl(node, vfile)
-      if (url) {
-        candidates.push({ node, index: index as number, parent: parent as any, url })
+      if (!url) return
+
+      const candidate: UrlCandidate = {
+        node,
+        index: index as number,
+        parent: parent as any,
+        url,
+      }
+
+      // X/Twitter URLかどうかで分類
+      if (isXTweetUrl(url)) {
+        xTweetCandidates.push(candidate)
+      } else {
+        genericCandidates.push(candidate)
       }
     })
 
-    if (candidates.length === 0) return
+    if (xTweetCandidates.length === 0 && genericCandidates.length === 0) return
 
-    // 2. URLをdedupeしてOGP一括取得
-    const urls = candidates.map((c) => c.url)
-    const ogpMap = await fetchOgpBatch(urls, options)
+    // 2. 通常URLのみOGP一括取得（X/TwitterはOGP取得をスキップ）
+    let ogpMap = new Map<string, OgpData>()
+    if (genericCandidates.length > 0) {
+      const urls = genericCandidates.map((c) => c.url)
+      ogpMap = await fetchOgpBatch(urls, options)
+    }
 
-    // 3. treeを置換（逆順で処理してインデックスのズレを防ぐ）
-    for (let i = candidates.length - 1; i >= 0; i--) {
-      const { index, parent, url } = candidates[i]
-      const ogpData = ogpMap.get(url) || { url, fetchedAt: Date.now() }
+    // 3. すべての候補をインデックス順にソートして逆順で処理
+    const allCandidates = [...xTweetCandidates, ...genericCandidates].sort(
+      (a, b) => b.index - a.index
+    )
 
-      const linkCardElement = createLinkCardElement(componentName, ogpData)
-      parent.children.splice(index, 1, linkCardElement)
+    for (const { index, parent, url } of allCandidates) {
+      let element: any
+
+      if (isXTweetUrl(url)) {
+        // X/Twitter URLの場合
+        const tweetId = extractTweetId(url)
+        if (tweetId) {
+          element = createXTweetCardElement(xTweetComponentName, tweetId, url)
+        } else {
+          // tweetId抽出失敗時はフォールバックとしてLinkCardを使用
+          const ogpData = { url, fetchedAt: Date.now() }
+          element = createLinkCardElement(componentName, ogpData)
+        }
+      } else {
+        // 通常URLの場合
+        const ogpData = ogpMap.get(url) || { url, fetchedAt: Date.now() }
+        element = createLinkCardElement(componentName, ogpData)
+      }
+
+      parent.children.splice(index, 1, element)
     }
   }
 }
@@ -100,6 +145,21 @@ function extractStandaloneUrl(paragraph: Paragraph, vfile: VFile): string | null
   }
 
   return url
+}
+
+/**
+ * XTweetCardのMDX JSX要素を生成
+ */
+function createXTweetCardElement(componentName: string, tweetId: string, url: string): any {
+  return {
+    type: 'mdxJsxFlowElement',
+    name: componentName,
+    attributes: [
+      { type: 'mdxJsxAttribute', name: 'tweetId', value: tweetId },
+      { type: 'mdxJsxAttribute', name: 'url', value: url },
+    ],
+    children: [],
+  }
 }
 
 /**
