@@ -106,6 +106,8 @@ cd theme/dx-media && SITE_ID=dx-media pnpm dev
 ```
 
 ### インポート時の拡張子ルール（重要）
+
+#### theme/ や Next.js アプリからのインポート
 **Next.js環境ではTypeScriptソースを直接インポートするため、`.js`拡張子は不要。**
 
 ```typescript
@@ -113,6 +115,7 @@ cd theme/dx-media && SITE_ID=dx-media pnpm dev
 import { AuthProvider } from '@techdoc/auth'
 import { usePurchaseComplete } from '@techdoc/paid'
 import { ContactFormModal } from '@techdoc/contact-form'
+import { remarkLinkCard } from '@techdoc/fumadocs-engine'
 
 // ❌ 間違い（.js拡張子は付けない）
 import { AuthProvider } from '@techdoc/auth/index.js'
@@ -127,6 +130,31 @@ import { usePaidContent } from '@techdoc/paid/hooks'
 // ❌ 間違い
 import { validateRedirectUrl } from '@techdoc/auth/lib/redirect.js'
 ```
+
+#### shared/fumadocs-engine 内部のインポート（特殊ルール）
+**`@techdoc/fumadocs-engine`はビルドが必要なパッケージのため、内部インポートには`.js`拡張子が必要。**
+
+| パッケージ | ビルド | エントリポイント | 理由 |
+|-----------|--------|-----------------|------|
+| `@techdoc/auth` | 不要 | `./src/index.ts` | Next.jsバンドラーが処理 |
+| `@techdoc/paid` | 不要 | `./src/index.ts` | Next.jsバンドラーが処理 |
+| `@techdoc/fumadocs-engine` | **必要** | `./dist/index.js` | `fumadocs-mdx`のpostinstallがNode.jsで直接実行 |
+
+```typescript
+// shared/fumadocs-engine/src/ 内部のインポート
+// ✅ 正しい（ビルド後の.jsファイルを参照）
+import { remarkLinkCard } from './mdx/plugins/remark-link-card.js'
+import { getBranding } from '../site/spec.js'
+
+// ❌ 間違い（Node.jsで実行時にエラー）
+import { remarkLinkCard } from './mdx/plugins/remark-link-card.ts'
+import { remarkLinkCard } from './mdx/plugins/remark-link-card'
+```
+
+**なぜ`@techdoc/fumadocs-engine`だけ特殊なのか:**
+- `fumadocs-mdx`のpostinstallスクリプトが`source.config.ts`を実行する際、Node.jsが直接`@techdoc/fumadocs-engine`を読み込む
+- Node.js v20はTypeScriptを直接実行できない（Type StrippingはNode.js v22.6.0以降の実験的機能）
+- そのため、事前にTypeScriptをJavaScriptにビルドし、`.js`拡張子でインポートする必要がある
 
 ### パッケージ間の依存関係
 ```
@@ -147,7 +175,8 @@ theme/*
 - [ ] テストを先に書き、全て通っているか
 - [ ] 型エラーがないか
 - [ ] ビジネスロジックは Domain 層にあるか
-- [ ] sharedパッケージのインポートに`.js`拡張子を付けていないか
+- [ ] theme/からsharedパッケージをインポートする際に`.js`拡張子を付けていないか
+- [ ] `shared/fumadocs-engine`内部のインポートに`.js`拡張子を付けているか
 
 ## 9. 関連ドキュメント
 
