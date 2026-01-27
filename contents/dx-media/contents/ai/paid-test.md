@@ -48,10 +48,6 @@ const secret = "premium content"
 
 :::
 
-![v0](../../../images/v0/v0.png)
-
-![](../../../images/hogesample.png)
-
 ```files
 /images/                    # プロジェクトルートの画像ディレクトリ
 ├── nextjs/
@@ -197,9 +193,6 @@ const secret = "premium content"
 
 :::
 
-![v0](../../../images/v0/v0.png)
-
-![](../../../images/hogesample.png)
 
 ```files
 /images/                    # プロジェクトルートの画像ディレクトリ
