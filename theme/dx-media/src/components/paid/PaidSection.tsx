@@ -5,10 +5,13 @@ import {
   type PaywallOptions,
   type SubscriptionPriceOption,
 } from '@techdoc/paid'
+import { Callout as BaseCallout } from 'fumadocs-ui/components/callout'
 import { CodeBlock, Pre } from 'fumadocs-ui/components/codeblock'
+import { Files as FdFiles, File as FdFile, Folder as FdFolder } from 'fumadocs-ui/components/files'
 import { createRoot, type Root } from 'react-dom/client'
 import { PaidSkeleton } from './PaidSkeleton'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, type ReactNode } from 'react'
+import { SpeechCallout } from '@/components/speech-callout'
 
 // 環境変数から取得
 const SITE_ID = process.env.NEXT_PUBLIC_SITE_ID || ''
@@ -52,41 +55,39 @@ export function PaidSection({ sectionId, productId }: PaidSectionProps) {
   })
 
   const contentContainerRef = useRef<HTMLDivElement | null>(null)
-  const codeBlockRootsRef = useRef<Root[]>([])
+  const enhancedRootsRef = useRef<Root[]>([])
 
   useEffect(() => {
-    // Unmount previous mounted code blocks (when content changes)
-    for (const root of codeBlockRootsRef.current) root.unmount()
-    codeBlockRootsRef.current = []
-
     const container = contentContainerRef.current
     if (!container) return
 
-    const preNodes = Array.from(container.querySelectorAll('pre.shiki')) as HTMLPreElement[]
-    for (const pre of preNodes) {
-      // Skip already enhanced blocks (in case of re-run)
-      if (pre.closest('[data-paid-codeblock-root]')) continue
+    let disposed = false
 
-      const mountPoint = document.createElement('div')
-      mountPoint.dataset.paidCodeblockRoot = 'true'
-
-      const preHtml = pre.innerHTML
-      const props = htmlAttributesToCodeBlockProps(pre)
-
-      pre.replaceWith(mountPoint)
-
-      const root = createRoot(mountPoint)
-      root.render(
-        <CodeBlock {...props}>
-          <Pre dangerouslySetInnerHTML={{ __html: preHtml }} />
-        </CodeBlock>
-      )
-      codeBlockRootsRef.current.push(root)
+    const unmountAll = () => {
+      for (const root of enhancedRootsRef.current) root.unmount()
+      enhancedRootsRef.current = []
     }
 
+    unmountAll()
+
+    const runEnhancements = () => {
+      if (disposed) return
+      const roots: Root[] = [...enhancedRootsRef.current]
+      enhancePaidCallouts(container, roots)
+      enhancePaidFiles(container, roots)
+      enhancePaidCodeBlocks(container, roots)
+      enhancedRootsRef.current = roots
+    }
+
+    // Run twice to also catch nested placeholders that appear after mounting
+    // (e.g. callout content containing code blocks or files trees).
+    runEnhancements()
+    const t = window.setTimeout(runEnhancements, 0)
+
     return () => {
-      for (const root of codeBlockRootsRef.current) root.unmount()
-      codeBlockRootsRef.current = []
+      disposed = true
+      window.clearTimeout(t)
+      unmountAll()
     }
   }, [content])
 
@@ -149,6 +150,110 @@ export function PaidSection({ sectionId, productId }: PaidSectionProps) {
       checkoutError={checkoutError}
     />
   )
+}
+
+function enhancePaidCallouts(container: HTMLElement, roots: Root[]) {
+  const nodes = Array.from(container.querySelectorAll('fd-callout')) as HTMLElement[]
+  for (const el of nodes) {
+    const type = el.dataset.type || 'info'
+    const title = el.dataset.title
+    const innerHtml = el.innerHTML
+
+    const mountPoint = document.createElement('div')
+    mountPoint.dataset.paidReactRoot = 'callout'
+
+    el.replaceWith(mountPoint)
+
+    const root = createRoot(mountPoint)
+    const child = <div dangerouslySetInnerHTML={{ __html: innerHtml }} />
+
+    if (type === 'speech-left' || type === 'speech-right') {
+      root.render(
+        <SpeechCallout
+          side={type === 'speech-left' ? 'left' : 'right'}
+          title={title}
+        >
+          {child}
+        </SpeechCallout>
+      )
+    } else {
+      root.render(
+        <BaseCallout type={type} title={title}>
+          {child}
+        </BaseCallout>
+      )
+    }
+
+    roots.push(root)
+  }
+}
+
+function enhancePaidFiles(container: HTMLElement, roots: Root[]) {
+  const nodes = Array.from(container.querySelectorAll('fd-files')) as HTMLElement[]
+  for (const el of nodes) {
+    const mountPoint = document.createElement('div')
+    mountPoint.dataset.paidReactRoot = 'files'
+
+    const tree = buildFilesTree(el)
+    el.replaceWith(mountPoint)
+
+    const root = createRoot(mountPoint)
+    root.render(tree)
+    roots.push(root)
+  }
+}
+
+function buildFilesTree(rootEl: HTMLElement) {
+  return <FdFiles>{buildFilesChildren(rootEl)}</FdFiles>
+}
+
+function buildFilesChildren(parentEl: HTMLElement): ReactNode[] {
+  const children = Array.from(parentEl.children) as HTMLElement[]
+  const out: ReactNode[] = []
+
+  children.forEach((child, index) => {
+    const tag = child.tagName.toLowerCase()
+    const name = child.dataset.name || ''
+
+    if (tag === 'fd-file') {
+      out.push(<FdFile key={`${index}:${name}`} name={name} />)
+      return
+    }
+
+    if (tag === 'fd-folder') {
+      out.push(
+        <FdFolder key={`${index}:${name}`} name={name} defaultOpen>
+          {buildFilesChildren(child)}
+        </FdFolder>
+      )
+    }
+  })
+
+  return out
+}
+
+function enhancePaidCodeBlocks(container: HTMLElement, roots: Root[]) {
+  const preNodes = Array.from(container.querySelectorAll('pre.shiki')) as HTMLPreElement[]
+  for (const pre of preNodes) {
+    // Skip already enhanced blocks (in case of re-run)
+    if (pre.closest('[data-paid-react-root="codeblock"]')) continue
+
+    const mountPoint = document.createElement('div')
+    mountPoint.dataset.paidReactRoot = 'codeblock'
+
+    const preHtml = pre.innerHTML
+    const props = htmlAttributesToCodeBlockProps(pre)
+
+    pre.replaceWith(mountPoint)
+
+    const root = createRoot(mountPoint)
+    root.render(
+      <CodeBlock {...props}>
+        <Pre dangerouslySetInnerHTML={{ __html: preHtml }} />
+      </CodeBlock>
+    )
+    roots.push(root)
+  }
 }
 
 function htmlAttributesToCodeBlockProps(pre: HTMLPreElement): Record<string, any> {

@@ -1,11 +1,17 @@
 import type { Content, Root } from 'mdast'
 import { unified } from 'unified'
-import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import rehypeStringify from 'rehype-stringify'
 import { visit } from 'unist-util-visit'
 import { rehypeCode, rehypeCodeDefaultOptions } from 'fumadocs-core/mdx-plugins'
-import { buildTechdocShikiTransformers } from '@techdoc/fumadocs-engine'
+import {
+  buildTechdocShikiTransformers,
+  remarkAddDelRegions,
+  remarkAdmonitionBlocks,
+  remarkCodeTitleBeforeBlocks,
+  remarkFilesToMdx,
+  remarkStepBlocks,
+} from '@techdoc/fumadocs-engine'
 
 /**
  * JSX component detection result
@@ -56,93 +62,28 @@ export function detectJsxComponents(nodes: Content[]): JsxDetectionResult {
 export async function mdastToHtml(nodes: Content[]): Promise<string> {
   const root: Root = { type: 'root', children: nodes }
 
-  // Normalize custom code fence languages that are not actual shiki languages.
-  // For example, ```files is transformed to UI components in MDX pipeline,
-  // but premium HTML rendering uses shiki and would throw on unknown languages.
+  // Apply the same mdast-level transforms used by the MDX pipeline so paid
+  // content can be rendered consistently (files tree, steps, admonitions, etc.).
+  //
+  // NOTE: order matters. remarkStepBlocks must run before remarkAdmonitionBlocks
+  // because it scans raw ':::' paragraph markers (nested admonitions).
+  await unified()
+    .use(remarkFilesToMdx)
+    .use(remarkStepBlocks)
+    .use(remarkCodeTitleBeforeBlocks)
+    .use(remarkAdmonitionBlocks)
+    .use(remarkAddDelRegions)
+    .run(root as any)
+
+  expandTechdocMdxElements(root)
+
+  // Fallback: if ```files is not converted for some reason, prevent shiki from
+  // throwing on an unknown language.
   visit(root, 'code' as any, (node: any) => {
-    if (node?.lang === 'files') {
-      node.lang = 'text'
-    }
-  })
-
-  // Transform admonition Callout JSX elements to HTML divs
-  visit(root, (node, index, parent) => {
-    if (
-      node.type === 'mdxJsxFlowElement' &&
-      (node as any).name === 'Callout'
-    ) {
-      const attrs = (node as any).attributes || []
-      const typeAttr = attrs.find((a: any) => a.name === 'type')
-      const titleAttr = attrs.find((a: any) => a.name === 'title')
-      const type = typeAttr?.value || 'info'
-      const title = titleAttr?.value
-
-      // Create a simple div structure for Callout
-      const children = [...(node as any).children]
-      if (title) {
-        children.unshift({
-          type: 'paragraph',
-          children: [{ type: 'strong', children: [{ type: 'text', value: title }] }],
-        } as any)
-      }
-
-      const replacement: Content = {
-        type: 'blockquote' as any,
-        data: {
-          hProperties: { className: [`callout`, `callout-${type}`] },
-        },
-        children,
-      } as any
-
-      if (parent && typeof index === 'number') {
-        parent.children[index] = replacement
-      }
-    }
-  })
-
-  // Transform Steps/Step JSX elements to HTML
-  visit(root, (node, index, parent) => {
-    if (
-      node.type === 'mdxJsxFlowElement' &&
-      (node as any).name === 'Steps'
-    ) {
-      const replacement: Content = {
-        type: 'html' as any,
-        value: '',
-        data: {
-          hName: 'div',
-          hProperties: { className: ['steps'] },
-        },
-        children: (node as any).children,
-      } as any
-
-      if (parent && typeof index === 'number') {
-        parent.children[index] = replacement
-      }
-    }
-
-    if (
-      node.type === 'mdxJsxFlowElement' &&
-      (node as any).name === 'Step'
-    ) {
-      const replacement: Content = {
-        type: 'html' as any,
-        value: '',
-        data: {
-          hName: 'div',
-          hProperties: { className: ['step'] },
-        },
-        children: (node as any).children,
-      } as any
-
-      if (parent && typeof index === 'number') {
-        parent.children[index] = replacement
-      }
-    }
+    if (node?.lang === 'files') node.lang = 'text'
   })
 
   const processor = unified()
-    .use(remarkParse)
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeCode, {
       ...(rehypeCodeDefaultOptions as any),
@@ -157,6 +98,113 @@ export async function mdastToHtml(nodes: Content[]): Promise<string> {
   const html = processor.stringify(result)
 
   return html
+}
+
+type MdxJsxElement = {
+  type: 'mdxJsxFlowElement' | 'mdxJsxTextElement'
+  name?: string
+  attributes?: Array<{ type: string; name: string; value?: any }>
+  children?: any[]
+}
+
+function expandTechdocMdxElements(root: Root) {
+  ;(root as any).children = expandChildren((root as any).children || [])
+}
+
+function expandChildren(children: any[]): any[] {
+  const out: any[] = []
+  for (const child of children) {
+    if (isMdxJsxElement(child)) {
+      out.push(...expandMdxJsxElement(child))
+      continue
+    }
+
+    if (Array.isArray(child?.children)) {
+      child.children = expandChildren(child.children)
+    }
+    out.push(child)
+  }
+  return out
+}
+
+function isMdxJsxElement(node: any): node is MdxJsxElement {
+  return node?.type === 'mdxJsxFlowElement' || node?.type === 'mdxJsxTextElement'
+}
+
+function expandMdxJsxElement(node: MdxJsxElement): any[] {
+  const name = String(node.name || '')
+
+  if (name === 'Callout') {
+    const type = getJsxAttr(node, 'type') || 'info'
+    const title = getJsxAttr(node, 'title')
+    return wrapRaw(
+      'fd-callout',
+      {
+        'data-type': type,
+        ...(title ? { 'data-title': title } : {}),
+      },
+      node.children || []
+    )
+  }
+
+  if (name === 'Files') {
+    return wrapRaw('fd-files', {}, node.children || [])
+  }
+  if (name === 'Folder') {
+    const folderName = getJsxAttr(node, 'name') || ''
+    return wrapRaw('fd-folder', { 'data-name': folderName }, node.children || [])
+  }
+  if (name === 'File') {
+    const fileName = getJsxAttr(node, 'name') || ''
+    return wrapRaw('fd-file', { 'data-name': fileName }, [])
+  }
+
+  // fumadocs-ui Steps/Step render to <div class="fd-steps|fd-step">...</div>
+  if (name === 'Steps') {
+    return wrapRaw('div', { class: 'fd-steps' }, node.children || [])
+  }
+  if (name === 'Step') {
+    return wrapRaw('div', { class: 'fd-step' }, node.children || [])
+  }
+
+  // Leave unknown JSX elements as-is so existing validation catches them.
+  return [node]
+}
+
+function wrapRaw(tag: string, attrs: Record<string, string>, children: any[]): any[] {
+  const open = htmlNode(`<${tag}${formatAttrs(attrs)}>` )
+  const close = htmlNode(`</${tag}>`)
+  return [open, ...expandChildren(children), close]
+}
+
+function htmlNode(value: string) {
+  return { type: 'html', value }
+}
+
+function getJsxAttr(node: MdxJsxElement, name: string): string | undefined {
+  const attrs = node.attributes || []
+  const hit = attrs.find((a) => a?.name === name)
+  if (!hit) return undefined
+  const v = (hit as any).value
+  if (typeof v === 'string') return v
+  if (v == null) return undefined
+  return String(v)
+}
+
+function formatAttrs(attrs: Record<string, string>): string {
+  const parts: string[] = []
+  for (const [k, v] of Object.entries(attrs)) {
+    parts.push(` ${k}="${escapeAttr(v)}"`)
+  }
+  return parts.join('')
+}
+
+function escapeAttr(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
 }
 
 /**

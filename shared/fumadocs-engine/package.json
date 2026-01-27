@@ -15,9 +15,29 @@
       "import": "./src/hooks/index.ts",
       "types": "./src/hooks/index.ts"
     },
+    "./mdx/plugins/remark-adddel": {
+      "import": "./dist/mdx/plugins/remark-adddel.js",
+      "types": "./dist/mdx/plugins/remark-adddel.d.ts"
+    },
+    "./mdx/plugins/remark-admonition-blocks": {
+      "import": "./dist/mdx/plugins/remark-admonition-blocks.js",
+      "types": "./dist/mdx/plugins/remark-admonition-blocks.d.ts"
+    },
+    "./mdx/plugins/remark-code-title": {
+      "import": "./dist/mdx/plugins/remark-code-title.js",
+      "types": "./dist/mdx/plugins/remark-code-title.d.ts"
+    },
+    "./mdx/plugins/remark-files-to-mdx": {
+      "import": "./dist/mdx/plugins/remark-files-to-mdx.js",
+      "types": "./dist/mdx/plugins/remark-files-to-mdx.d.ts"
+    },
     "./mdx/plugins/remark-premium-blocks": {
       "import": "./dist/mdx/plugins/remark-premium-blocks.js",
       "types": "./dist/mdx/plugins/remark-premium-blocks.d.ts"
+    },
+    "./mdx/plugins/remark-steps": {
+      "import": "./dist/mdx/plugins/remark-steps.js",
+      "types": "./dist/mdx/plugins/remark-steps.d.ts"
     }
   },
   "files": [

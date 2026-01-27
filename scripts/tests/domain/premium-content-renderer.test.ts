@@ -150,10 +150,11 @@ describe('mdastToHtml', () => {
 
     const html = await mdastToHtml(nodes)
 
-    expect(html).toContain('<pre')
-    expect(html).toContain('class="shiki')
-    expect(html).toMatch(/images/)
-    expect(html).toMatch(/example\.png/)
+    expect(html).toContain('<fd-files>')
+    expect(html).toContain('fd-folder')
+    expect(html).toContain('data-name="/images"')
+    expect(html).toContain('fd-file')
+    expect(html).toContain('data-name="example.png"')
   })
 
   it('converts multiple nodes', async () => {
