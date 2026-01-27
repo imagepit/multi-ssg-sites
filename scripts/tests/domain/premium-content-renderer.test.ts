@@ -133,9 +133,10 @@ describe('mdastToHtml', () => {
 
     const html = await mdastToHtml(nodes)
 
-    expect(html).toContain('<pre>')
+    expect(html).toContain('<pre')
+    expect(html).toContain('class="shiki')
     expect(html).toContain('<code')
-    expect(html).toContain('const x = 1')
+    expect(html).toMatch(/const[\s\S]*x[\s\S]*1/)
   })
 
   it('converts multiple nodes', async () => {

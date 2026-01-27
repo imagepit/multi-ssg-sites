@@ -4,6 +4,8 @@ import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import rehypeStringify from 'rehype-stringify'
 import { visit } from 'unist-util-visit'
+import { rehypeCode, rehypeCodeDefaultOptions } from 'fumadocs-core/mdx-plugins'
+import { buildTechdocShikiTransformers } from '@techdoc/fumadocs-engine'
 
 /**
  * JSX component detection result
@@ -133,6 +135,13 @@ export async function mdastToHtml(nodes: Content[]): Promise<string> {
   const processor = unified()
     .use(remarkParse)
     .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeCode, {
+      ...(rehypeCodeDefaultOptions as any),
+      transformers: [
+        ...((rehypeCodeDefaultOptions as any).transformers || []),
+        ...buildTechdocShikiTransformers(),
+      ],
+    })
     .use(rehypeStringify, { allowDangerousHtml: true })
 
   const result = await processor.run(root)
