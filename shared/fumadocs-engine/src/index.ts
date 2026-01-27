@@ -8,3 +8,5 @@ export { remarkPremiumBlocks, getPremiumSectionsFromVFile, type PremiumBlocksDat
 export { remarkLinkCard, type RemarkLinkCardOptions } from './mdx/plugins/remark-link-card.js'
 export { fetchOgp, fetchOgpBatch, type OgpData, type OgpFetcherOptions } from './mdx/utils/ogp-fetcher.js'
 export { isXTweetUrl, extractTweetId } from './mdx/utils/twitter-utils.js'
+export { generateRobots, type RobotsConfig, type RobotsRule } from './seo/robots.js'
+export { generateSitemap, type SitemapPage, type SitemapEntry } from './seo/sitemap.js'

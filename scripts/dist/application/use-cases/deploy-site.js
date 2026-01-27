@@ -21,12 +21,20 @@ export class DeploySiteUseCase {
         this.syncPaidContentUseCase = syncPaidContentUseCase;
     }
     async execute(input) {
+        const projectName = input.projectName ?? input.siteId.toString();
+        const siteOrigin = input.production
+            ? `https://${projectName}.pages.dev`
+            : `https://${input.branch ?? 'preview'}.${projectName}.pages.dev`;
+        const publicEnv = {
+            NEXT_PUBLIC_SITE_ORIGIN: siteOrigin
+        };
+        if (input.searchIndexBaseUrl) {
+            publicEnv.NEXT_PUBLIC_SEARCH_INDEX_BASE_URL = input.searchIndexBaseUrl;
+        }
         await this.buildSite.execute({
             siteId: input.siteId,
             themeId: input.themeId,
-            publicEnv: input.searchIndexBaseUrl
-                ? { NEXT_PUBLIC_SEARCH_INDEX_BASE_URL: input.searchIndexBaseUrl }
-                : undefined
+            publicEnv
         });
         if (input.syncAssets && !input.r2Config) {
             throw new UseCaseError('R2 configuration is required when asset sync is enabled');
@@ -86,7 +94,6 @@ export class DeploySiteUseCase {
             }
         }
         const outputDir = this.paths.themeOutputDir(input.themeId);
-        const projectName = input.projectName ?? input.siteId.toString();
         const args = ['pages', 'deploy', outputDir, '--project-name', projectName];
         if (!input.production) {
             const branch = input.branch ?? 'preview';

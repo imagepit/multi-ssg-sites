@@ -56,12 +56,22 @@ export class DeploySiteUseCase {
   ) {}
 
   async execute(input: DeploySiteInput): Promise<void> {
+    const projectName = input.projectName ?? input.siteId.toString()
+    const siteOrigin = input.production
+      ? `https://${projectName}.pages.dev`
+      : `https://${input.branch ?? 'preview'}.${projectName}.pages.dev`
+
+    const publicEnv: Record<string, string> = {
+      NEXT_PUBLIC_SITE_ORIGIN: siteOrigin
+    }
+    if (input.searchIndexBaseUrl) {
+      publicEnv.NEXT_PUBLIC_SEARCH_INDEX_BASE_URL = input.searchIndexBaseUrl
+    }
+
     await this.buildSite.execute({
       siteId: input.siteId,
       themeId: input.themeId,
-      publicEnv: input.searchIndexBaseUrl
-        ? { NEXT_PUBLIC_SEARCH_INDEX_BASE_URL: input.searchIndexBaseUrl }
-        : undefined
+      publicEnv
     })
 
     if (input.syncAssets && !input.r2Config) {
@@ -132,7 +142,6 @@ export class DeploySiteUseCase {
     }
 
     const outputDir = this.paths.themeOutputDir(input.themeId)
-    const projectName = input.projectName ?? input.siteId.toString()
     const args = ['pages', 'deploy', outputDir, '--project-name', projectName]
 
     if (!input.production) {
