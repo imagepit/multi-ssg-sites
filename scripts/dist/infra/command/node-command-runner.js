@@ -2,11 +2,12 @@ import { spawn } from 'node:child_process';
 export class NodeCommandRunner {
     async run(command, args, options = {}) {
         const env = { ...process.env, ...(options.env ?? {}) };
+        const hasInput = options.input !== undefined;
         return new Promise((resolve, reject) => {
             const child = spawn(command, args, {
                 cwd: options.cwd,
                 env,
-                stdio: options.stdio ?? 'inherit'
+                stdio: hasInput ? ['pipe', options.stdio ?? 'inherit', options.stdio ?? 'inherit'] : (options.stdio ?? 'inherit'),
             });
             child.on('error', (error) => {
                 reject(error);
@@ -19,6 +20,11 @@ export class NodeCommandRunner {
                 }
                 resolve({ exitCode });
             });
+            // Write input to stdin if provided
+            if (hasInput && child.stdin) {
+                child.stdin.write(options.input);
+                child.stdin.end();
+            }
         });
     }
 }

@@ -1,0 +1,7 @@
+packages:
+  - 'shared/*'
+  - 'theme/*'
+  - 'admin'
+  - 'admin-ui'
+  - 'scripts'
+  - 'mail-api'

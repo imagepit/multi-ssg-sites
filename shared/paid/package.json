@@ -24,7 +24,7 @@
     }
   },
   "dependencies": {
-    "@techdoc/auth": "link:../auth"
+    "@techdoc/auth": "workspace:*"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
