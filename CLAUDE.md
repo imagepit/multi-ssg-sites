@@ -79,6 +79,37 @@ WebサイトをCloudflare環境（Pages、R2）にデプロイして公開する
 pnpm exec techdoc deploy v0 --theme fumadocs --production
 ```
 
+### 商品データの同期
+MDXファイルのfrontmatterに定義された商品情報をadmin Worker（D1）に同期する。
+
+```bash
+# 単独で商品同期（ローカル開発時）
+pnpm exec techdoc sync-products dx-media --api-url http://localhost:8787 --api-key test-api-key
+
+# 環境変数を使用（ADMIN_API_BASE_URL, ADMIN_API_KEY）
+pnpm exec techdoc sync-products dx-media
+
+# デプロイ時に商品同期も実行
+pnpm exec techdoc deploy dx-media --theme dx-media --production --sync-products
+```
+
+**商品定義の例（MDX frontmatter）:**
+```yaml
+---
+title: 有料コンテンツ
+paid: true
+products:
+  - id: product:test-course
+    price: 980
+    stripe_price_id: price_xxx
+    description: "テストコース"
+---
+```
+
+**CI/CDでの動作:**
+- `deploy-sites.yml` で `ADMIN_API_KEY` が設定されている場合、自動的に `--sync-products` が有効になる
+- GitHub Secrets: `ADMIN_API_KEY`（admin Worker側にも同じキーを設定）
+
 ## 6. 開発原則
 
 ### 1. テスト駆動開発 (TDD)

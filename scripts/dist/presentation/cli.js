@@ -10,13 +10,16 @@ import { BuildSiteUseCase } from '../application/use-cases/build-site.js';
 import { SyncAssetsUseCase } from '../application/use-cases/sync-assets.js';
 import { DeploySiteUseCase } from '../application/use-cases/deploy-site.js';
 import { SyncSearchIndexesUseCase } from '../application/use-cases/sync-search-indexes.js';
+import { SyncProductsUseCase } from '../application/use-cases/sync-products.js';
 import { NodeCommandRunner } from '../infra/command/node-command-runner.js';
 import { NodeFileSystem } from '../infra/fs/node-file-system.js';
 import { ConsoleLogger } from '../infra/logging/console-logger.js';
 import { PnpmInstaller } from '../infra/deps/pnpm-installer.js';
 import { AwsS3AssetRepository } from '../infra/assets/aws-s3-asset-repository.js';
 import { AwsS3SearchIndexRepository } from '../infra/search-index/aws-s3-search-index-repository.js';
+import { HttpProductSyncRepository } from '../infra/product-sync/http-product-sync-repository.js';
 import { loadEnvFile } from '../infra/env/dotenv-loader.js';
+import path from 'node:path';
 const program = new Command();
 const buildDependencies = (rootDir) => {
     const runner = new NodeCommandRunner();
@@ -111,13 +114,16 @@ program
     .option('--skip-search-index', 'skip R2 search index sync', false)
     .option('--search-index-prefix <prefix>', 'search index prefix override')
     .option('--search-index-base-url <url>', 'search index base url')
+    .option('--sync-products', 'sync products to admin API', false)
+    .option('--admin-api-url <url>', 'admin API base URL for product sync')
+    .option('--admin-api-key <key>', 'admin API key for product sync')
     .option('--root <rootDir>', 'workspace root', process.cwd())
     .action(async (siteIdRaw, options) => {
     try {
         loadEnvFile(options.root);
         const siteId = parseSiteId(siteIdRaw);
         const themeId = parseThemeId(options.theme);
-        const { deploySite } = buildDependencies(options.root);
+        const { deploySite, fileSystem, logger } = buildDependencies(options.root);
         const syncAssets = !options.skipAssets;
         const syncSearchIndexes = !options.skipSearchIndex;
         const searchIndexBaseUrl = resolveSearchIndexBaseUrl(siteId, options.searchIndexBaseUrl);
@@ -155,6 +161,64 @@ program
             searchIndexBaseUrl,
             r2Config,
             searchIndexConfig
+        });
+        // Sync products after deploy if requested
+        if (options.syncProducts) {
+            const apiBaseUrl = options.adminApiUrl || process.env.ADMIN_API_BASE_URL;
+            const apiKey = options.adminApiKey || process.env.ADMIN_API_KEY;
+            if (!apiBaseUrl) {
+                throw new Error('missing admin API URL: use --admin-api-url or set ADMIN_API_BASE_URL');
+            }
+            if (!apiKey) {
+                throw new Error('missing admin API key: use --admin-api-key or set ADMIN_API_KEY');
+            }
+            const repository = new HttpProductSyncRepository();
+            const syncProducts = new SyncProductsUseCase(repository, fileSystem, logger);
+            const contentsDir = path.join(options.root, 'contents', siteId.toString(), 'contents');
+            await syncProducts.execute({
+                siteId: siteId.toString(),
+                contentsDir,
+                adminApiConfig: {
+                    baseUrl: apiBaseUrl,
+                    apiKey
+                }
+            });
+        }
+    }
+    catch (error) {
+        handleError(error);
+    }
+});
+program
+    .command('sync-products')
+    .argument('<siteId>', 'site id')
+    .option('--api-url <url>', 'admin API base URL')
+    .option('--api-key <key>', 'admin API key')
+    .option('--root <rootDir>', 'workspace root', process.cwd())
+    .action(async (siteIdRaw, options) => {
+    try {
+        loadEnvFile(options.root);
+        const siteId = parseSiteId(siteIdRaw);
+        const fileSystem = new NodeFileSystem();
+        const logger = new ConsoleLogger();
+        const repository = new HttpProductSyncRepository();
+        const syncProducts = new SyncProductsUseCase(repository, fileSystem, logger);
+        const apiBaseUrl = options.apiUrl || process.env.ADMIN_API_BASE_URL;
+        const apiKey = options.apiKey || process.env.ADMIN_API_KEY;
+        if (!apiBaseUrl) {
+            throw new Error('missing admin API URL: use --api-url or set ADMIN_API_BASE_URL');
+        }
+        if (!apiKey) {
+            throw new Error('missing admin API key: use --api-key or set ADMIN_API_KEY');
+        }
+        const contentsDir = path.join(options.root, 'contents', siteId.toString(), 'contents');
+        await syncProducts.execute({
+            siteId: siteId.toString(),
+            contentsDir,
+            adminApiConfig: {
+                baseUrl: apiBaseUrl,
+                apiKey
+            }
         });
     }
     catch (error) {
