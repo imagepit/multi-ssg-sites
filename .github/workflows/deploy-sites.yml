@@ -185,6 +185,11 @@ jobs:
             args+=(--sync-products)
           fi
 
+          # Sync paid content to R2 if production
+          if [ "$production" = "true" ]; then
+            args+=(--sync-paid-content --env prod)
+          fi
+
           pnpm exec techdoc "${args[@]}"
 
   notify:
