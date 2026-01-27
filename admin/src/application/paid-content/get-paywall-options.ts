@@ -122,7 +122,9 @@ export async function getPaywallOptions(
     throw new Error('productId is required')
   }
 
-  const product = await deps.productRepo.findById(input.productId)
+  // Product ID in D1 is stored as "siteId:productId" format
+  const fullProductId = `${input.siteId}:${input.productId}`
+  const product = await deps.productRepo.findById(fullProductId)
   if (!product) {
     throw new Error('Product not found')
   }
