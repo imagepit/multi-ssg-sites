@@ -1,6 +1,5 @@
 import type { Env } from '../../../env.js'
 import type { AuthClaims } from '../../../domain/auth/claims.js'
-import { JwtTokenIssuer } from '../../../infrastructure/auth/jwt-issuer.js'
 
 /**
  * Authentication middleware for paid content API
@@ -15,7 +14,8 @@ export async function requirePaidContentAuth(
     return new Response('Unauthorized', { status: 401 })
   }
 
-  const secret = env.JWT_SECRET
+  // Use ADMIN_JWT_SECRET for token verification (same key used for token issuance)
+  const secret = env.ADMIN_JWT_SECRET
   if (!secret) {
     return new Response('Server misconfigured', { status: 500 })
   }
