@@ -1,0 +1,120 @@
+name: Deploy Admin Worker
+
+on:
+  workflow_dispatch:
+    inputs:
+      production:
+        description: "Deploy as production"
+        required: false
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+    paths:
+      - "admin/**"
+      - ".github/workflows/deploy-admin.yml"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+          cache-dependency-path: admin/pnpm-lock.yaml
+
+      - name: Install dependencies
+        working-directory: admin
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check
+        working-directory: admin
+        run: pnpm type-check
+
+      - name: Run tests
+        working-directory: admin
+        run: pnpm test
+
+      - name: Deploy to Cloudflare Workers
+        working-directory: admin
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          EVENT_NAME: ${{ github.event_name }}
+          REF_NAME: ${{ github.ref }}
+          PRODUCTION_INPUT: ${{ github.event.inputs.production }}
+        run: |
+          production=false
+          if [ "$EVENT_NAME" = "push" ] && [ "$REF_NAME" = "refs/heads/main" ]; then
+            production=true
+          fi
+          if [ "$EVENT_NAME" = "workflow_dispatch" ] && [ "$PRODUCTION_INPUT" = "true" ]; then
+            production=true
+          fi
+
+          if [ "$production" = "true" ]; then
+            npx wrangler deploy --env prod
+          else
+            npx wrangler deploy --env stg
+          fi
+
+  notify:
+    needs: deploy
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          if [ -z "$SLACK_WEBHOOK_URL" ]; then
+            echo "SLACK_WEBHOOK_URL is not set, skipping notification"
+            exit 0
+          fi
+
+          RESULT="${{ needs.deploy.result }}"
+          if [ "$RESULT" = "success" ]; then
+            COLOR="#36a64f"
+            EMOJI=":white_check_mark:"
+            STATUS="成功"
+          else
+            COLOR="#dc3545"
+            EMOJI=":x:"
+            STATUS="失敗"
+          fi
+
+          curl -X POST "$SLACK_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -d @- <<EOF
+          {
+            "attachments": [{
+              "color": "$COLOR",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "$EMOJI *Deploy Admin Worker* - $STATUS"
+                  }
+                },
+                {
+                  "type": "context",
+                  "elements": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "<${{ github.server_url }}/${{ github.repository }}|${{ github.repository }}> | <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Run>"
+                    }
+                  ]
+                }
+              ]
+            }]
+          }
+          EOF
