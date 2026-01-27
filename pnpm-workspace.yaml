@@ -4,4 +4,4 @@ packages:
   - 'admin'
   - 'admin-ui'
   - 'scripts'
-  - 'mail-api'
+  # mail-api is excluded from workspace (has its own pnpm-lock.yaml)
