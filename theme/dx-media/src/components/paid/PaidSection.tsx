@@ -5,7 +5,10 @@ import {
   type PaywallOptions,
   type SubscriptionPriceOption,
 } from '@techdoc/paid'
+import { CodeBlock, Pre } from 'fumadocs-ui/components/codeblock'
+import { createRoot, type Root } from 'react-dom/client'
 import { PaidSkeleton } from './PaidSkeleton'
+import { useEffect, useRef } from 'react'
 
 // 環境変数から取得
 const SITE_ID = process.env.NEXT_PUBLIC_SITE_ID || ''
@@ -48,6 +51,45 @@ export function PaidSection({ sectionId, productId }: PaidSectionProps) {
     productId,
   })
 
+  const contentContainerRef = useRef<HTMLDivElement | null>(null)
+  const codeBlockRootsRef = useRef<Root[]>([])
+
+  useEffect(() => {
+    // Unmount previous mounted code blocks (when content changes)
+    for (const root of codeBlockRootsRef.current) root.unmount()
+    codeBlockRootsRef.current = []
+
+    const container = contentContainerRef.current
+    if (!container) return
+
+    const preNodes = Array.from(container.querySelectorAll('pre.shiki')) as HTMLPreElement[]
+    for (const pre of preNodes) {
+      // Skip already enhanced blocks (in case of re-run)
+      if (pre.closest('[data-paid-codeblock-root]')) continue
+
+      const mountPoint = document.createElement('div')
+      mountPoint.dataset.paidCodeblockRoot = 'true'
+
+      const preHtml = pre.innerHTML
+      const props = htmlAttributesToCodeBlockProps(pre)
+
+      pre.replaceWith(mountPoint)
+
+      const root = createRoot(mountPoint)
+      root.render(
+        <CodeBlock {...props}>
+          <Pre dangerouslySetInnerHTML={{ __html: preHtml }} />
+        </CodeBlock>
+      )
+      codeBlockRootsRef.current.push(root)
+    }
+
+    return () => {
+      for (const root of codeBlockRootsRef.current) root.unmount()
+      codeBlockRootsRef.current = []
+    }
+  }, [content])
+
   // ローディング状態
   if (paywallLoading) {
     return <PaidSkeleton />
@@ -71,6 +113,7 @@ export function PaidSection({ sectionId, productId }: PaidSectionProps) {
         data-section-id={sectionId}
         data-product-id={productId}
         dangerouslySetInnerHTML={{ __html: content }}
+        ref={contentContainerRef}
       />
     )
   }
@@ -106,6 +149,56 @@ export function PaidSection({ sectionId, productId }: PaidSectionProps) {
       checkoutError={checkoutError}
     />
   )
+}
+
+function htmlAttributesToCodeBlockProps(pre: HTMLPreElement): Record<string, any> {
+  const props: Record<string, any> = {}
+
+  for (const attr of Array.from(pre.attributes)) {
+    const name = attr.name
+    const value = attr.value
+
+    if (name === 'class') {
+      props.className = value
+      continue
+    }
+    if (name === 'style') {
+      props.style = parseInlineStyle(value)
+      continue
+    }
+    if (name === 'icon') {
+      props.icon = value
+      continue
+    }
+    if (name === 'title') {
+      props.title = value
+      continue
+    }
+    if (name.startsWith('data-')) {
+      props[name] = value === '' ? true : value
+      continue
+    }
+
+    // Pass-through for other attributes (rare)
+    props[name] = value
+  }
+
+  return props
+}
+
+function parseInlineStyle(styleText: string): Record<string, string> {
+  const style: Record<string, string> = {}
+  for (const part of styleText.split(';')) {
+    const trimmed = part.trim()
+    if (!trimmed) continue
+    const idx = trimmed.indexOf(':')
+    if (idx === -1) continue
+    const prop = trimmed.slice(0, idx).trim()
+    const value = trimmed.slice(idx + 1).trim()
+    if (!prop) continue
+    style[prop] = value
+  }
+  return style
 }
 
 /**
