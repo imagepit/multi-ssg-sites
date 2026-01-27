@@ -139,6 +139,23 @@ describe('mdastToHtml', () => {
     expect(html).toMatch(/const[\s\S]*x[\s\S]*1/)
   })
 
+  it('treats ```files blocks as plain text (no shiki language error)', async () => {
+    const nodes: Content[] = [
+      {
+        type: 'code',
+        lang: 'files',
+        value: '/images/\n└── example.png',
+      } as Code,
+    ]
+
+    const html = await mdastToHtml(nodes)
+
+    expect(html).toContain('<pre')
+    expect(html).toContain('class="shiki')
+    expect(html).toMatch(/images/)
+    expect(html).toMatch(/example\.png/)
+  })
+
   it('converts multiple nodes', async () => {
     const nodes: Content[] = [
       {

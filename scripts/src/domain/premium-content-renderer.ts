@@ -56,6 +56,15 @@ export function detectJsxComponents(nodes: Content[]): JsxDetectionResult {
 export async function mdastToHtml(nodes: Content[]): Promise<string> {
   const root: Root = { type: 'root', children: nodes }
 
+  // Normalize custom code fence languages that are not actual shiki languages.
+  // For example, ```files is transformed to UI components in MDX pipeline,
+  // but premium HTML rendering uses shiki and would throw on unknown languages.
+  visit(root, 'code' as any, (node: any) => {
+    if (node?.lang === 'files') {
+      node.lang = 'text'
+    }
+  })
+
   // Transform admonition Callout JSX elements to HTML divs
   visit(root, (node, index, parent) => {
     if (
