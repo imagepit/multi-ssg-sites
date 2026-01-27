@@ -64,6 +64,16 @@ export async function getPaidContent(
   // Parse content JSON
   const content = JSON.parse(contentJson)
 
+  // Validate productId matches to prevent content mismatch attacks
+  if (content.productId && content.productId !== input.productId) {
+    throw new Error('product id mismatch')
+  }
+
+  // Validate sectionId matches
+  if (content.sectionId && content.sectionId !== input.sectionId) {
+    throw new Error('section id mismatch')
+  }
+
   return {
     html: content.html
   }

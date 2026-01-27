@@ -14,6 +14,10 @@
     "./hooks": {
       "import": "./src/hooks/index.ts",
       "types": "./src/hooks/index.ts"
+    },
+    "./mdx/plugins/remark-premium-blocks": {
+      "import": "./dist/mdx/plugins/remark-premium-blocks.js",
+      "types": "./dist/mdx/plugins/remark-premium-blocks.d.ts"
     }
   },
   "files": [

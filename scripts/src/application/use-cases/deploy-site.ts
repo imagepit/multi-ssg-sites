@@ -8,6 +8,9 @@ import { ThemeId } from '../../domain/value-objects/theme-id.js'
 import { BuildSiteUseCase } from './build-site.js'
 import { SyncAssetsUseCase } from './sync-assets.js'
 import { SyncSearchIndexesUseCase } from './sync-search-indexes.js'
+import { ExtractPaidContentUseCase } from './extract-paid-content.js'
+import { SyncPaidContentUseCase } from './sync-paid-content.js'
+import { PaidContentStorageConfig } from '../../domain/ports/paid-content-repository.js'
 
 export type DeploySiteInput = {
   siteId: SiteId
@@ -18,6 +21,8 @@ export type DeploySiteInput = {
   syncAssets: boolean
   syncSearchIndexes: boolean
   searchIndexBaseUrl?: string
+  syncPaidContent?: boolean
+  contentsDir?: string
   r2Config?: {
     bucket: string
     endpoint: string
@@ -34,6 +39,7 @@ export type DeploySiteInput = {
     prefix: string
     diffOnly: boolean
   }
+  paidContentConfig?: PaidContentStorageConfig
 }
 
 export class DeploySiteUseCase {
@@ -44,7 +50,9 @@ export class DeploySiteUseCase {
     private readonly paths: WorkspacePaths,
     private readonly buildSite: BuildSiteUseCase,
     private readonly syncAssetsUseCase: SyncAssetsUseCase,
-    private readonly syncSearchIndexesUseCase: SyncSearchIndexesUseCase
+    private readonly syncSearchIndexesUseCase: SyncSearchIndexesUseCase,
+    private readonly extractPaidContentUseCase: ExtractPaidContentUseCase,
+    private readonly syncPaidContentUseCase: SyncPaidContentUseCase
   ) {}
 
   async execute(input: DeploySiteInput): Promise<void> {
@@ -89,6 +97,38 @@ export class DeploySiteUseCase {
         diffOnly: input.searchIndexConfig.diffOnly
       })
       await this.fileSystem.remove(searchIndexesDir)
+    }
+
+    // Sync paid content to R2
+    if (input.syncPaidContent) {
+      if (!input.paidContentConfig) {
+        throw new UseCaseError('paid content configuration is required when sync is enabled')
+      }
+      if (!input.contentsDir) {
+        throw new UseCaseError('contents directory is required when paid content sync is enabled')
+      }
+
+      // Extract premium sections from MDX files
+      const extractResult = await this.extractPaidContentUseCase.execute({
+        siteId: input.siteId.toString(),
+        contentsDir: input.contentsDir,
+      })
+
+      // Fail if there are validation errors
+      if (extractResult.errors.length > 0) {
+        throw new UseCaseError(
+          `Paid content extraction failed with ${extractResult.errors.length} error(s)`
+        )
+      }
+
+      // Upload to R2
+      if (extractResult.sections.length > 0) {
+        await this.syncPaidContentUseCase.execute({
+          siteId: input.siteId.toString(),
+          sections: extractResult.sections,
+          storage: input.paidContentConfig,
+        })
+      }
     }
 
     const outputDir = this.paths.themeOutputDir(input.themeId)

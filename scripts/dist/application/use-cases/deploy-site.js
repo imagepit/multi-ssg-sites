@@ -7,7 +7,9 @@ export class DeploySiteUseCase {
     buildSite;
     syncAssetsUseCase;
     syncSearchIndexesUseCase;
-    constructor(runner, logger, fileSystem, paths, buildSite, syncAssetsUseCase, syncSearchIndexesUseCase) {
+    extractPaidContentUseCase;
+    syncPaidContentUseCase;
+    constructor(runner, logger, fileSystem, paths, buildSite, syncAssetsUseCase, syncSearchIndexesUseCase, extractPaidContentUseCase, syncPaidContentUseCase) {
         this.runner = runner;
         this.logger = logger;
         this.fileSystem = fileSystem;
@@ -15,6 +17,8 @@ export class DeploySiteUseCase {
         this.buildSite = buildSite;
         this.syncAssetsUseCase = syncAssetsUseCase;
         this.syncSearchIndexesUseCase = syncSearchIndexesUseCase;
+        this.extractPaidContentUseCase = extractPaidContentUseCase;
+        this.syncPaidContentUseCase = syncPaidContentUseCase;
     }
     async execute(input) {
         await this.buildSite.execute({
@@ -54,6 +58,32 @@ export class DeploySiteUseCase {
                 diffOnly: input.searchIndexConfig.diffOnly
             });
             await this.fileSystem.remove(searchIndexesDir);
+        }
+        // Sync paid content to R2
+        if (input.syncPaidContent) {
+            if (!input.paidContentConfig) {
+                throw new UseCaseError('paid content configuration is required when sync is enabled');
+            }
+            if (!input.contentsDir) {
+                throw new UseCaseError('contents directory is required when paid content sync is enabled');
+            }
+            // Extract premium sections from MDX files
+            const extractResult = await this.extractPaidContentUseCase.execute({
+                siteId: input.siteId.toString(),
+                contentsDir: input.contentsDir,
+            });
+            // Fail if there are validation errors
+            if (extractResult.errors.length > 0) {
+                throw new UseCaseError(`Paid content extraction failed with ${extractResult.errors.length} error(s)`);
+            }
+            // Upload to R2
+            if (extractResult.sections.length > 0) {
+                await this.syncPaidContentUseCase.execute({
+                    siteId: input.siteId.toString(),
+                    sections: extractResult.sections,
+                    storage: input.paidContentConfig,
+                });
+            }
         }
         const outputDir = this.paths.themeOutputDir(input.themeId);
         const projectName = input.projectName ?? input.siteId.toString();
