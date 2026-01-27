@@ -39,7 +39,7 @@ binding = "DB"
 database_name = "techdoc-admin-stg"
 database_id = "ebe846f5-7caf-4a2c-a626-ece30a100dcd"
 
-[env.stg.r2_buckets]
+[[env.stg.r2_buckets]]
 binding = "PAID_CONTENT"
 bucket_name = "techdoc-paid-content-stg"
 
@@ -62,7 +62,7 @@ binding = "DB"
 database_name = "techdoc-admin-prod"
 database_id = "eaed2b51-57b1-4e09-8723-23b4881c2f1b"
 
-[env.prod.r2_buckets]
+[[env.prod.r2_buckets]]
 binding = "PAID_CONTENT"
 bucket_name = "techdoc-paid-content-prod"
 

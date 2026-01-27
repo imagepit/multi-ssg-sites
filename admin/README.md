@@ -2,7 +2,7 @@
 
 ## 概要
 
-techdoc管理者アプリは、techdoc の管理者向けのアプリです。
+techdoc管理者アプリは、techdocの管理者向けのアプリです。
 
 ## 機能
 
