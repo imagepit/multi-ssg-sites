@@ -9,9 +9,9 @@ description: "テストページ"
 paid: true
 products:
   - id: product:test-course
-    price: 980
-    stripe_price_id: price_1Srzx3HLkqemnldGgivyqVLU
-    description: "テストコース9"
+    price: 100
+    stripe_price_id: price_1Su4USHLkqemnldGQd3bzFlt
+    description: "テスト有料ページ"
 ---
 
 ## 無料コンテンツ
