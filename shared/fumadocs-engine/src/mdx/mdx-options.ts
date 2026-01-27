@@ -10,8 +10,7 @@ import { remarkLinkCard, type RemarkLinkCardOptions } from './plugins/remark-lin
 import { rehypeResolveImages } from './plugins/rehype-resolve-images.js'
 import { rehypeNextImage } from './plugins/rehype-next-image.js'
 import { rehypeBashClass } from './plugins/rehype-bash-class.js'
-import { transformerRawNotationDiff } from './shiki/shiki-raw-notation.js'
-import { transformerBashClass } from './shiki/shiki-bash-transformer.js'
+import { buildTechdocShikiTransformers } from './shiki/techdoc-transformers.js'
 
 const dateSchema = z.preprocess((value) => {
   if (value instanceof Date) return value.toISOString()
@@ -106,8 +105,7 @@ export function buildMdxOptions(config: BuildMdxOptionsConfig = {}) {
             ...baseOptions,
             transformers: [
               ...(baseOptions.transformers || (rehypeCodeDefaultOptions as any).transformers || []),
-              transformerRawNotationDiff(),
-              transformerBashClass(),
+              ...buildTechdocShikiTransformers(),
             ],
           }]
         }
@@ -115,8 +113,7 @@ export function buildMdxOptions(config: BuildMdxOptionsConfig = {}) {
           return [rehypeCode, {
             transformers: [
               ...(rehypeCodeDefaultOptions as any).transformers || [],
-              transformerRawNotationDiff(),
-              transformerBashClass(),
+              ...buildTechdocShikiTransformers(),
             ],
           }]
         }

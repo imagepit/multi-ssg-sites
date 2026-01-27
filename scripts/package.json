@@ -16,6 +16,7 @@
     "@techdoc/fumadocs-engine": "workspace:*",
     "commander": "^12.1.0",
     "dotenv": "^16.4.7",
+    "fumadocs-core": "16.4.8",
     "gray-matter": "^4.0.3",
     "rehype-stringify": "^10.0.0",
     "remark-mdx": "^3.0.0",
