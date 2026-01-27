@@ -482,6 +482,9 @@ importers:
       '@orama/orama':
         specifier: ^3.1.14
         version: 3.1.18
+      '@techdoc/fumadocs-engine':
+        specifier: workspace:*
+        version: link:../../shared/fumadocs-engine
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -588,6 +591,9 @@ importers:
       '@orama/orama':
         specifier: ^3.1.14
         version: 3.1.18
+      '@techdoc/fumadocs-engine':
+        specifier: workspace:*
+        version: link:../../shared/fumadocs-engine
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
