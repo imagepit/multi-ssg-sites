@@ -41,3 +41,8 @@ const secret = "premium content"
 ## まとめ（無料）
 
 無料部分の続きです。
+
+```typescript
+// 有料コードサンプル
+const secret = "premium content"
+```
