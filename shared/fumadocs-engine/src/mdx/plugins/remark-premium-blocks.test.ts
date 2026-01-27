@@ -3,7 +3,7 @@ import { unified } from 'unified'
 import remarkParse from 'remark-parse'
 import remarkMdx from 'remark-mdx'
 import { VFile } from 'vfile'
-import { remarkPremiumBlocks, getPremiumSectionsFromVFile } from './remark-premium-blocks.js'
+import { remarkPremiumBlocks, getPremiumSectionsFromVFile } from './remark-premium-blocks.ts'
 
 // Helper to process markdown and get result
 async function processMarkdown(markdown: string) {
