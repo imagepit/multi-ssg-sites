@@ -148,6 +148,7 @@ jobs:
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           R2_PUBLIC_BASE_URL: ${{ secrets.R2_PUBLIC_BASE_URL }}
+          NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
           THEME_ID_INPUT: ${{ github.event.inputs.theme_id }}
           THEME_ID_VAR: ${{ vars.THEME_ID }}
           PRODUCTION_INPUT: ${{ github.event.inputs.production }}
