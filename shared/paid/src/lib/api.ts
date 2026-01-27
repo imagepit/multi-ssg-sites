@@ -118,6 +118,7 @@ export async function createCheckoutSession(
       'Authorization': `Bearer ${accessToken}`,
     },
     body: JSON.stringify({
+      siteId: params.returnContext.siteId,
       productId: params.productId,
       stripePriceId: params.stripePriceId,
       mode: params.mode,

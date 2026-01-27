@@ -41,8 +41,10 @@ export async function getPaidContent(
   }
 
   // Check entitlement
+  // Product ID in D1 is stored as "siteId:productId" format
+  const fullProductId = `${input.siteId}:${input.productId}`
   const entitlementResult = await checkEntitlement(
-    { userId: input.userId, productId: input.productId },
+    { userId: input.userId, productId: fullProductId },
     { entitlementRepo: deps.entitlementRepo, productRepo: deps.productRepo }
   )
 

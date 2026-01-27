@@ -7,6 +7,7 @@ import { StripeCheckoutClient } from '../../../infrastructure/stripe/stripe-chec
 import type { BillingPeriod, Product, ProductPrice } from '../../../domain/entitlement/product.js'
 
 interface CheckoutRequestBody {
+  siteId: string
   productId: string
   successUrl: string
   cancelUrl: string
@@ -93,15 +94,18 @@ export async function handleCheckoutCreate(
     })
   }
 
-  if (!body.productId || !body.successUrl || !body.cancelUrl) {
+  if (!body.siteId || !body.productId || !body.successUrl || !body.cancelUrl) {
     return new Response(
-      JSON.stringify({ error: 'Missing required fields: productId, successUrl, cancelUrl' }),
+      JSON.stringify({ error: 'Missing required fields: siteId, productId, successUrl, cancelUrl' }),
       {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
       }
     )
   }
+
+  // Product ID in D1 is stored as "siteId:productId" format
+  const fullProductId = `${body.siteId}:${body.productId}`
 
   const productReader = new D1ProductReader(env.DB)
   const productPriceReader = new D1ProductPriceReader(env.DB)
@@ -114,7 +118,7 @@ export async function handleCheckoutCreate(
   if (body.mode === 'subscription' && body.billingPeriod) {
     // サブスクリプションの場合、billingPeriodからstripePriceIdとセール情報を取得
     const productPrice = await productPriceReader.findByProductAndBillingPeriod(
-      body.productId,
+      fullProductId,
       body.billingPeriod
     )
     if (!productPrice) {
@@ -130,7 +134,7 @@ export async function handleCheckoutCreate(
     salePrice = buildSalePriceFromProductPrice(productPrice)
   } else {
     // 単体購入の場合、商品からセール情報を取得
-    const product = await productReader.findById(body.productId)
+    const product = await productReader.findById(fullProductId)
     if (product) {
       salePrice = buildSalePriceFromProduct(product)
     }
@@ -139,7 +143,7 @@ export async function handleCheckoutCreate(
   const result = await createCheckoutSession(
     {
       userId: auth.sub,
-      productId: body.productId,
+      productId: fullProductId,
       successUrl: body.successUrl,
       cancelUrl: body.cancelUrl,
       mode: body.mode,
