@@ -11,7 +11,7 @@ products:
   - id: product:test-course
     price: 980
     stripe_price_id: price_1Srzx3HLkqemnldGgivyqVLU
-    description: "テストコース4"
+    description: "テストコース5"
 ---
 
 ## 無料コンテンツ
