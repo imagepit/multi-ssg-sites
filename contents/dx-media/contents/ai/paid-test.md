@@ -36,6 +36,144 @@ SSG出力には含まれず、R2にアップロードされます（本番時）
 const secret = "premium content"
 ```
 
+:::speech-left Ryosuke | /ryosuke.png | ようこそ！
+
+こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！
+
+:::
+
+:::speech-right Ryosuke | /ryosuke.png | ようこそ！
+
+こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！
+
+:::
+
+![v0](../../../images/v0/v0.png)
+
+![](../../../images/hogesample.png)
+
+```files
+/images/                    # プロジェクトルートの画像ディレクトリ
+├── nextjs/
+│   ├── logo.png
+│   ├── screenshots/
+│   └── diagrams/
+├── cloudflare/
+│   └── ...
+├── claude-code/
+│   └── ...
+└── shared/                 # 共通画像
+    ├── icons/
+    └── backgrounds/
+```
+
+```xml
+//addstart
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div class="bg-white rounded-lg shadow-md p-4">
+    <h3 class="text-lg font-medium text-gray-800">Chroma</h3>
+    <p class="text-gray-600">Chromaは、ベクトル検索エンジンです。</p>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div class="bg-white rounded-lg shadow-md p-4">
+    <h3 class="text-lg font-medium text-gray-800">Pinecone</h3>
+    <p class="text-gray-600">Pineconeは、ベクトル検索エンジンです。</p>
+  </div>
+</div>
+//addend
+```
+
+```yaml
+//delstart
+services:
+  meilisearch:
+    image: getmeili/meilisearch:v1.9.1
+    ports:
+      - 7700:7700
+    environment:
+      - MEILI_MASTER_KEY=masterKey
+      - MEILI_NO_ANALYTICS=true
+//delend
+```
+
+```yaml
+//highlightstart
+services:
+  meilisearch:
+    image: getmeili/meilisearch:v1.9.1
+    ports:
+      - 7700:7700
+    environment:
+      - MEILI_MASTER_KEY=masterKey
+      - MEILI_NO_ANALYTICS=true
+//highlightend
+```
+
+```yaml
+services:
+  meilisearch:
+//focusstart
+    image: getmeili/meilisearch:v1.9.1
+//focusend
+    ports:
+      - 7700:7700
+    environment:
+      - MEILI_MASTER_KEY=masterKey
+      - MEILI_NO_ANALYTICS=true
+```
+
+```yaml
+//errorstart
+services:
+  meilisearch:
+    image: getmeili/meilisearch:v1.9.1
+    ports:
+      - 7700:7700
+    environment:
+      - MEILI_MASTER_KEY=masterKey
+      - MEILI_NO_ANALYTICS=true
+//errorend
+```
+
+```yaml
+//warningstart
+services:
+  meilisearch:
+    image: getmeili/meilisearch:v1.9.1
+    ports:
+      - 7700:7700
+    environment:
+      - MEILI_MASTER_KEY=masterKey
+      - MEILI_NO_ANALYTICS=true
+//warningend
+```
+
+:::step
+
+1. プロンプトからUIを生成してみよう
+
+まずは簡単なプロンプトでv0の動作を確認しましょう。v0のインターフェースを開き、以下のようなプロンプトを入力します。
+
+```text
+モダンなカードコンポーネントを作成。画像、タイトル、説明文、CTAボタンを含み、ホバー時に影がつくアニメーションを追加
+```
+
+生成されたコンポーネントを確認し、デザインや機能が期待通りか確認します。
+
+2. 生成結果を反復改良
+
+最初の生成結果に基づいて、より詳細な指示を追加します。
+
+```text
+背景色を白に変更し、角丸を8pxに、ボタンの色を青系のグラデーションに。カードのサイズは幅320px、高さは自動調整
+```
+
+このように、対話的にプロンプトを調整することで、理想のUIに近づけていきます。
+
+:::
+
 :::
 
 ## まとめ（無料）
@@ -46,3 +184,141 @@ const secret = "premium content"
 // 有料コードサンプル
 const secret = "premium content"
 ```
+
+:::speech-left Ryosuke | /ryosuke.png | ようこそ！
+
+こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！
+
+:::
+
+:::speech-right Ryosuke | /ryosuke.png | ようこそ！
+
+こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！
+
+:::
+
+![v0](../../../images/v0/v0.png)
+
+![](../../../images/hogesample.png)
+
+```files
+/images/                    # プロジェクトルートの画像ディレクトリ
+├── nextjs/
+│   ├── logo.png
+│   ├── screenshots/
+│   └── diagrams/
+├── cloudflare/
+│   └── ...
+├── claude-code/
+│   └── ...
+└── shared/                 # 共通画像
+    ├── icons/
+    └── backgrounds/
+```
+
+```xml
+//addstart
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div class="bg-white rounded-lg shadow-md p-4">
+    <h3 class="text-lg font-medium text-gray-800">Chroma</h3>
+    <p class="text-gray-600">Chromaは、ベクトル検索エンジンです。</p>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div class="bg-white rounded-lg shadow-md p-4">
+    <h3 class="text-lg font-medium text-gray-800">Pinecone</h3>
+    <p class="text-gray-600">Pineconeは、ベクトル検索エンジンです。</p>
+  </div>
+</div>
+//addend
+```
+
+```yaml
+//delstart
+services:
+  meilisearch:
+    image: getmeili/meilisearch:v1.9.1
+    ports:
+      - 7700:7700
+    environment:
+      - MEILI_MASTER_KEY=masterKey
+      - MEILI_NO_ANALYTICS=true
+//delend
+```
+
+```yaml
+//highlightstart
+services:
+  meilisearch:
+    image: getmeili/meilisearch:v1.9.1
+    ports:
+      - 7700:7700
+    environment:
+      - MEILI_MASTER_KEY=masterKey
+      - MEILI_NO_ANALYTICS=true
+//highlightend
+```
+
+```yaml
+services:
+  meilisearch:
+//focusstart
+    image: getmeili/meilisearch:v1.9.1
+//focusend
+    ports:
+      - 7700:7700
+    environment:
+      - MEILI_MASTER_KEY=masterKey
+      - MEILI_NO_ANALYTICS=true
+```
+
+```yaml
+//errorstart
+services:
+  meilisearch:
+    image: getmeili/meilisearch:v1.9.1
+    ports:
+      - 7700:7700
+    environment:
+      - MEILI_MASTER_KEY=masterKey
+      - MEILI_NO_ANALYTICS=true
+//errorend
+```
+
+```yaml
+//warningstart
+services:
+  meilisearch:
+    image: getmeili/meilisearch:v1.9.1
+    ports:
+      - 7700:7700
+    environment:
+      - MEILI_MASTER_KEY=masterKey
+      - MEILI_NO_ANALYTICS=true
+//warningend
+```
+
+:::step
+
+1. プロンプトからUIを生成してみよう
+
+まずは簡単なプロンプトでv0の動作を確認しましょう。v0のインターフェースを開き、以下のようなプロンプトを入力します。
+
+```text
+モダンなカードコンポーネントを作成。画像、タイトル、説明文、CTAボタンを含み、ホバー時に影がつくアニメーションを追加
+```
+
+生成されたコンポーネントを確認し、デザインや機能が期待通りか確認します。
+
+2. 生成結果を反復改良
+
+最初の生成結果に基づいて、より詳細な指示を追加します。
+
+```text
+背景色を白に変更し、角丸を8pxに、ボタンの色を青系のグラデーションに。カードのサイズは幅320px、高さは自動調整
+```
+
+このように、対話的にプロンプトを調整することで、理想のUIに近づけていきます。
+
+:::
