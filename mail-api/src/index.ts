@@ -2,6 +2,7 @@
  * メール送信API
  * Cloudflare Pages Functions + Hono
  */
+
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { z } from 'zod';
