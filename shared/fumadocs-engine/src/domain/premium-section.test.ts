@@ -4,7 +4,7 @@ import {
   createPremiumPlaceholder,
   type PremiumSection,
   type PremiumPlaceholder,
-} from './premium-section.ts'
+} from './premium-section.js'
 
 describe('PremiumSection', () => {
   describe('createPremiumSection', () => {

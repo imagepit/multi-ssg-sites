@@ -2,8 +2,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { unified } from 'unified'
 import remarkParse from 'remark-parse'
 import remarkMdx from 'remark-mdx'
-import { remarkLinkCard } from './remark-link-card.ts'
-import * as ogpFetcher from '../utils/ogp-fetcher.ts'
+import { remarkLinkCard } from './remark-link-card.js'
+import * as ogpFetcher from '../utils/ogp-fetcher.js'
 
 // OGP fetcherをモック
 vi.mock('../utils/ogp-fetcher')

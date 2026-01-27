@@ -1,6 +1,6 @@
 import type { Root, Content, Paragraph } from 'mdast'
 import { visit } from 'unist-util-visit'
-import type { PremiumSection, PremiumPlaceholder } from '../../domain/premium-section.ts'
+import type { PremiumSection, PremiumPlaceholder } from '../../domain/premium-section.js'
 
 /**
  * Metadata stored in vfile.data for extracted premium sections

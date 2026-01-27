@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import type * as PageTree from 'fumadocs-core/page-tree'
-import type { SidebarMode } from '../source/fumadocs-source.ts'
+import type { SidebarMode } from '../source/fumadocs-source.js'
 
 // Structure used for sitemap parsing
 export type SiteNode = {

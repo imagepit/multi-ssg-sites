@@ -5,7 +5,7 @@ import {
   parseSaleConfig,
   type SaleConfig,
   type ActiveSale,
-} from './sale.ts'
+} from './sale.js'
 
 describe('sale domain', () => {
   // Test fixtures

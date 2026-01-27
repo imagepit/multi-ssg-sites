@@ -1,6 +1,6 @@
 import { type InferPageType, loader } from 'fumadocs-core/source'
 import type * as PageTree from 'fumadocs-core/page-tree'
-import { getBranding } from '../site/spec.ts'
+import { getBranding } from '../site/spec.js'
 
 export function createSource(docs: any) {
   return loader({

@@ -1,8 +1,8 @@
 import type { Root, Paragraph, Text } from 'mdast'
 import type { VFile } from 'vfile'
 import { visit } from 'unist-util-visit'
-import { fetchOgpBatch, type OgpData, type OgpFetcherOptions } from '../utils/ogp-fetcher.ts'
-import { isXTweetUrl, extractTweetId } from '../utils/twitter-utils.ts'
+import { fetchOgpBatch, type OgpData, type OgpFetcherOptions } from '../utils/ogp-fetcher.js'
+import { isXTweetUrl, extractTweetId } from '../utils/twitter-utils.js'
 
 /**
  * リンクカードプラグインのオプション
