@@ -10,6 +10,8 @@ paid: true
 products:
   - id: product:test-course
     price: 980
+    stripe_price_id: price_1Srzx3HLkqemnldGgivyqVLU
+    description: "テストコース"
 ---
 
 ## 無料コンテンツ
