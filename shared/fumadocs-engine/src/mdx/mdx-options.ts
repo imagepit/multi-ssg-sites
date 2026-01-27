@@ -78,6 +78,10 @@ export interface BuildMdxOptionsConfig {
 export function buildMdxOptions(config: BuildMdxOptionsConfig = {}) {
   const { linkCard = {} } = config
 
+  const isRehypeCodePlugin = (p: unknown): p is typeof rehypeCode => {
+    return p === rehypeCode || (typeof p === 'function' && (p as any).name === 'rehypeCode')
+  }
+
   return {
     preset: 'fumadocs' as const,
     remarkPlugins: (v: any) => [
@@ -99,9 +103,10 @@ export function buildMdxOptions(config: BuildMdxOptionsConfig = {}) {
     rehypePlugins: (v: any) => {
       const base = Array.isArray(v) ? v : []
       const enhanced = base.map((p: any) => {
-        if (Array.isArray(p) && p[0] === rehypeCode) {
+        if (Array.isArray(p) && isRehypeCodePlugin(p[0])) {
+          const codePlugin = p[0]
           const baseOptions = (p[1] || {}) as any
-          return [rehypeCode, {
+          return [codePlugin, {
             ...baseOptions,
             transformers: [
               ...(baseOptions.transformers || (rehypeCodeDefaultOptions as any).transformers || []),
@@ -109,8 +114,9 @@ export function buildMdxOptions(config: BuildMdxOptionsConfig = {}) {
             ],
           }]
         }
-        if (p === rehypeCode || (typeof p === 'function' && p.name === 'rehypeCode')) {
-          return [rehypeCode, {
+        if (isRehypeCodePlugin(p)) {
+          const codePlugin = p
+          return [codePlugin, {
             transformers: [
               ...(rehypeCodeDefaultOptions as any).transformers || [],
               ...buildTechdocShikiTransformers(),
