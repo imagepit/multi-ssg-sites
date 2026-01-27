@@ -92,13 +92,13 @@ jobs:
       - name: Install dependencies (skip postinstall)
         run: pnpm install --frozen-lockfile --ignore-scripts
 
-      - name: Build scripts (techdoc CLI)
-        run: pnpm build
-        working-directory: scripts
-
       - name: Build shared fumadocs-engine
         run: pnpm build
         working-directory: shared/fumadocs-engine
+
+      - name: Build scripts (techdoc CLI)
+        run: pnpm build
+        working-directory: scripts
 
       - name: Run theme postinstall scripts
         run: pnpm run --filter "./theme/*" postinstall
