@@ -190,7 +190,7 @@ jobs:
             args+=(--sync-paid-content --env prod)
           fi
 
-          pnpm exec techdoc "${args[@]}"
+          node scripts/dist/presentation/cli.js "${args[@]}"
 
   notify:
     needs: [detect-sites, deploy-site]
