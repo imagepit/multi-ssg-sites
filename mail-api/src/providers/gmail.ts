@@ -3,7 +3,7 @@
  * @see https://developers.google.com/gmail/api/reference/rest/v1/users.messages/send
  */
 
-import type { MailProvider, SendMailParams, SendMailResult } from '../types';
+import type { MailProvider, SendMailParams, SendMailResult, TransactionalMailParams } from '../types';
 import { formatSubject, formatPlainTextBody } from '../templates/contact';
 import { formatAutoReplySubject, formatAutoReplyPlainTextBody } from '../templates/auto-reply';
 
@@ -92,6 +92,58 @@ export class GmailProvider implements MailProvider {
         undefined,
         formatAutoReplySubject(params),
         formatAutoReplyPlainTextBody(params)
+      );
+
+      const response = await fetch(
+        'https://gmail.googleapis.com/gmail/v1/users/me/messages/send',
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            raw: rawMessage,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({})) as { error?: { message?: string } };
+        return {
+          success: false,
+          error: errorData.error?.message || `HTTP ${response.status}: ${response.statusText}`,
+        };
+      }
+
+      const data = await response.json() as { id: string };
+      return {
+        success: true,
+        messageId: data.id,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
+
+  async sendTransactional(params: TransactionalMailParams): Promise<SendMailResult> {
+    try {
+      const accessToken = await this.getAccessToken();
+      if (!accessToken) {
+        return {
+          success: false,
+          error: 'Failed to obtain access token',
+        };
+      }
+
+      const rawMessage = this.createRawMessage(
+        params.to,
+        undefined,
+        params.subject,
+        params.text
       );
 
       const response = await fetch(

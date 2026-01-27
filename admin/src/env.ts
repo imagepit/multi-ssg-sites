@@ -11,4 +11,10 @@ export interface Env {
   DB?: D1Database;
   PAID_CONTENT?: R2Bucket;
   EVENTS_QUEUE?: Queue;
+  /** メールAPI URL（設定時は実メール送信、未設定時はコンソール出力） */
+  MAIL_API_URL?: string;
+  /** メールAPI認証キー */
+  MAIL_API_KEY?: string;
+  /** 許可されたコールバックURLのオリジン（カンマ区切り） */
+  ALLOWED_CALLBACK_ORIGINS?: string;
 }

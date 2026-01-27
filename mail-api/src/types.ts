@@ -23,6 +23,18 @@ export interface SendMailResult {
   error?: string;
 }
 
+/** トランザクショナルメール送信パラメータ（任意宛先） */
+export interface TransactionalMailParams {
+  /** 送信先メールアドレス */
+  to: string;
+  /** 件名 */
+  subject: string;
+  /** プレーンテキスト本文 */
+  text: string;
+  /** HTML本文（オプション） */
+  html?: string;
+}
+
 /** メールプロバイダーインターフェース */
 export interface MailProvider {
   /** プロバイダー名 */
@@ -31,6 +43,8 @@ export interface MailProvider {
   send(params: SendMailParams): Promise<SendMailResult>;
   /** 問い合わせ者への自動返信メール送信 */
   sendAutoReply(params: SendMailParams): Promise<SendMailResult>;
+  /** トランザクショナルメール送信（任意宛先） */
+  sendTransactional(params: TransactionalMailParams): Promise<SendMailResult>;
 }
 
 /** サポートするプロバイダー種別 */
@@ -47,4 +61,6 @@ export interface Env {
   GMAIL_CLIENT_ID?: string;
   GMAIL_CLIENT_SECRET?: string;
   GMAIL_REFRESH_TOKEN?: string;
+  /** 内部API認証キー（/send エンドポイント用） */
+  INTERNAL_API_KEY?: string;
 }

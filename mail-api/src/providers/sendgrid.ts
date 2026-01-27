@@ -3,7 +3,7 @@
  * @see https://docs.sendgrid.com/api-reference/mail-send/mail-send
  */
 
-import type { MailProvider, SendMailParams, SendMailResult } from '../types';
+import type { MailProvider, SendMailParams, SendMailResult, TransactionalMailParams } from '../types';
 import { formatSubject, formatPlainTextBody } from '../templates/contact';
 import { formatAutoReplySubject, formatAutoReplyPlainTextBody } from '../templates/auto-reply';
 
@@ -105,6 +105,72 @@ export class SendGridProvider implements MailProvider {
               value: formatAutoReplyPlainTextBody(params),
             },
           ],
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+        try {
+          const errorData = JSON.parse(errorText) as { errors?: Array<{ message: string }> };
+          if (errorData.errors?.[0]?.message) {
+            errorMessage = errorData.errors[0].message;
+          }
+        } catch {
+          // JSONパースエラーは無視
+        }
+        return {
+          success: false,
+          error: errorMessage,
+        };
+      }
+
+      const messageId = response.headers.get('x-message-id') || undefined;
+      return {
+        success: true,
+        messageId,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
+
+  async sendTransactional(params: TransactionalMailParams): Promise<SendMailResult> {
+    try {
+      const content = [
+        {
+          type: 'text/plain',
+          value: params.text,
+        },
+      ];
+
+      if (params.html) {
+        content.push({
+          type: 'text/html',
+          value: params.html,
+        });
+      }
+
+      const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          personalizations: [
+            {
+              to: [{ email: params.to }],
+            },
+          ],
+          from: {
+            email: this.fromEmail,
+          },
+          subject: params.subject,
+          content,
         }),
       });
 
