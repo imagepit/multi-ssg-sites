@@ -39,6 +39,11 @@ on:
       - "pnpm-lock.yaml"
       - ".github/workflows/deploy-sites.yml"
 
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
 jobs:
   detect-sites:
     runs-on: ubuntu-latest
