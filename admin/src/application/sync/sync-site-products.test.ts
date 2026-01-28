@@ -256,6 +256,19 @@ describe('syncSiteProducts', () => {
       expect(result.products.archived).toBe(2)
       expect(mockProductRepo.archiveMissing).toHaveBeenCalledWith('dx-media', ['dx-media:product:active'])
     })
+
+    it('should not archive products when archiveMissing is false', async () => {
+      const request: SyncProductsRequest = {
+        siteId: 'dx-media',
+        products: [{ id: 'product:active', price: 500 }],
+        archiveMissing: false
+      }
+
+      const result = await syncSiteProducts(request, deps)
+
+      expect(result.products.archived).toBe(0)
+      expect(mockProductRepo.archiveMissing).not.toHaveBeenCalled()
+    })
   })
 
   describe('combined single and subscription', () => {

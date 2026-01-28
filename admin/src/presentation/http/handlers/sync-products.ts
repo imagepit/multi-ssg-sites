@@ -74,11 +74,13 @@ function normalizeRequest(payload: Record<string, unknown>): SyncProductsRequest
   const siteId = payload.siteId as string
   const products = normalizeProducts(payload.products)
   const subscription = normalizeSubscription(payload.subscription)
+  const archiveMissing = normalizeArchiveMissing(payload.archiveMissing)
 
   return {
     siteId,
     products,
-    subscription
+    subscription,
+    archiveMissing
   }
 }
 
@@ -174,6 +176,14 @@ function normalizeSubscription(value: unknown): SubscriptionInput | undefined {
   }
 
   return subscription
+}
+
+function normalizeArchiveMissing(value: unknown): boolean | undefined {
+  if (value === undefined) return undefined
+  if (typeof value !== 'boolean') {
+    throw new Error('archiveMissing must be a boolean')
+  }
+  return value
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

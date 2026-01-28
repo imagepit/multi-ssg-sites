@@ -142,6 +142,7 @@ program
   .option('--search-index-prefix <prefix>', 'search index prefix override')
   .option('--search-index-base-url <url>', 'search index base url')
   .option('--sync-products', 'sync products to admin API', false)
+  .option('--no-archive-missing', 'do not archive missing products (upsert only)')
   .option('--admin-api-url <url>', 'admin API base URL for product sync')
   .option('--admin-api-key <key>', 'admin API key for product sync')
   .option('--sync-paid-content', 'sync paid content to R2', false)
@@ -247,7 +248,8 @@ program
           adminApiConfig: {
             baseUrl: apiBaseUrl,
             apiKey
-          }
+          },
+          archiveMissing: options.archiveMissing
         })
       }
     } catch (error) {
@@ -260,6 +262,7 @@ program
   .argument('<siteId>', 'site id')
   .option('--api-url <url>', 'admin API base URL')
   .option('--api-key <key>', 'admin API key')
+  .option('--no-archive-missing', 'do not archive missing products (upsert only)')
   .option('--root <rootDir>', 'workspace root', process.cwd())
   .action(async (siteIdRaw, options) => {
     try {
@@ -288,7 +291,8 @@ program
         adminApiConfig: {
           baseUrl: apiBaseUrl,
           apiKey
-        }
+        },
+        archiveMissing: options.archiveMissing
       })
     } catch (error) {
       handleError(error)

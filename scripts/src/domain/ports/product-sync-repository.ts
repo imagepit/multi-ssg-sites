@@ -44,6 +44,11 @@ export type SyncProductsPayload = {
   siteId: string
   products: ProductInfo[]
   subscription?: SubscriptionInfo
+  /**
+   * When true (default), products missing from the sync are archived on the server.
+   * Set to false for "upsert-only" sync (recommended for shared staging environments).
+   */
+  archiveMissing?: boolean
 }
 
 /**

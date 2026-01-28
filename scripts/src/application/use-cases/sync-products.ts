@@ -14,6 +14,11 @@ export type SyncProductsInput = {
   siteId: string
   contentsDir: string
   adminApiConfig: AdminApiConfig
+  /**
+   * When false, do not archive products missing from the sync (upsert-only).
+   * Defaults to server behavior (archiveMissing=true).
+   */
+  archiveMissing?: boolean
 }
 
 /**
@@ -46,7 +51,8 @@ export class SyncProductsUseCase {
       {
         siteId: input.siteId,
         products,
-        subscription
+        subscription,
+        archiveMissing: input.archiveMissing
       },
       input.adminApiConfig
     )

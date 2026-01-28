@@ -50,6 +50,11 @@ export interface SyncProductsRequest {
   products: ProductInput[]
   /** Subscription product from spec.json */
   subscription?: SubscriptionInput
+  /**
+   * When true (default), products not included in the sync are archived.
+   * Set to false for "upsert-only" sync (useful for shared staging environments).
+   */
+  archiveMissing?: boolean
 }
 
 export interface SyncProductsDependencies {
@@ -117,6 +122,7 @@ export async function syncSiteProducts(
   deps: SyncProductsDependencies
 ): Promise<SyncProductsResult> {
   const { siteId, products, subscription } = input
+  const archiveMissing = input.archiveMissing ?? true
   const warnings: string[] = []
   const now = new Date().toISOString()
 
@@ -241,8 +247,10 @@ export async function syncSiteProducts(
     }
   }
 
-  // Archive products that are no longer in the sync
-  const archived = await deps.productRepository.archiveMissing(siteId, processedProductIds)
+  // Archive products that are no longer in the sync (optional)
+  const archived = archiveMissing
+    ? await deps.productRepository.archiveMissing(siteId, processedProductIds)
+    : 0
 
   return {
     products: {
