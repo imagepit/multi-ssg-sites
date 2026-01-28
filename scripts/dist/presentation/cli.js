@@ -13,6 +13,7 @@ import { SyncSearchIndexesUseCase } from '../application/use-cases/sync-search-i
 import { SyncProductsUseCase } from '../application/use-cases/sync-products.js';
 import { ExtractPaidContentUseCase } from '../application/use-cases/extract-paid-content.js';
 import { SyncPaidContentUseCase } from '../application/use-cases/sync-paid-content.js';
+import { LoadSiteSpecUseCase } from '../application/use-cases/load-site-spec.js';
 import { NodeCommandRunner } from '../infra/command/node-command-runner.js';
 import { NodeFileSystem } from '../infra/fs/node-file-system.js';
 import { ConsoleLogger } from '../infra/logging/console-logger.js';
@@ -113,6 +114,7 @@ program
     .argument('<siteId>', 'site id')
     .option('--theme <themeId>', 'theme id', 'fumadocs')
     .option('--production', 'deploy as production', false)
+    .option('--force', 'skip phase check for production deploy', false)
     .option('--branch <branch>', 'preview branch name')
     .option('--project <projectName>', 'pages project name')
     .option('--skip-assets', 'skip R2 asset sync', false)
@@ -121,8 +123,10 @@ program
     .option('--search-index-prefix <prefix>', 'search index prefix override')
     .option('--search-index-base-url <url>', 'search index base url')
     .option('--sync-products', 'sync products to admin API', false)
+    .option('--no-archive-missing', 'do not archive missing products (upsert only)')
     .option('--admin-api-url <url>', 'admin API base URL for product sync')
     .option('--admin-api-key <key>', 'admin API key for product sync')
+    .option('--stripe-env <stripeEnv>', 'stripe environment for product sync (prod/test)', 'prod')
     .option('--sync-paid-content', 'sync paid content to R2', false)
     .option('--env <env>', 'environment (dev/stg/prod)', 'dev')
     .option('--paid-content-bucket <bucket>', 'paid content R2 bucket override')
@@ -133,6 +137,16 @@ program
         const siteId = parseSiteId(siteIdRaw);
         const themeId = parseThemeId(options.theme);
         const { deploySite, fileSystem, logger } = buildDependencies(options.root);
+        if (options.production && !options.force) {
+            const loadSiteSpec = new LoadSiteSpecUseCase(fileSystem);
+            const spec = await loadSiteSpec.execute(siteId.toString(), options.root);
+            if (!spec) {
+                throw new Error(`Cannot deploy site "${siteId}" to production: spec.json not found.`);
+            }
+            if (!spec.phase.isPublishable()) {
+                throw new Error(`Cannot deploy site "${siteId}" to production: phase is "${spec.phase.toString()}" (required: "publish"). Use --force to override.`);
+            }
+        }
         const syncAssets = !options.skipAssets;
         const syncSearchIndexes = !options.skipSearchIndex;
         const searchIndexBaseUrl = resolveSearchIndexBaseUrl(siteId, options.searchIndexBaseUrl);
@@ -198,13 +212,19 @@ program
             const repository = new HttpProductSyncRepository();
             const syncProducts = new SyncProductsUseCase(repository, fileSystem, logger);
             const contentsDir = path.join(options.root, 'contents', siteId.toString(), 'contents');
+            const stripeEnv = options.stripeEnv;
+            if (stripeEnv !== 'prod' && stripeEnv !== 'test') {
+                throw new Error('--stripe-env must be "prod" or "test"');
+            }
             await syncProducts.execute({
                 siteId: siteId.toString(),
                 contentsDir,
                 adminApiConfig: {
                     baseUrl: apiBaseUrl,
                     apiKey
-                }
+                },
+                archiveMissing: options.archiveMissing,
+                stripeEnv
             });
         }
     }
@@ -217,6 +237,8 @@ program
     .argument('<siteId>', 'site id')
     .option('--api-url <url>', 'admin API base URL')
     .option('--api-key <key>', 'admin API key')
+    .option('--no-archive-missing', 'do not archive missing products (upsert only)')
+    .option('--stripe-env <env>', 'stripe environment (prod/test)', 'prod')
     .option('--root <rootDir>', 'workspace root', process.cwd())
     .action(async (siteIdRaw, options) => {
     try {
@@ -234,6 +256,10 @@ program
         if (!apiKey) {
             throw new Error('missing admin API key: use --api-key or set ADMIN_API_KEY');
         }
+        const stripeEnv = options.stripeEnv;
+        if (stripeEnv !== 'prod' && stripeEnv !== 'test') {
+            throw new Error('--stripe-env must be "prod" or "test"');
+        }
         const contentsDir = path.join(options.root, 'contents', siteId.toString(), 'contents');
         await syncProducts.execute({
             siteId: siteId.toString(),
@@ -241,7 +267,9 @@ program
             adminApiConfig: {
                 baseUrl: apiBaseUrl,
                 apiKey
-            }
+            },
+            archiveMissing: options.archiveMissing,
+            stripeEnv
         });
     }
     catch (error) {

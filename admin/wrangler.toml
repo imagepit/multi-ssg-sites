@@ -28,8 +28,14 @@ queue = "events-dev"
 queue = "events-dev"
 max_batch_size = 10
 max_batch_timeout = 30
+
+[env.stg]
+name = "techdoc-admin-stg"
+
 [env.stg.vars]
 ENV = "stg"
+MAIL_API_URL = "https://techdoc-mail-api.pages.dev"
+ALLOWED_CALLBACK_ORIGINS = "https://*.dx-media.pages.dev,https://*.nextjs.pages.dev,https://*.v0.pages.dev"
 
 [env.stg.triggers]
 crons = ["5 * * * *", "30 15 * * *"]
@@ -51,8 +57,14 @@ queue = "events-stg"
 queue = "events-stg"
 max_batch_size = 10
 max_batch_timeout = 30
+
+[env.prod]
+name = "techdoc-admin-prod"
+
 [env.prod.vars]
 ENV = "prod"
+MAIL_API_URL = "https://techdoc-mail-api.pages.dev"
+ALLOWED_CALLBACK_ORIGINS = "https://*.dx-pit.net,https://*.dx-media.pages.dev,https://*.nextjs.pages.dev,https://*.v0.pages.dev"
 
 [env.prod.triggers]
 crons = ["5 * * * *", "30 15 * * *"]

@@ -3,6 +3,8 @@ import type { AuditLogger } from '../../../application/audit/audit-logger.js'
 import { syncSiteProducts, type SyncProductsRequest, type ProductInput, type SubscriptionInput } from '../../../application/sync/sync-site-products.js'
 import { D1ProductWriter } from '../../../infrastructure/db/d1-product-writer.js'
 import { D1ProductPriceWriter } from '../../../infrastructure/db/d1-product-price-writer.js'
+import { D1SiteRepository } from '../../../infrastructure/db/d1-site-repository.js'
+import { createSite } from '../../../domain/sites/site.js'
 import { logAudit } from '../../../application/audit/log-audit.js'
 
 export async function handleSyncProducts(
@@ -42,6 +44,15 @@ export async function handleSyncProducts(
     return new Response(message, { status: 400 })
   }
 
+  // Ensure the site exists (foreign key constraint) even if pages sync hasn't run yet
+  const siteRepository = new D1SiteRepository(env.DB)
+  await siteRepository.upsert(
+    createSite({
+      siteId: syncRequest.siteId,
+      name: syncRequest.siteId
+    })
+  )
+
   const result = await syncSiteProducts(syncRequest, {
     productRepository: new D1ProductWriter(env.DB),
     priceRepository: new D1ProductPriceWriter(env.DB)
@@ -74,11 +85,13 @@ function normalizeRequest(payload: Record<string, unknown>): SyncProductsRequest
   const siteId = payload.siteId as string
   const products = normalizeProducts(payload.products)
   const subscription = normalizeSubscription(payload.subscription)
+  const archiveMissing = normalizeArchiveMissing(payload.archiveMissing)
 
   return {
     siteId,
     products,
-    subscription
+    subscription,
+    archiveMissing
   }
 }
 
@@ -174,6 +187,14 @@ function normalizeSubscription(value: unknown): SubscriptionInput | undefined {
   }
 
   return subscription
+}
+
+function normalizeArchiveMissing(value: unknown): boolean | undefined {
+  if (value === undefined) return undefined
+  if (typeof value !== 'boolean') {
+    throw new Error('archiveMissing must be a boolean')
+  }
+  return value
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

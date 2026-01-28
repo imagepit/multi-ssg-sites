@@ -11,7 +11,8 @@ products:
   - id: product:test-course
     price: 100
     stripe_price_id: price_1Su4USHLkqemnldGQd3bzFlt
-    description: "テスト有料ページ3"
+    stripe_price_id_test: price_1Srzx3HLkqemnldGgivyqVLU
+    description: "テスト有料ページ"
 ---
 
 ## 無料コンテンツ

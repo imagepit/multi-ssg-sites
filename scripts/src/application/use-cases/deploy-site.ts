@@ -109,6 +109,13 @@ export class DeploySiteUseCase {
       await this.fileSystem.remove(searchIndexesDir)
     }
 
+    // Pages has a 25MiB per-file limit. Search indexes can easily exceed this.
+    // If we are not syncing search indexes to R2, ensure they are not included in Pages deploy output.
+    if (!input.syncSearchIndexes) {
+      const searchIndexesDir = this.paths.searchIndexesDir(input.themeId)
+      await this.fileSystem.remove(searchIndexesDir)
+    }
+
     // Sync paid content to R2
     if (input.syncPaidContent) {
       if (!input.paidContentConfig) {
