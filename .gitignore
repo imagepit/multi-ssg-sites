@@ -127,3 +127,6 @@ feeds/
 # sketch
 *.sketch
 post-commit
+
+# Local git worktrees (created by developers)
+.worktrees/
