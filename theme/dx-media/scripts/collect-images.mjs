@@ -30,12 +30,19 @@ async function main() {
 
   const files = fg.sync(['**/*.{md,mdx}'], { cwd: siteContentsRoot, dot: false, absolute: true })
   const reImg = /!\[[^\]]*\]\(([^)]+)\)|<img[^>]*src=["']([^"']+)["']/gi
+  // speech-left/right コールアウトからのavatar画像パス抽出（行頭空白を許容）
+  const reSpeech = /^\s*:::speech-(?:left|right)\s+[^|]+\|\s*([^\s|]+)/gm
 
   const entries = new Map() // dest -> src
 
   function addImage(raw, baseDir, options = {}) {
-    const cleaned = (raw || '').trim()
+    let cleaned = (raw || '').trim()
     if (!cleaned || /^https?:|^data:|^blob:/i.test(cleaned)) return
+
+    // speech-left/right 用: /xxx → /images/xxx に正規化
+    if (options.normalizePath && cleaned.startsWith('/') && !cleaned.startsWith('/images/')) {
+      cleaned = '/images' + cleaned
+    }
 
     let resolved
     if (cleaned.startsWith('/images/')) {
@@ -71,6 +78,11 @@ async function main() {
     for (const m of text.matchAll(reImg)) {
       const raw = (m[1] || m[2] || '').trim()
       addImage(raw, dir)
+    }
+    // speech-left/right コールアウトからのavatar画像抽出
+    for (const m of text.matchAll(reSpeech)) {
+      const raw = (m[1] || '').trim()
+      addImage(raw, dir, { normalizePath: true })
     }
   }
 

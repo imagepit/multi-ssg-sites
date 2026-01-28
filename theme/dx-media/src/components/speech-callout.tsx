@@ -1,4 +1,5 @@
 import React from 'react'
+import ExportedImage from '@/components/ExportedImage'
 
 type SpeechSide = 'left' | 'right'
 
@@ -76,13 +77,27 @@ export function SpeechCallout({ side, title, children }: SpeechCalloutProps) {
   )
 }
 
+// avatar画像パスを正規化: /xxx → /images/xxx
+function normalizeAvatarPath(url: string): string {
+  if (url.startsWith('/') && !url.startsWith('/images/')) {
+    return '/images' + url
+  }
+  return url
+}
+
 function Avatar({ url, name, className = '' }: { url?: string; name?: string; className?: string }) {
   const fallback = (name || 'User').slice(0, 2).toUpperCase()
+  const normalizedUrl = url ? normalizeAvatarPath(url) : undefined
   return (
     <div className={`w-10 h-10 shrink-0 rounded-full border overflow-hidden bg-background text-muted-foreground flex items-center justify-center ${className}`}>
-      {url ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={url} alt={name || 'avatar'} className="block w-full h-full object-cover" />
+      {normalizedUrl ? (
+        <ExportedImage
+          src={normalizedUrl}
+          alt={name || 'avatar'}
+          width={48}
+          height={48}
+          className="block w-full h-full object-cover"
+        />
       ) : (
         <span className="text-xs font-semibold select-none">{fallback}</span>
       )}
