@@ -12,52 +12,31 @@ import { hashToken, generateSecureToken, generateId } from '../../../infrastruct
  * @param env 環境変数
  * @returns 許可されていれば true
  */
-export function validateCallbackUrl(callbackUrl: string, env: Env): boolean {
+function validateCallbackUrl(callbackUrl: string, env: Env): boolean {
   try {
     const url = new URL(callbackUrl)
 
     // 開発環境では localhost を許可
-    if ((env.ENV === 'dev' || env.ENV === 'development') && (url.hostname === 'localhost' || url.hostname === '127.0.0.1')) {
+    if (env.ENV === 'development' && (url.hostname === 'localhost' || url.hostname === '127.0.0.1')) {
       return true
     }
 
     // 許可されたオリジンのリストを取得
     const allowedOrigins = env.ALLOWED_CALLBACK_ORIGINS?.split(',').map((o) => o.trim()) || []
 
-    const isAllowed = (pattern: string): boolean => {
-      if (!pattern) return false
-
-      // Exact origin match
-      if (!pattern.includes('*')) {
-        try {
-          const allowedUrl = new URL(pattern)
-          return allowedUrl.origin === url.origin
-        } catch {
-          return false
-        }
-      }
-
-      // Wildcard origin pattern (supports only leading "*." in hostname)
-      // Examples:
-      // - https://*.dx-media.pages.dev
-      // - https://*.dx-pit.net
-      const m = pattern.match(/^(https?):\/\/\*\.(.+?)(?::(\d+))?$/)
-      if (!m) return false
-
-      const scheme = m[1]
-      const baseDomain = m[2]
-      const port = m[3]
-
-      if (url.protocol !== `${scheme}:`) return false
-      if (port !== undefined && url.port !== port) return false
-
-      // Require a proper domain boundary: either exact base domain or subdomain of it.
-      // (Avoids allowing "evil{baseDomain}" when using simple endsWith)
-      return url.hostname === baseDomain || url.hostname.endsWith(`.${baseDomain}`)
+    // オリジンが許可リストに含まれているか確認
+    if (allowedOrigins.includes(url.origin)) {
+      return true
     }
 
+    // ワイルドカード対応（*.example.com など）
     for (const allowed of allowedOrigins) {
-      if (isAllowed(allowed)) return true
+      if (allowed.startsWith('*.')) {
+        const domain = allowed.slice(2)
+        if (url.hostname.endsWith(domain) || url.hostname === domain.slice(1)) {
+          return true
+        }
+      }
     }
 
     return false

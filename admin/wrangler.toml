@@ -30,8 +30,6 @@ max_batch_size = 10
 max_batch_timeout = 30
 [env.stg.vars]
 ENV = "stg"
-MAIL_API_URL = "https://techdoc-mail-api.pages.dev"
-ALLOWED_CALLBACK_ORIGINS = "https://*.dx-media.pages.dev,https://*.nextjs.pages.dev,https://*.v0.pages.dev"
 
 [env.stg.triggers]
 crons = ["5 * * * *", "30 15 * * *"]
@@ -55,10 +53,6 @@ max_batch_size = 10
 max_batch_timeout = 30
 [env.prod.vars]
 ENV = "prod"
-# NOTE: Keep Pages default URL allowed during migration.
-# After custom domains are fully rolled out, tighten to: "https://*.dx-pit.net"
-MAIL_API_URL = "https://techdoc-mail-api.pages.dev"
-ALLOWED_CALLBACK_ORIGINS = "https://*.dx-pit.net,https://*.pages.dev"
 
 [env.prod.triggers]
 crons = ["5 * * * *", "30 15 * * *"]
