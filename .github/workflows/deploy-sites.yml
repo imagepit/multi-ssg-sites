@@ -249,8 +249,12 @@ jobs:
           # Sync products if ADMIN_API_KEY is configured
           if [ -n "$ADMIN_API_KEY" ]; then
             args+=(--sync-products)
-            # Avoid archiving other PR's products in shared staging DB
-            if [ "$EVENT_NAME" = "pull_request" ]; then
+            # Use test stripe price IDs for non-production (staging) environments
+            if [ "$production" = "true" ]; then
+              args+=(--stripe-env prod)
+            else
+              args+=(--stripe-env test)
+              # Avoid archiving other PR's products in shared staging DB
               args+=(--no-archive-missing)
             fi
           fi

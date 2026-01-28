@@ -126,6 +126,7 @@ program
     .option('--no-archive-missing', 'do not archive missing products (upsert only)')
     .option('--admin-api-url <url>', 'admin API base URL for product sync')
     .option('--admin-api-key <key>', 'admin API key for product sync')
+    .option('--stripe-env <stripeEnv>', 'stripe environment for product sync (prod/test)', 'prod')
     .option('--sync-paid-content', 'sync paid content to R2', false)
     .option('--env <env>', 'environment (dev/stg/prod)', 'dev')
     .option('--paid-content-bucket <bucket>', 'paid content R2 bucket override')
@@ -211,6 +212,10 @@ program
             const repository = new HttpProductSyncRepository();
             const syncProducts = new SyncProductsUseCase(repository, fileSystem, logger);
             const contentsDir = path.join(options.root, 'contents', siteId.toString(), 'contents');
+            const stripeEnv = options.stripeEnv;
+            if (stripeEnv !== 'prod' && stripeEnv !== 'test') {
+                throw new Error('--stripe-env must be "prod" or "test"');
+            }
             await syncProducts.execute({
                 siteId: siteId.toString(),
                 contentsDir,
@@ -218,7 +223,8 @@ program
                     baseUrl: apiBaseUrl,
                     apiKey
                 },
-                archiveMissing: options.archiveMissing
+                archiveMissing: options.archiveMissing,
+                stripeEnv
             });
         }
     }
@@ -232,6 +238,7 @@ program
     .option('--api-url <url>', 'admin API base URL')
     .option('--api-key <key>', 'admin API key')
     .option('--no-archive-missing', 'do not archive missing products (upsert only)')
+    .option('--stripe-env <env>', 'stripe environment (prod/test)', 'prod')
     .option('--root <rootDir>', 'workspace root', process.cwd())
     .action(async (siteIdRaw, options) => {
     try {
@@ -249,6 +256,10 @@ program
         if (!apiKey) {
             throw new Error('missing admin API key: use --api-key or set ADMIN_API_KEY');
         }
+        const stripeEnv = options.stripeEnv;
+        if (stripeEnv !== 'prod' && stripeEnv !== 'test') {
+            throw new Error('--stripe-env must be "prod" or "test"');
+        }
         const contentsDir = path.join(options.root, 'contents', siteId.toString(), 'contents');
         await syncProducts.execute({
             siteId: siteId.toString(),
@@ -257,7 +268,8 @@ program
                 baseUrl: apiBaseUrl,
                 apiKey
             },
-            archiveMissing: options.archiveMissing
+            archiveMissing: options.archiveMissing,
+            stripeEnv
         });
     }
     catch (error) {

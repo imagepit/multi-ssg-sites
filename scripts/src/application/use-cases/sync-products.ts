@@ -19,6 +19,12 @@ export type SyncProductsInput = {
    * Defaults to server behavior (archiveMissing=true).
    */
   archiveMissing?: boolean
+  /**
+   * Stripe environment to use for price IDs.
+   * - 'prod': Use stripe_price_id (default)
+   * - 'test': Use stripe_price_id_test if available, fallback to stripe_price_id
+   */
+  stripeEnv?: 'prod' | 'test'
 }
 
 /**
@@ -33,8 +39,14 @@ export class SyncProductsUseCase {
 
   async execute(input: SyncProductsInput): Promise<SyncProductsResult> {
     this.logger.info(`Extracting products from: ${input.contentsDir}`)
+    const stripeEnv = input.stripeEnv ?? 'prod'
+    this.logger.info(`Using Stripe environment: ${stripeEnv}`)
 
-    const { products, subscription } = await this.extractProductsFromContents(input.contentsDir)
+    const { products: rawProducts, subscription: rawSubscription } = await this.extractProductsFromContents(input.contentsDir)
+
+    // Select appropriate stripe_price_id based on environment
+    const products = rawProducts.map(p => this.selectStripePriceId(p, stripeEnv))
+    const subscription = rawSubscription ? this.selectSubscriptionPriceIds(rawSubscription, stripeEnv) : undefined
 
     if (products.length === 0 && !subscription) {
       this.logger.info('No products found in contents')
@@ -96,6 +108,9 @@ export class SyncProductsUseCase {
             if (typeof product.stripe_price_id === 'string') {
               productInfo.stripe_price_id = product.stripe_price_id
             }
+            if (typeof product.stripe_price_id_test === 'string') {
+              productInfo.stripe_price_id_test = product.stripe_price_id_test
+            }
             if (typeof product.description === 'string') {
               productInfo.description = product.description
             }
@@ -127,6 +142,9 @@ export class SyncProductsUseCase {
         if (typeof frontmatter.subscription.stripe_price_id === 'string') {
           sub.stripe_price_id = frontmatter.subscription.stripe_price_id
         }
+        if (typeof frontmatter.subscription.stripe_price_id_test === 'string') {
+          sub.stripe_price_id_test = frontmatter.subscription.stripe_price_id_test
+        }
 
         if (Array.isArray(frontmatter.subscription.prices)) {
           sub.prices = frontmatter.subscription.prices.map((p: Record<string, unknown>) => {
@@ -136,6 +154,9 @@ export class SyncProductsUseCase {
               stripe_price_id: String(p.stripe_price_id)
             }
 
+            if (typeof p.stripe_price_id_test === 'string') {
+              price.stripe_price_id_test = p.stripe_price_id_test
+            }
             if (typeof p.label === 'string') {
               price.label = p.label
             }
@@ -188,5 +209,53 @@ export class SyncProductsUseCase {
     }
 
     return results
+  }
+
+  /**
+   * Select appropriate stripe_price_id based on environment
+   */
+  private selectStripePriceId(product: ProductInfo, stripeEnv: 'prod' | 'test'): ProductInfo {
+    if (stripeEnv === 'test' && product.stripe_price_id_test) {
+      return {
+        ...product,
+        stripe_price_id: product.stripe_price_id_test,
+        stripe_price_id_test: undefined
+      }
+    }
+    // For prod or when test ID is not available, use the original stripe_price_id
+    const { stripe_price_id_test, ...rest } = product
+    return rest
+  }
+
+  /**
+   * Select appropriate stripe_price_ids for subscription based on environment
+   */
+  private selectSubscriptionPriceIds(subscription: SubscriptionInfo, stripeEnv: 'prod' | 'test'): SubscriptionInfo {
+    const result: SubscriptionInfo = {
+      ...subscription,
+      stripe_price_id_test: undefined
+    }
+
+    // Handle top-level stripe_price_id
+    if (stripeEnv === 'test' && subscription.stripe_price_id_test) {
+      result.stripe_price_id = subscription.stripe_price_id_test
+    }
+
+    // Handle prices array
+    if (subscription.prices) {
+      result.prices = subscription.prices.map(price => {
+        if (stripeEnv === 'test' && price.stripe_price_id_test) {
+          return {
+            ...price,
+            stripe_price_id: price.stripe_price_id_test,
+            stripe_price_id_test: undefined
+          }
+        }
+        const { stripe_price_id_test, ...rest } = price
+        return rest
+      })
+    }
+
+    return result
   }
 }

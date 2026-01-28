@@ -5,6 +5,7 @@ export type ProductInfo = {
   id: string
   price?: number
   stripe_price_id?: string
+  stripe_price_id_test?: string
   description?: string
   sale?: {
     price: number
@@ -21,10 +22,12 @@ export type SubscriptionInfo = {
   id: string
   name: string
   stripe_price_id?: string
+  stripe_price_id_test?: string
   prices?: Array<{
     billing_period: 'monthly' | 'yearly'
     price: number
     stripe_price_id: string
+    stripe_price_id_test?: string
     label?: string
     badge?: string
     sale?: {
