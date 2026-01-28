@@ -55,8 +55,10 @@ max_batch_size = 10
 max_batch_timeout = 30
 [env.prod.vars]
 ENV = "prod"
-MAIL_API_URL = "https://mail.dx-pit.net"
-ALLOWED_CALLBACK_ORIGINS = "https://*.dx-pit.net"
+# NOTE: Keep Pages default URL allowed during migration.
+# After custom domains are fully rolled out, tighten to: "https://*.dx-pit.net"
+MAIL_API_URL = "https://techdoc-mail-api.pages.dev"
+ALLOWED_CALLBACK_ORIGINS = "https://*.dx-pit.net,https://*.pages.dev"
 
 [env.prod.triggers]
 crons = ["5 * * * *", "30 15 * * *"]
