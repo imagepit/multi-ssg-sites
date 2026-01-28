@@ -29,11 +29,14 @@ function validateCallbackUrl(callbackUrl: string, env: Env): boolean {
       return true
     }
 
-    // ワイルドカード対応（*.example.com など）
+    // ワイルドカード対応（https://*.example.com など）
     for (const allowed of allowedOrigins) {
-      if (allowed.startsWith('*.')) {
-        const domain = allowed.slice(2)
-        if (url.hostname.endsWith(domain) || url.hostname === domain.slice(1)) {
+      // https://*.example.com 形式をパース
+      const wildcardMatch = allowed.match(/^https?:\/\/\*\.(.+)$/)
+      if (wildcardMatch) {
+        const domain = wildcardMatch[1]
+        // hostname が .domain で終わるか、domain そのものと一致するか
+        if (url.hostname.endsWith(`.${domain}`) || url.hostname === domain) {
           return true
         }
       }
