@@ -136,6 +136,27 @@ dx-media は全sharedパッケージを使用しており、開発・テスト�
 cd theme/dx-media && SITE_ID=dx-media pnpm dev
 ```
 
+### Markdown/MDX変換（無料/有料）の共通化方針（重要）
+
+**結論:** 「完全に1つの変換処理に統一」はできない（= パイプラインが2つ必要）。ただし「変換ルール/見た目の一致」は共通化できる。
+
+- **無料コンテンツ（通常のMD/MDX）**
+  - `fumadocs-mdx` が MDX を **Reactコンポーネントとして**ビルドして表示する
+  - 入口: `theme/*/source.config.ts` → `@techdoc/fumadocs-engine` の `buildMdxOptions()`
+- **有料コンテンツ（:::premium 内）**
+  - SSG出力に含めず、`scripts` が `:::premium` を抽出して **HTML文字列に変換**し、R2へアップロード（JSON）
+  - 入口: `scripts/src/domain/premium-content-renderer.ts`
+  - 有料側は「MDXをReactとしてビルド」できないため、必要に応じて `fd-*` のプレースホルダ要素を出力し、
+    `theme/*/src/components/paid/PaidSection.tsx` で **クライアント側でUIコンポーネントに置換/拡張**する
+
+**共通化できる（すべき）部分**
+- Markdown→AST 変換後のルール（例: `:::step` / `:::files` / admonition / `//addstart` などの独自記法）
+- Shikiのtransformerセット（diff/highlight/focus 等）
+
+そのため、Markdown/MDXの変換仕様を変更する場合は原則として:
+- 変換ルールは `shared/fumadocs-engine` に集約（remark/rehype plugin と shiki transformers）
+- 有料側だけ「Reactコンポーネントが必要」な表現は `fd-*` プレースホルダ + `PaidSection` の拡張で揃える
+
 ### インポート時の拡張子ルール（重要）
 
 #### theme/ や Next.js アプリからのインポート
