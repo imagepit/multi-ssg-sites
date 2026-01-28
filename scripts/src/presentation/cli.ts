@@ -13,6 +13,7 @@ import { SyncSearchIndexesUseCase } from '../application/use-cases/sync-search-i
 import { SyncProductsUseCase } from '../application/use-cases/sync-products.js'
 import { ExtractPaidContentUseCase } from '../application/use-cases/extract-paid-content.js'
 import { SyncPaidContentUseCase } from '../application/use-cases/sync-paid-content.js'
+import { LoadSiteSpecUseCase } from '../application/use-cases/load-site-spec.js'
 import { NodeCommandRunner } from '../infra/command/node-command-runner.js'
 import { NodeFileSystem } from '../infra/fs/node-file-system.js'
 import { ConsoleLogger } from '../infra/logging/console-logger.js'
@@ -132,6 +133,7 @@ program
   .argument('<siteId>', 'site id')
   .option('--theme <themeId>', 'theme id', 'fumadocs')
   .option('--production', 'deploy as production', false)
+  .option('--force', 'skip phase check for production deploy', false)
   .option('--branch <branch>', 'preview branch name')
   .option('--project <projectName>', 'pages project name')
   .option('--skip-assets', 'skip R2 asset sync', false)
@@ -152,6 +154,21 @@ program
       const siteId = parseSiteId(siteIdRaw)
       const themeId = parseThemeId(options.theme)
       const { deploySite, fileSystem, logger } = buildDependencies(options.root)
+
+      if (options.production && !options.force) {
+        const loadSiteSpec = new LoadSiteSpecUseCase(fileSystem)
+        const spec = await loadSiteSpec.execute(siteId.toString(), options.root)
+        if (!spec) {
+          throw new Error(
+            `Cannot deploy site "${siteId}" to production: spec.json not found.`
+          )
+        }
+        if (!spec.phase.isPublishable()) {
+          throw new Error(
+            `Cannot deploy site "${siteId}" to production: phase is "${spec.phase.toString()}" (required: "publish"). Use --force to override.`
+          )
+        }
+      }
 
       const syncAssets = !options.skipAssets
       const syncSearchIndexes = !options.skipSearchIndex

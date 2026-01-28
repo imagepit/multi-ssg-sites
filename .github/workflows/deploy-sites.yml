@@ -42,7 +42,29 @@ jobs:
       - name: Detect target sites
         id: detect
         run: |
+          production=false
+          if [ "${{ github.event_name }}" = "push" ] && [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            production=true
+          fi
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.production }}" = "true" ]; then
+            production=true
+          fi
+
           if [ -n "${{ github.event.inputs.site_id }}" ]; then
+            if [ "$production" = "true" ]; then
+              spec_path="contents/${{ github.event.inputs.site_id }}/specs/spec.json"
+              if [ ! -f "$spec_path" ]; then
+                echo "Skipping site '${{ github.event.inputs.site_id }}': spec.json not found" >&2
+                echo "sites=[]" >> "$GITHUB_OUTPUT"
+                exit 0
+              fi
+              phase=$(node -e "const fs=require('fs');const p=process.argv[1];try{const spec=JSON.parse(fs.readFileSync(p,'utf8'));console.log((spec.phase||'unknown').toString());}catch{console.log('unknown');}" "$spec_path")
+              if [ "$phase" != "publish" ]; then
+                echo "Skipping site '${{ github.event.inputs.site_id }}': phase is '$phase' (required: 'publish')" >&2
+                echo "sites=[]" >> "$GITHUB_OUTPUT"
+                exit 0
+              fi
+            fi
             echo "sites=[\"${{ github.event.inputs.site_id }}\"]" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -53,7 +75,7 @@ jobs:
             BASE="HEAD~1"
           fi
 
-          sites=$(bash scripts/ci/detect-sites.sh "$BASE" "$HEAD")
+          sites=$(bash scripts/ci/detect-sites.sh "$BASE" "$HEAD" "$production")
           echo "sites=$sites" >> "$GITHUB_OUTPUT"
 
   deploy-site:

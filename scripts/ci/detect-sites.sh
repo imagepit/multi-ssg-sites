@@ -3,9 +3,10 @@ set -euo pipefail
 
 BASE="${1:-}"
 HEAD="${2:-}"
+PRODUCTION="${3:-false}"
 
 if [ -z "$BASE" ] || [ -z "$HEAD" ]; then
-  echo "usage: $(basename "$0") <base> <head>" >&2
+  echo "usage: $(basename "$0") <base> <head> [production:true|false]" >&2
   exit 1
 fi
 
@@ -98,8 +99,28 @@ filter_sites_with_contents() {
   done
 }
 
+filter_sites_by_phase() {
+  while IFS= read -r site; do
+    [ -z "$site" ] && continue
+    spec="contents/$site/specs/spec.json"
+    if [ -f "$spec" ]; then
+      phase=$(node -e "const fs=require('fs');const p=process.argv[1];try{const spec=JSON.parse(fs.readFileSync(p,'utf8'));console.log((spec.phase||'unknown').toString());}catch{console.log('unknown');}" "$spec")
+      if [ "$phase" = "publish" ]; then
+        printf "%s\n" "$site"
+      else
+        echo "Skipping site '$site': phase is '$phase' (required: 'publish')" >&2
+      fi
+    else
+      echo "Skipping site '$site': spec.json not found" >&2
+    fi
+  done
+}
+
 if [ -n "${sites:-}" ]; then
   sites=$(printf "%s\n" "$sites" | filter_sites_with_contents)
+  if [ "$PRODUCTION" = "true" ]; then
+    sites=$(printf "%s\n" "$sites" | filter_sites_by_phase)
+  fi
 fi
 
 if command -v jq >/dev/null 2>&1; then
