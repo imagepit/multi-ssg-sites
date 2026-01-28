@@ -12,13 +12,13 @@ description: "サンプルページ"
 
 AIがコードを書く時代が到来しました。v0 by Vercelは、自然言語のプロンプトからReactコンポーネントを生成する画期的なツールです。このガイドは、フロントエンド開発者、UI/UXデザイナー、プロダクトマネージャー、そしてエンタープライズ開発チーム向けに、v0の全てを網羅的に解説します。
 
-:::speech-left Ryosuke | /profile/profile01.png | ようこそ！
+:::speech-left Ryosuke | /profile/profile01.png | ようこそ
 
 こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！
 
 :::
 
-:::speech-right Ryosuke | /profile/profile01.png | ようこそ！
+:::speech-right Ryosuke | /profile/profile01.png | ようこそ
 
 こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！こんにちはLangChain実践開発ガイドへようこそ！
 
