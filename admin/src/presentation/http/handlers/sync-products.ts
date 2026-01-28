@@ -3,6 +3,8 @@ import type { AuditLogger } from '../../../application/audit/audit-logger.js'
 import { syncSiteProducts, type SyncProductsRequest, type ProductInput, type SubscriptionInput } from '../../../application/sync/sync-site-products.js'
 import { D1ProductWriter } from '../../../infrastructure/db/d1-product-writer.js'
 import { D1ProductPriceWriter } from '../../../infrastructure/db/d1-product-price-writer.js'
+import { D1SiteRepository } from '../../../infrastructure/db/d1-site-repository.js'
+import { createSite } from '../../../domain/sites/site.js'
 import { logAudit } from '../../../application/audit/log-audit.js'
 
 export async function handleSyncProducts(
@@ -41,6 +43,15 @@ export async function handleSyncProducts(
     const message = err instanceof Error ? err.message : 'Invalid payload'
     return new Response(message, { status: 400 })
   }
+
+  // Ensure the site exists (foreign key constraint) even if pages sync hasn't run yet
+  const siteRepository = new D1SiteRepository(env.DB)
+  await siteRepository.upsert(
+    createSite({
+      siteId: syncRequest.siteId,
+      name: syncRequest.siteId
+    })
+  )
 
   const result = await syncSiteProducts(syncRequest, {
     productRepository: new D1ProductWriter(env.DB),
