@@ -5,6 +5,7 @@
 */
 import fs from 'node:fs'
 import path from 'node:path'
+import { createRequire } from 'node:module'
 
 function ensureDir(dir) {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
@@ -25,8 +26,10 @@ async function main() {
     return
   }
 
-  const { default: micromatch } = await import('micromatch')
-  const { default: fg } = await import('fast-glob')
+  // テーマ側のnode_modulesからパッケージを解決するためcreateRequireを使用
+  const require = createRequire(path.join(appRoot, 'package.json'))
+  const micromatch = require('micromatch')
+  const fg = require('fast-glob')
 
   const files = fg.sync(['**/*.{md,mdx}'], { cwd: siteContentsRoot, dot: false, absolute: true })
   const reImg = /!\[[^\]]*\]\(([^)]+)\)|<img[^>]*src=["']([^"']+)["']/gi

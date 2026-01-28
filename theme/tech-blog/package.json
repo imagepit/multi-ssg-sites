@@ -6,9 +6,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "prebuild": "node scripts/manage-api-route.mjs && node scripts/collect-images.mjs && node scripts/prepare-site-assets.mjs && SITE_ID=${SITE_ID:-${NEXT_PUBLIC_SITE_ID}} node scripts/generate-search-index.mjs",
+    "prebuild": "node scripts/manage-api-route.mjs && node ../../shared/fumadocs-engine/scripts/collect-images.mjs && node scripts/prepare-site-assets.mjs && SITE_ID=${SITE_ID:-${NEXT_PUBLIC_SITE_ID}} node scripts/generate-search-index.mjs",
     "build": "NODE_OPTIONS='--max-old-space-size=4096' next build && next-image-export-optimizer --nextConfigPath ./next.config.mjs",
-    "dev": "node scripts/manage-api-route.mjs && node scripts/collect-images.mjs && node scripts/prepare-site-assets.mjs && next-image-export-optimizer --clear-cache --nextConfigPath ./next.config.mjs && next dev --turbo",
+    "dev": "node scripts/manage-api-route.mjs && node ../../shared/fumadocs-engine/scripts/collect-images.mjs && node scripts/prepare-site-assets.mjs && next-image-export-optimizer --clear-cache --nextConfigPath ./next.config.mjs && next dev --turbo",
     "start": "next start",
     "postinstall": "fumadocs-mdx",
     "lint": "eslint"
