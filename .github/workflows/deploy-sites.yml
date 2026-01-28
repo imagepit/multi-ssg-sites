@@ -238,7 +238,7 @@ jobs:
             site_origin="https://${branch}.${{ matrix.site }}.pages.dev"
             args+=(--branch "$branch")
             # Keep PR previews self-contained and avoid touching shared R2 paths
-            args+=(--skip-assets --skip-search-index --search-index-base-url "$site_origin")
+            args+=(--skip-assets --skip-search-index)
           fi
 
           # Sync products if ADMIN_API_KEY is configured
